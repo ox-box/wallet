@@ -1,0 +1,172 @@
+﻿@page "/nft/transfernft/{transferhex}" 
+@inherits WalletComponentBase
+<PageContainer Title=@PageTitle>
+
+    <Content>
+        <span>@msg</span>
+    </Content>
+    <ChildContent>
+        @if (this.Model.IsNotNull() && this.NftTransfer.IsNotNull())
+        {
+            <Form Model="@this.Model"
+                                  Style="margin-top: 8px;"
+                                  OnFinish="Transfer">
+                                
+                                <FormItem Label=@UIHelper.LocalString("NFT CID","NFT CID") LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
+                                    <Input @bind-Value="@this.NftTransfer.NFSStateKey.NFCID.CID" ReadOnly=true />
+                                </FormItem>                                
+                                <FormItem Label=@UIHelper.LocalString("转售金额","Transfer Amount") LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
+                                    <Input @bind-Value="@context.Amount" />
+                                </FormItem>
+                                 <FormItem Label=@UIHelper.LocalString("最大区块高度:", "Max Block Index:") LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
+                                    <Input @bind-Value="@context.MaxIndex" />
+                                </FormItem>
+                                  <FormItem Label=@UIHelper.LocalString("最小区块高度:", "Min Block Index:") LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
+                                    <Input @bind-Value="@context.MinIndex" />
+                                </FormItem>
+                                 <FormItem Label=" " Style="margin-top:32px" WrapperCol="_submitFormLayout.WrapperCol">
+                                    <Button Type="primary" HtmlType="submit" Disabled=!this.Valid>
+                                        @UIHelper.LocalString("签名","Sign")
+                                    </Button>
+                                </FormItem>
+                                <FormItem Label=@UIHelper.LocalString("签名数据:", "Signature Data:") LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
+                                    <Text Copyable>@context.Signature</Text>
+                                </FormItem>                                
+                            </Form>
+         }
+    </ChildContent>
+</PageContainer>
+<style>
+
+    .card {
+        margin-bottom: 24px;
+    }
+
+        .card :global .ant-legacy-form-item .ant-legacy-form-item-control-wrapper {
+            width: 100%;
+        }
+
+    .errorIcon {
+        margin-right: 24px;
+        color: #ff4d4f;
+        cursor: pointer;
+    }
+
+        .errorIcon span.anticon {
+            margin-right: 4px;
+        }
+
+    .errorPopover :global .ant-popover-inner-content {
+        min-width: 256px;
+        max-height: 290px;
+        padding: 0;
+        overflow: auto;
+    }
+
+    .errorListItem {
+        padding: 8px 16px;
+        list-style: none;
+        border-bottom: 1px solid #f0f0f0;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+        .errorListItem:hover {
+            background: #e6f7ff;
+        }
+
+        .errorListItem:last-child {
+            border: 0;
+        }
+
+        .errorListItem .errorIcon {
+            float: left;
+            margin-top: 4px;
+            margin-right: 12px;
+            padding-bottom: 22px;
+            color: #ff4d4f;
+        }
+
+        .errorListItem .errorField {
+            margin-top: 2px;
+            color: rgba(0, 0, 0, 0.45);
+            font-size: 12px;
+        }
+
+    .editable td {
+        padding-top: 13px !important;
+        padding-bottom: 12.5px !important;
+    }
+
+    .avatarHolder {
+        margin-bottom: 24px;
+        text-align: center;
+    }
+
+        .avatarHolder > img {
+            width: 104px;
+            height: 104px;
+            margin-bottom: 20px;
+        }
+
+        .avatarHolder .name {
+            margin-bottom: 4px;
+            color: rgba(0, 0, 0, 0.85);
+            font-weight: 500;
+            font-size: 20px;
+            line-height: 28px;
+        }
+
+    .detail p {
+        position: relative;
+        margin-bottom: 8px;
+        padding-left: 26px;
+    }
+
+        .detail p:last-child {
+            margin-bottom: 0;
+        }
+
+    .detail i {
+        position: absolute;
+        top: 4px;
+        left: 0;
+        width: 14px;
+        height: 14px;
+    }
+
+    .tagsTitle,
+    .teamTitle {
+        margin-bottom: 12px;
+        color: rgba(0, 0, 0, 0.85);
+        font-weight: 500;
+    }
+
+    .tags .ant-tag {
+        margin-bottom: 8px;
+    }
+
+    .team .ant-avatar {
+        margin-right: 12px;
+    }
+
+    .team a {
+        display: block;
+        margin-bottom: 24px;
+        overflow: hidden;
+        color: rgba(0, 0, 0, 0.85);
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        word-break: break-all;
+        transition: color 0.3s;
+    }
+
+        .team a:hover {
+            color: #1890ff;
+        }
+
+    .tabsCard .ant-card-head {
+        padding: 0 16px;
+    }
+
+</style>

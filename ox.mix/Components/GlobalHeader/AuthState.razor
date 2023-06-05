@@ -1,0 +1,56 @@
+﻿@namespace OX.Mix.Components
+@inherits WebBoxComponentBase
+
+<Space Class="@ClassMapper.Class" Size="@("24")">
+    <SpaceItem>
+        @if (HasMetaMask)
+        {
+            if (this.EthID.IsNotNull())
+            {
+                <Space>
+                    @if (this.LastBlock.IsNotNull())
+                    {
+                        <SpaceItem>
+                            <a href="/blockchain/explorer/@this.LastBlock.Index">@this.LastBlock.Index</a>
+                            <a class="ethidspan">|</a>
+                        </SpaceItem>
+                    }
+                    @*   <SpaceItem>
+            <Text Copyable>@this.EthID.MapAddress.ToAddress()</Text>
+            <a class="ethidspan">|</a>
+            </SpaceItem>*@
+                    <SpaceItem>
+                        <a>@this.EthID.AddressID</a>
+                        <a class="ethidspan">|</a>
+                    </SpaceItem>
+                    <SpaceItem>
+                        <Text Copyable>@this.EthID.EthAddress</Text>
+                </SpaceItem>
+            </Space>
+            }
+            else
+            {
+                <a @onclick="ConnectMetaMask"><Avatar Src="/_content/ox.metamask/img/metamask-fox.svg" />@UIHelper.LocalString("连接钱包","Connect Wallet")</a>
+            }
+        }
+        else
+        {
+            <a href="https://metamask.io" target="_blank">@UIHelper.LocalString("Metamask 没有安装,请点击安装","No MetaMask detected. Please install") </a>
+        }
+    </SpaceItem>
+    <SpaceItem>
+        @{
+            var userName = UIHelper.LocalString("外机", "Remote Host");
+            if (HttpContextAccessor.IsLocalHost())
+            {
+                userName = UIHelper.LocalString("本机", "Local Host");
+            }
+        }
+    </SpaceItem>
+</Space>
+<style>
+    .ethidspan {
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+</style>

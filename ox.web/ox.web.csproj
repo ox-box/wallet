@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <OutputType>WinExe</OutputType>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWindowsForms>True</UseWindowsForms>
+    <RootNamespace>OX.Web</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Chain_009ABDBC\**" />
+    <Content Remove="Chain_009ABDBC\**" />
+    <EmbeddedResource Remove="Chain_009ABDBC\**" />
+    <None Remove="Chain_009ABDBC\**" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="AntDesign.Charts" Version="0.2.3" />
+    <PackageReference Include="AntDesign.ProLayout" Version="0.12.4" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.13" />
+    <PackageReference Include="System.Net.Http.Json" Version="6.0.0" />
+    <PackageReference Include="Nethereum.Web3" Version="4.14.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ox.mix\ox.mix.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="ox">
+      <HintPath>C:\ox\net6.0\ox.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  
+</Project>

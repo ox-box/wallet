@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <RootNamespace>OX.Wallets</RootNamespace>
+    <Authors>gt</Authors>
+    <Copyright>gt</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Version>1.0.2</Version>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>c:\ox</OutputPath>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NBitcoin" Version="7.0.19" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ox.wallets.core\ox.wallets.core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="ox">
+      <HintPath>C:\ox\net6.0\ox.dll</HintPath>
+    </Reference>
+    <Reference Include="ox.vm">
+      <HintPath>C:\ox\net6.0\ox.vm.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="UI\Docking\DarkToolWindow.cs" />
+  </ItemGroup>
+
+</Project>

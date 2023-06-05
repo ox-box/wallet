@@ -1,0 +1,250 @@
+﻿@page "/wallet/transferasset/{assetid}"
+@page "/wallet/transferasset/{assetid}/{kind}/{targetaddr}"
+@page "/wallet/transferasset/{assetid}/{kind}/{targetaddr}/{amount}"
+@page "/wallet/transferasset/{assetid}/{kind}/{targetaddr}/{amount}/{height}"
+@inherits WalletComponentBase
+<PageContainer Title=@PageTitle>
+
+    <Content>
+        <span>@msg</span>
+    </Content>
+    <ChildContent>
+
+
+        <Card Class="tabsCard">
+            <CardTabs>
+                <Tabs  @bind-ActiveKey=@activeKey>
+                    <TabPane Key="1">
+                        <TabTemplate>@UIHelper.LocalString("转到OX地址","To OX Address")</TabTemplate>
+                        <ChildContent>
+                            <Form Model="@model"
+                                  Style="margin-top: 8px;"
+                                  OnFinish="HandleSubmit">
+                                @{
+                                    var assetName = AssetState?.GetName();
+                                    var transferassetId = AssetState?.AssetId.ToString();
+                                }
+                                <FormItem Label=@UIHelper.LocalString("资产名称","Asset Name") LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
+                                    <Input @bind-Value="@assetName" ReadOnly=true />
+                                </FormItem>
+                                <FormItem Label=@UIHelper.LocalString("资产Id","Asset Id") LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
+                                    <Input @bind-Value="@transferassetId" ReadOnly=true />
+                                </FormItem>
+                                <FormItem Label=@UIHelper.LocalString("Eth 付款地址","Eth Payment Address") LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
+                                    <Input @bind-Value="@context.FromEthAddress" ReadOnly=true />
+                                </FormItem>
+                                <FormItem Label=@UIHelper.LocalString("OX 付款地址","OX Payment Address") LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
+                                    @{
+                                        var addr = context.FromOXAddress?.ToAddress();
+                                    }
+                                    <Input @bind-Value="@addr" ReadOnly=true />
+                                </FormItem>
+                                <FormItem Label=@UIHelper.LocalString("OX 付款地址可用余额","OX Payment Available Balance") LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
+                                    <Input @bind-Value="@this.BalanceState.AvailableBalance" ReadOnly=true />
+                                </FormItem>
+                                <FormItem Label=@UIHelper.LocalString("OX 收款地址","OX Receipt Address") LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
+                                    <Input Placeholder=@UIHelper.LocalString("输入接收OX资产的地址","Enter the address to receive OX assets") @bind-Value="@context.OxAddress" />
+                                </FormItem>                              
+                                <FormItem Label=@UIHelper.LocalString("转帐金额","Transfer Amount") LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
+                                    <Input Placeholder=@UIHelper.LocalString("输入要转帐的OX链资产金额","Enter the OX asset amount to transfer") @bind-Value="@context.Amount" />
+                                </FormItem>
+                                <FormItem Label=" " Style="margin-top:32px" WrapperCol="_submitFormLayout.WrapperCol">
+                                    <Button Type="primary" HtmlType="submit" Disabled=!this.Valid>
+                                        @UIHelper.LocalString("提交","Submit")
+                                    </Button>
+                                </FormItem>
+                                <FormItem Label=" " Style="margin-top:32px" WrapperCol="_submitFormLayout.WrapperCol">
+                                    <Spin Spinning=loading>
+                                    </Spin>
+                                </FormItem>
+                            </Form>
+                        </ChildContent>
+                    </TabPane>
+                    <TabPane Key="2">
+                        <TabTemplate>@UIHelper.LocalString("转到以太坊映射地址","To Ethereum Map Address")</TabTemplate>
+                        <ChildContent>
+                            <Form Model="@modelEth"
+                                  Style="margin-top: 8px;"
+                                  OnFinish="HandleSubmit2">
+                                @{
+                                    var assetName = AssetState?.GetName();
+                                    var transferassetId = AssetState?.AssetId.ToString();
+                                }
+                                <FormItem Label=@UIHelper.LocalString("资产名称","Asset Name") LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
+                                    <Input @bind-Value="@assetName" ReadOnly=true />
+                                </FormItem>
+                                <FormItem Label=@UIHelper.LocalString("资产Id","Asset Id") LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
+                                    <Input @bind-Value="@transferassetId" ReadOnly=true />
+                                </FormItem>
+                                <FormItem Label=@UIHelper.LocalString("Eth 付款地址","Eth Payment Address") LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
+                                    <Input @bind-Value="@context.FromEthAddress" ReadOnly=true />
+                                </FormItem>
+                                <FormItem Label=@UIHelper.LocalString("OX 付款地址","OX Payment Address") LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
+                                    @{
+                                        var addr = context.FromOXAddress?.ToAddress();
+                                    }
+                                    <Input @bind-Value="@addr" ReadOnly=true />
+                                </FormItem>
+                                <FormItem Label=@UIHelper.LocalString("OX 付款地址可用余额","OX Payment Available Balance") LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
+                                    <Input @bind-Value="@this.BalanceState.AvailableBalance" ReadOnly=true />
+                                </FormItem>
+                                <FormItem Label=@UIHelper.LocalString("以太坊收款地址","Ethereum Receipt Address") LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
+                                    <Input Placeholder=@UIHelper.LocalString("输入接收OX资产的以太坊映射地址","Enter the Ethereum amp address to receive OX assets") @bind-Value="@context.ToEthAddress" />
+                                </FormItem>
+                                <FormItem Label=@UIHelper.LocalString("锁仓区块高度","Lock Blockchain Height") LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
+                                    <AntDesign.InputNumber Min="0" TValue="uint" Max=uint.MaxValue Placeholder=@UIHelper.LocalString("输入解锁的区块高度","Enter the blockchain height to unlock") @bind-Value="@context.LockExprationIndex" />
+                                </FormItem>
+                                <FormItem Label=@UIHelper.LocalString("转帐金额","Transfer Amount") LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
+                                    <Input Placeholder=@UIHelper.LocalString("输入要转帐的OX链资产金额","Enter the OX asset amount to transfer") @bind-Value="@context.Amount" />
+                                </FormItem>
+                                <FormItem Label=" " Style="margin-top:32px" WrapperCol="_submitFormLayout.WrapperCol">
+                                    <Button Type="primary" HtmlType="submit" Disabled=!this.Valid>
+                                        @UIHelper.LocalString("提交","Submit")
+                                    </Button>
+                                </FormItem>
+                                <FormItem Label=" " Style="margin-top:32px" WrapperCol="_submitFormLayout.WrapperCol">
+                                    <Spin Spinning=loading2>
+                                    </Spin>
+                                </FormItem>
+                            </Form>
+                        </ChildContent>
+                    </TabPane>
+                </Tabs>
+            </CardTabs>
+        </Card>
+    </ChildContent>
+</PageContainer>
+<style>
+
+    .card {
+        margin-bottom: 24px;
+    }
+
+        .card :global .ant-legacy-form-item .ant-legacy-form-item-control-wrapper {
+            width: 100%;
+        }
+
+    .errorIcon {
+        margin-right: 24px;
+        color: #ff4d4f;
+        cursor: pointer;
+    }
+
+        .errorIcon span.anticon {
+            margin-right: 4px;
+        }
+
+    .errorPopover :global .ant-popover-inner-content {
+        min-width: 256px;
+        max-height: 290px;
+        padding: 0;
+        overflow: auto;
+    }
+
+    .errorListItem {
+        padding: 8px 16px;
+        list-style: none;
+        border-bottom: 1px solid #f0f0f0;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+        .errorListItem:hover {
+            background: #e6f7ff;
+        }
+
+        .errorListItem:last-child {
+            border: 0;
+        }
+
+        .errorListItem .errorIcon {
+            float: left;
+            margin-top: 4px;
+            margin-right: 12px;
+            padding-bottom: 22px;
+            color: #ff4d4f;
+        }
+
+        .errorListItem .errorField {
+            margin-top: 2px;
+            color: rgba(0, 0, 0, 0.45);
+            font-size: 12px;
+        }
+
+    .editable td {
+        padding-top: 13px !important;
+        padding-bottom: 12.5px !important;
+    }
+
+    .avatarHolder {
+        margin-bottom: 24px;
+        text-align: center;
+    }
+
+        .avatarHolder > img {
+            width: 104px;
+            height: 104px;
+            margin-bottom: 20px;
+        }
+
+        .avatarHolder .name {
+            margin-bottom: 4px;
+            color: rgba(0, 0, 0, 0.85);
+            font-weight: 500;
+            font-size: 20px;
+            line-height: 28px;
+        }
+
+    .detail p {
+        position: relative;
+        margin-bottom: 8px;
+        padding-left: 26px;
+    }
+
+        .detail p:last-child {
+            margin-bottom: 0;
+        }
+
+    .detail i {
+        position: absolute;
+        top: 4px;
+        left: 0;
+        width: 14px;
+        height: 14px;
+    }
+
+    .tagsTitle,
+    .teamTitle {
+        margin-bottom: 12px;
+        color: rgba(0, 0, 0, 0.85);
+        font-weight: 500;
+    }
+
+    .tags .ant-tag {
+        margin-bottom: 8px;
+    }
+
+    .team .ant-avatar {
+        margin-right: 12px;
+    }
+
+    .team a {
+        display: block;
+        margin-bottom: 24px;
+        overflow: hidden;
+        color: rgba(0, 0, 0, 0.85);
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        word-break: break-all;
+        transition: color 0.3s;
+    }
+
+        .team a:hover {
+            color: #1890ff;
+        }
+
+    .tabsCard .ant-card-head {
+        padding: 0 16px;
+    }
+
+</style>

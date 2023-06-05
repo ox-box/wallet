@@ -1,0 +1,255 @@
+﻿@page "/nft/resale"
+@inherits WalletComponentBase
+@using OX.Wallets.Base.NFT
+<Microsoft.AspNetCore.Components.Web.Extensions.Head.Title Value=@PageTitle />
+<PageContainer Title=@PageTitle>
+    <Extra>
+        <Button OnClick="OpenPublish" Icon="plus" HtmlType="submit" Type="primary">@UIHelper.LocalString("发布NFT出售信息","Publish NFT sales information")</Button>
+    </Extra>
+    <ChildContent>
+        <div class="standardList">
+            <Card Class="listCard"
+                  Style="margin-top: 24px;"
+                  BodyStyle="padding: 0 10px 40px 10px">
+                <ChildContent>
+                    @{
+                        List<ResaleNftViewModel> list = new List<ResaleNftViewModel>();
+                        if (NFTBook.Instance.IsNotNull() && NFTBook.Instance.Records.IsNotNullAndEmpty())
+                        {
+                            foreach (var r in NFTBook.Instance.Records)
+                            {
+                                var nfcState = Blockchain.Singleton.CurrentSnapshot.NFTs.TryGet(r.Value.TranferData.Key.NFCID);
+                                if (nfcState.IsNotNull())
+                                {
+                                    list.Add(new ResaleNftViewModel
+                                {
+                                    IssueId = r.Key,
+                                    Auth = r.Value.Auth,
+                                    NFTTranferData = r.Value.TranferData,
+                                    NFCState = nfcState
+                                });
+                                }
+                            }
+                        }
+                        if (list.IsNotNullAndEmpty())
+                        {
+                            var ls = list.OrderByDescending(m => m.NFCState.TotalAmountTransfer).ToArray();
+                            <AntList TItem="ResaleNftViewModel"
+                             DataSource="ls"
+                             ItemLayout="ListItemLayout.Horizontal">
+                                <ListItem>
+
+                                    <div class="listContent">
+                                        <div class="listContentItem">
+                                            <span>@UIHelper.LocalString("NFT CID","NFT CID")</span>
+                                            <p>@context.NFCState.NFC.NftCopyright.NftID.CID</p>
+                                        </div>
+                                    </div>
+                                    <div class="listContent">
+                                        <div class="listContentItem">
+                                            <span>@UIHelper.LocalString("NFT 名称","NFT Name")</span>
+                                            <p>@context.NFCState.NFC.NftCopyright.NftName </p>
+                                        </div>
+                                    </div>
+                                    <div class="listContent">
+                                        <div class="listContentItem">
+                                            <span>@UIHelper.LocalString("NFT 简介","NFT Description")</span>
+                                            <p>@context.NFCState.NFC.NftCopyright.Description </p>
+                                        </div>
+                                    </div>  
+                                    <div class="listContent">
+                                        <div class="listContentItem">
+                                            <span>@UIHelper.LocalString("标价","Mark Price")</span>
+                                            <p>@context.NFTTranferData.Validator.Target.Amount  OXC </p>
+                                        </div>
+                                    </div>
+                                    <div class="listContent">
+                                        <div class="listContentItem">
+                                            <span>@UIHelper.LocalString("到期高度","Expiration Height")</span>
+                                            <p>@context.NFTTranferData.Validator.Target.MaxIndex</p>
+                                        </div>
+                                    </div>
+                                  
+
+                                <div class="listContent">
+                                    <div class="listContentItem">
+                                        @{
+                                                var url = $"https://ipfs.io/ipfs/{context.NFCState.NFC.NftCopyright.NftID.CID}/{context.NFCState.NFC.NftCopyright.NftName}";
+                                                var url2 = $"ipfs://{context.NFCState.NFC.NftCopyright.NftID.CID}/{context.NFCState.NFC.NftCopyright.NftName}";
+                                                var url3 = $"/nft/nftline/{context.NFCState.NFC.NftCopyright.NftID.ToArray().ToHexString()}";
+                                                var url4 = $"/nft/buynft/{context.IssueId}";
+                                            }
+                                            <Space>
+                                                <SpaceItem>
+                                                    <a href="@url4" target="_blank">@UIHelper.LocalString("购买","Buy")</a>
+                                                </SpaceItem>
+                                                <SpaceItem>
+                                                    <a href="@url3" target="_blank">@UIHelper.LocalString("成交走势","Transfer Trend")</a>
+                                                </SpaceItem>
+                                                <SpaceItem>
+                                                    <a href="@url" target="_blank">@UIHelper.LocalString("预览","Preview")</a>
+                                                </SpaceItem>
+                                                <SpaceItem>
+                                                    <a href="@url2" target="_blank">@UIHelper.LocalString("节点预览","Node Preview")</a>
+                                                </SpaceItem>
+                                            </Space>
+                                        </div>
+                                    </div>
+                                </ListItem>
+                            </AntList>
+                        }
+                    }
+
+                </ChildContent>
+
+            </Card>
+        </div>
+        <div>
+            <Drawer Closable="true" Width="600" Visible="DrawerVisible" Title='@UIHelper.LocalString("发布NFT出售信息","Publish NFT sales information")' OnClose="_=>ClosePublish()">
+                <Template style="height:90%">
+                    <Form Model="@this.Model"
+                          Style="margin-top: 8px;"
+                          OnFinish="GoPublish">
+                        <FormItem Label=@UIHelper.LocalString("签名数据","Signature Data") LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
+                            <TextArea MinRows="6" AllowClear ShowCount @bind-Value="@context.Data" />
+                        </FormItem>
+                        <Row Gutter="8">
+                            <AntDesign.Col Span="18">
+                            </AntDesign.Col>
+                            <AntDesign.Col Span="6">
+                                <Button Icon="plus" HtmlType="submit" Type="primary" Disabled=false>@UIHelper.LocalString("发布", "Publish")</Button>
+                            </AntDesign.Col>
+                        </Row>
+                    </Form>
+                </Template>
+            </Drawer>
+        </div>
+    </ChildContent>
+</PageContainer>
+<style type="text/css">
+    .standardList .ant-card-head {
+        border-bottom: none;
+    }
+
+    .standardList .ant-card-head-title {
+        padding: 24px 0;
+        line-height: 32px;
+    }
+
+    .standardList .ant-card-extra {
+        padding: 24px 0;
+    }
+
+    .standardList .ant-list-pagination {
+        margin-top: 24px;
+        text-align: right;
+    }
+
+    .standardList .ant-avatar-lg {
+        width: 48px;
+        height: 48px;
+        line-height: 48px;
+    }
+
+    .standardList .headerInfo {
+        position: relative;
+        text-align: center;
+    }
+
+        .standardList .headerInfo > span {
+            display: inline-block;
+            margin-bottom: 4px;
+            color: rgba(0, 0, 0, 0.45);
+            font-size: 14px;
+            line-height: 22px;
+        }
+
+        .standardList .headerInfo > p {
+            margin: 0;
+            color: rgba(0, 0, 0, 0.85);
+            font-size: 24px;
+            line-height: 32px;
+        }
+
+        .standardList .headerInfo > em {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 1px;
+            height: 56px;
+            background-color: #f0f0f0;
+        }
+
+    .standardList .listContent {
+        font-size: 0;
+    }
+
+        .standardList .listContent .listContentItem {
+            display: inline-block;
+            margin-left: 20px;
+            color: rgba(0, 0, 0, 0.45);
+            font-size: 14px;
+            vertical-align: middle;
+        }
+
+            .standardList .listContent .listContentItem > span {
+                line-height: 20px;
+            }
+
+            .standardList .listContent .listContentItem > p {
+                margin-top: 4px;
+                margin-bottom: 0;
+                line-height: 22px;
+            }
+
+    .standardList .extraContentSearch {
+        width: 272px;
+        margin-left: 16px;
+    }
+
+    .standardList .ant-list-item-action {
+        margin-left: 0;
+    }
+
+    .standardList .listContent {
+        margin-left: 0;
+    }
+
+        .standardList .listContent > div {
+            margin-left: 0;
+        }
+
+    .standardList .listCard .ant-card-head-title {
+        overflow: visible;
+    }
+
+    }
+
+    .standardList .headerInfo {
+        margin-bottom: 16px;
+    }
+
+        .standardList .headerInfo > em {
+            display: none;
+        }
+
+    }
+
+    .standardListForm .ant-form-item {
+        margin-bottom: 12px;
+    }
+
+        .standardListForm .ant-form-item:last-child {
+            margin-bottom: 32px;
+            padding-top: 4px;
+        }
+
+    .formResult {
+        width: 100%;
+    }
+
+        .formResult [class^='title'] {
+            margin-bottom: 8px;
+        }
+
+</style>

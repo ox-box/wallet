@@ -1,0 +1,43 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<Copyright>gt</Copyright>
+		<AssemblyTitle>OX</AssemblyTitle>
+		<Version>1.0.2</Version>
+		<Authors>gt</Authors>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<AssemblyName>ox.wallets.core</AssemblyName>
+		<PackageId>ox.wallets.core</PackageId>
+		<PackageTags></PackageTags>
+		<PackageProjectUrl></PackageProjectUrl>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<RepositoryType>git</RepositoryType>
+		<RepositoryUrl></RepositoryUrl>
+		<RootNamespace>OX.Wallets</RootNamespace>
+		<Company>gt</Company>
+		<Description>ox.wallets.core</Description>
+		<LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>C:\ox</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>c:\ox</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="States\EthereumContext.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="ox">
+      <HintPath>C:\ox\net6.0\ox.dll</HintPath>
+    </Reference>
+    <Reference Include="ox.vm">
+      <HintPath>C:\ox\net6.0\ox.vm.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

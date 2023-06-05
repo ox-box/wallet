@@ -1,0 +1,31 @@
+﻿@namespace OX.Web
+@inherits LayoutComponentBase
+
+<AntDesign.ProLayout.BasicLayout Title="@DNPHelper.GetDNPSetting()?.DNP_Name" Logo="@("/assets/ox.svg")" MenuData=WebBoxBuilder.Menus Theme=MenuTheme.Dark>
+    <ChildContent>
+        @Body
+    </ChildContent>
+    <FooterRender>
+        <FooterView Copyright="2023 OX Ecosystem" Links="Links"></FooterView>
+    </FooterRender>
+</AntDesign.ProLayout.BasicLayout>
+@code{
+    public LinkItem[] Links { get; set; } =
+       {
+        new LinkItem
+        {
+            Key = "OX-Eco source code",
+            Title =(RenderFragment)(@<Space><Icon Type="github"></Icon><span>OX-Eco</span></Space>),
+            Href = "https://github.com/ox-eco/oxchain",
+            BlankTarget = true,
+        },
+        new LinkItem
+        {
+            Key = "ox box source code",
+            Title = (RenderFragment)(@<Space><Icon Type="github"></Icon><span>ox box</span></Space>),
+            Href = "https://github.com/ox-box/wallet",
+            BlankTarget = true,
+        } 
+    };
+}
+

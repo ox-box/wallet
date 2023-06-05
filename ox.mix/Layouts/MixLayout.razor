@@ -1,0 +1,16 @@
+﻿@namespace OX.Mix
+@inherits LayoutComponentBase
+
+<AntDesign.ProLayout.BasicLayout Title="@DNPHelper.GetDNPSetting()?.DNP_Name" Logo="@("/assets/ox.svg")" MenuData=WebBoxBuilder.Menus Theme=MenuTheme.Dark>
+    <RightContentRender>
+        <OX.Mix.Components.AuthState />
+    </RightContentRender>
+    <ChildContent>
+        @Body
+    </ChildContent>
+    <FooterRender>
+
+    </FooterRender>
+</AntDesign.ProLayout.BasicLayout>
+@*<SettingDrawer />*@
+

@@ -1,0 +1,84 @@
+﻿@page "/blockchain/transaction"
+@page "/blockchain/transaction/{txid}"
+@layout BlockchainLayout
+@inherits BlockchainComponentBase
+<Microsoft.AspNetCore.Components.Web.Extensions.Head.Title Value=@PageTitle />
+<PageContainer Title=@PageTitle>
+    <ChildContent>
+        <GridRow Class="row">
+            <GridCol Class="col" Span="4">
+            </GridCol>
+            <GridCol Class="col" Span="16">
+                <Search Placeholder="@UIHelper.LocalString("输入交易哈希","input transaction hash")" Size="@InputSize.Large" EnterButton="@UIHelper.LocalString("查看区块","View Block")" @bind-Value="@this.txid" OnSearch="OnSearch" />
+            </GridCol>
+            <GridCol Class="col" Span="4">
+            </GridCol>
+        </GridRow>
+        <GridRow Class="row">
+            @if (this.TX.IsNotNull())
+            {
+                <GridCol Span="24">
+                    <Collapse>
+                        @{
+
+                            if (this.TX.Type != Network.P2P.Payloads.TransactionType.MinerTransaction)
+                            {
+                                var s = $"{TX.Type.ToString()} / {TX.Hash.ToString()}";
+                                <Panel Header="@s">
+                                    <Collapse>
+                                        <Panel Header='@UIHelper.LocalString("输入","Input")'>
+
+                                            @foreach (var refer in TX.References)
+                                            {
+                                                <ul>
+                                                    <li>
+                                                        @UIHelper.LocalString($"地址:{refer.Value.ScriptHash.ToAddress()}",$"Address:{refer.Value.ScriptHash.ToAddress()}")
+                                                    </li>
+                                                    <li>
+                                                        @UIHelper.LocalString($"资产Id:{refer.Value.AssetId.ToString()}",$"Asset Id:{refer.Value.AssetId.ToString()}")
+                                                    </li>
+                                                    <li>
+                                                        @UIHelper.LocalString($"金额:{refer.Value.Value}",$"Amount:{refer.Value.Value}")
+                                                    </li>
+                                                </ul>
+                                                <Divider />
+                                            }
+
+                                        </Panel>
+                                        <Panel Header='@UIHelper.LocalString("输出","Output")'>
+
+                                            @foreach (var output in TX.Outputs)
+                                            {
+                                                <ul>
+                                                    <li>
+                                                        @UIHelper.LocalString($"地址:{output.ScriptHash.ToAddress()}",$"Address:{output.ScriptHash.ToAddress()}")
+                                                    </li>
+                                                    <li>
+                                                        @UIHelper.LocalString($"资产Id:{output.AssetId.ToString()}",$"Asset Id:{output.AssetId.ToString()}")
+                                                    </li>
+                                                    <li>
+                                                        @UIHelper.LocalString($"金额:{output.Value}",$"Amount:{output.Value}")
+                                                    </li>
+                                                </ul>
+                                                <Divider />
+                                            }
+                                        </Panel>
+                                    </Collapse>
+                                </Panel>
+
+                            }
+                        }
+                    </Collapse>
+                </GridCol>
+            }
+        </GridRow>
+    </ChildContent>
+</PageContainer>
+<style>
+    .col {
+        text-align: center;
+    }
+    .row{
+        margin-bottom:20px;
+    }
+</style>

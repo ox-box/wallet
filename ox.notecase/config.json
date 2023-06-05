@@ -1,0 +1,33 @@
+﻿{
+  "ApplicationConfiguration": {
+    "Paths": {
+      "Chain": "Chain_{0}",
+      "BizChain": "BizChain_{0}",
+      "Index": "Index_{0}"
+    },
+    "P2P": {
+      "Port": 11333,
+      "WsPort": 11334,
+      "ApiPort": 11332
+    },
+    "Seeds": [
+      "seed.oxchain.link:11333",
+      "seed1.oxchain.link:11333",
+      "seed2.oxchain.link:11333",
+      "seed3.oxchain.link:11333",
+      "seed4.oxchain.link:11333",
+      "seed5.oxchain.link:11333",
+      "seed6.oxchain.link:11333",
+      "seed7.oxchain.link:11333",
+      "seed8.oxchain.link:11333",
+      "seed9.oxchain.link:11333"
+    ],
+    "UnlockWallet": {
+      "Path": "",
+      "Password": "",
+      "StartConsensus": false,
+      "IsActive": false
+    },
+    "PluginURL": ""
+  }
+}

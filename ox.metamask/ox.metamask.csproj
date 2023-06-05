@@ -1,0 +1,38 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <WarningsAsErrors>nullable</WarningsAsErrors>
+    <Version>1.9.0</Version>
+    <Product>OX.MetaMask</Product>
+    <RootNamespace>OX.MetaMask</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>C:\ox</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>c:\ox</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <SupportedPlatform Include="browser" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="ox">
+      <HintPath>C:\ox\net6.0\ox.dll</HintPath>
+    </Reference>
+    <Reference Include="ox.vm">
+      <HintPath>C:\ox\net6.0\ox.vm.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.10" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.10" />
+    <PackageReference Include="Nethereum.ABI" Version="4.14.0" />
+    <PackageReference Include="Nethereum.RPC" Version="4.14.0" />
+  		<PackageReference Include="Nethereum.Web3" Version="4.14.0" />
+  </ItemGroup>
+
+</Project>

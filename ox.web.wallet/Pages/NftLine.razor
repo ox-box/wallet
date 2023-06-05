@@ -1,0 +1,87 @@
+﻿@page "/nft/nftline/{nftidhex}"
+@inherits WalletComponentBase
+<Microsoft.AspNetCore.Components.Web.Extensions.Head.Title Value=@PageTitle />
+<PageContainer Title=@PageTitle>
+    <ChildContent>
+        @{
+            string s = string.Empty;
+            NFCState nfcstate = default;
+            if (this.NftID.IsNotNull())
+            {
+                s = this.NftID.CID;
+                nfcstate = Blockchain.Singleton.CurrentSnapshot.NFTs.TryGet(this.NftID);
+            }
+        }
+        <div class="standardList">
+            <Card Class="listCard"
+                  Title="@s"
+                  Style="margin-top: 24px;"
+                  BodyStyle="padding: 0 10px 40px 10px">
+                <ChildContent>
+                    @if (nfcstate.IsNotNull())
+                    {
+                        var author = Contract.CreateSignatureRedeemScript(nfcstate.NFC.Author).ToScriptHash().ToAddress();
+                        <ul>
+                            <li>@UIHelper.LocalString($"作者:{author}",$"Author:{author}")</li>
+                            <li>@UIHelper.LocalString($"作者名称:{nfcstate.NFC.NftCopyright.AuthorName}",$"Author Name:{nfcstate.NFC.NftCopyright.AuthorName}")</li>
+                            <li>@UIHelper.LocalString($"已发行{nfcstate.TotalIssue}份",$"{nfcstate.TotalIssue} copies issued")</li>
+                            <li>@UIHelper.LocalString($"转售{nfcstate.TotalTransfer}次",$"Resale {nfcstate.TotalTransfer} times")</li>
+                            <li>@UIHelper.LocalString($"累计交易{nfcstate.TotalAmountTransfer} OXC",$"Total  exchange amount {nfcstate.TotalAmountTransfer} OXC")</li>
+                        </ul>
+                    }
+                    <AntDesign.Charts.Line @ref="@chart1" Config="config1" OnFirstRender="OnChart_Render" />
+                </ChildContent>
+            </Card>
+        </div>
+
+    </ChildContent>
+</PageContainer>
+@code {
+    IChartComponent chart1;
+    NftID NftID;
+
+    private async Task OnChart_Render(IChartComponent chart)
+    {
+        reload();
+        await chart.ChangeData(Points);
+    }
+
+    LineConfig config1 = new LineConfig()
+        {
+            Padding = "auto",
+            XField = "Date",
+            YField = "scales",
+            XAxis = new ValueCatTimeAxis()
+            {
+                TickCount = 5
+            }
+        };
+    void reload()
+    {
+        Points = new NftLineViewModel[0];
+        if (nftidhex.IsNotNullAndEmpty())
+        {
+            try
+            {
+                var bs = nftidhex.HexToBytes();
+                NftID = bs.AsSerializable<NftID>();
+                if (NftID.IsNotNull())
+                {
+                    var records = WalletBappProvider.Instance.GetAll<NFTSellKey, NFTSellValue>(WalletBizPersistencePrefixes.NFT_Transfer_Record, NftID);
+                    if (records.IsNotNullAndEmpty())
+                    {
+                        Points = records.OrderBy(m => m.Value.Time).Select(m => new NftLineViewModel { scales = (int)(m.Value.Amount.GetInternalValue() / Fixed8.D), Date = m.Value.Time.ToDateTime().ToString("yyyy-MM-dd HH:mm") }).ToArray();
+                    }
+                }
+            }
+            catch
+            {
+
+            }
+        }
+    }
+
+
+
+
+}

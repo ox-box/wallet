@@ -1,0 +1,54 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <RootNamespace>OX.Web</RootNamespace>
+    <OutputType>Library</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="Pages\Introduce.razor" />
+  </ItemGroup>
+
+   <ItemGroup>
+    <SupportedPlatform Include="browser" />
+  </ItemGroup>
+
+	<ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="6.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
+    <PackageReference Include="AntDesign.Charts" Version="0.2.3" />
+    <PackageReference Include="AntDesign.ProLayout" Version="0.12.4" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.13" />
+    <PackageReference Include="System.Net.Http.Json" Version="6.0.0" /> 
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="ox">
+      <HintPath>C:\ox\net6.0\ox.dll</HintPath>
+    </Reference>
+    <Reference Include="ox.vm">
+      <HintPath>C:\ox\net6.0\ox.vm.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Shared\" />
+	  <Folder Include="Styles\" />
+	  <Folder Include="wwwroot\" />
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\ox.bapp.wallet\ox.bapp.wallet.csproj" />
+	  <ProjectReference Include="..\ox.metamask\ox.metamask.csproj" />
+	  <ProjectReference Include="..\ox.wallets.core\ox.wallets.core.csproj" />
+	  <ProjectReference Include="..\ox.wallets.web\ox.wallets.web.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Content Update="Pages\Resale.razor">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	  </Content>
+	</ItemGroup>
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+	  <Exec Command="copy $(TargetPath)  E:\Data\Source\AU-X\OX\OX-Wallets\ox.notecase\bin\Debug\net6.0-windows\bapps\wlt\&#xD;&#xA;copy $(TargetPath)  E:\Data\Source\AU-X\OX\OX-Wallets\ox.mix\bin\Debug\net6.0-windows\bapps\wlt\&#xD;&#xA;copy $(TargetPath)  E:\Data\Source\AU-X\OX\OX-Wallets\ox.web\bin\Debug\net6.0-windows\bapps\wlt\&#xD;&#xA;&#xD;&#xA;" />
+	</Target>
+
+</Project>

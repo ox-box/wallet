@@ -1,0 +1,46 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <RootNamespace>OX.Wallets</RootNamespace>
+  <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Hubs\HubComponentBase.cs" />
+  </ItemGroup>
+
+   <ItemGroup>
+    <SupportedPlatform Include="browser" />
+  </ItemGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>c:\ox</OutputPath>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+	<ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="6.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
+    <PackageReference Include="AntDesign.Charts" Version="0.2.3" />
+    <PackageReference Include="AntDesign.ProLayout" Version="0.12.4" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.13" />
+    <PackageReference Include="Quick.AspNetCore.Components.Web.Extensions" Version="6.0.2" />
+    <PackageReference Include="System.Net.Http.Json" Version="6.0.0" />
+    <PackageReference Include="Nethereum.Signer" Version="4.14.0" />
+    <PackageReference Include="Nethereum.Web3" Version="4.14.0" />
+    <PackageReference Include="Blazored.SessionStorage" Version="2.3.0" />
+  </ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\ox.metamask\ox.metamask.csproj" />
+	  <ProjectReference Include="..\ox.wallets.core\ox.wallets.core.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Reference Include="ox">
+	    <HintPath>C:\ox\net6.0\ox.dll</HintPath>
+	  </Reference>
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="OTC\" />
+	</ItemGroup>
+
+</Project>

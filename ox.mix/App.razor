@@ -1,0 +1,11 @@
+<Router AppAssembly="@typeof(Program).Assembly" AdditionalAssemblies=Bapp.Assemblies >
+    <Found Context="routeData">
+        <RouteView RouteData="@routeData" DefaultLayout="@typeof(MixLayout)" />
+    </Found>
+    <NotFound>
+        <LayoutView Layout="@typeof(MixLayout)">
+            <p>Sorry, there's nothing at this address.</p>
+        </LayoutView>
+    </NotFound>
+</Router>
+<AntContainer />

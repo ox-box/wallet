@@ -1,0 +1,208 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <RootNamespace>OX.Wallets.Base</RootNamespace>
+    <Authors>gt</Authors>
+    <Copyright>gt</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <AssemblyName>ox.wallets.module.base</AssemblyName>
+    <Version>1.0.2</Version>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath></OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="NFT\NewOnChainNFTCoin.cs" />
+    <Compile Remove="NFT\NewOnChainNFTCoin.Designer.cs" />
+    <Compile Remove="NFT\NFTCoinControl.cs" />
+    <Compile Remove="NFT\NFTCoinControl.Designer.cs" />
+    <Compile Remove="NFT\NFTDonateControl.cs" />
+    <Compile Remove="NFT\NFTDonateControl.Designer.cs" />
+    <Compile Remove="NFT\ReceiveNFT.cs" />
+    <Compile Remove="NFT\ReceiveNFT.Designer.cs" />
+    <Compile Remove="NFT\TransferNFT.cs" />
+    <Compile Remove="NFT\TransferNFT.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="ManageBizSystem.Designer.resx" />
+    <EmbeddedResource Remove="NFT\NewOnChainNFTCoin.resx" />
+    <EmbeddedResource Remove="NFT\NFTCoinControl.resx" />
+    <EmbeddedResource Remove="NFT\NFTDonateControl.resx" />
+    <EmbeddedResource Remove="NFT\ReceiveNFT.resx" />
+    <EmbeddedResource Remove="NFT\TransferNFT.resx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Akka" Version="1.5.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Nethereum.Signer" Version="4.14.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ox.wallets.ui\ox.wallets.ui.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="ox">
+      <HintPath>C:\ox\net6.0\ox.dll</HintPath>
+    </Reference>
+    <Reference Include="ox.vm">
+      <HintPath>C:\ox\net6.0\ox.vm.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="DNP\SetPortalHome.cs" />
+    <Compile Update="NFT\MyNFTDetails.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="NFT\NFTTransferAvatarControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Wallets\DialogNativeAsset.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Wallets\DialogEthMapPayTo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Wallets\DialogSinglePayToEth.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Wallets\DialogSingleTokenPayTo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Trust\DialogTrustAssetBalance.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Help\DialogCheckPubKey.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Trust\MyTrusterContracts.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Wallets\ViewBlockDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Trust\TransferTrustAsset.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Trust\NewAssetTrustContract.cs" />
+    <Compile Update="Wallets\ClaimLockAsset.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Books\CreateBook.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Letters\MyLetters.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Books\MyBooks.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Trust\MyTrusteeContracts.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Letters\ViewLetterDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Wallets\OXTokens.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Letters\NewLetterDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Help\SignatureDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Wallets\DialogPrivateAssetLockTransfer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Wallets\DialogViewPrivateAssets.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Wallets\DialogShowOpenAccountKey.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Wallets\BTCAsset.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Wallets\DialogDefragment.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Wallets\DialogLockTransfer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Wallets\OXLockAsset.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Events\EventList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Events\MyEngraves.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Events\MyBoards.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Events\DiggList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Events\NewDigg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Events\NewEvent.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Wallets\DetainDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Events\FollowBoards.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Events\CreateEventBoard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Wallets\MnemonicsWallet.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Wallets\NoteAccountDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Wallets\EthAsset.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Wallets\Partners.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Events\Boards.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Events\BoardButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Wallets\LockWallet.cs">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Books\CreateBook.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Messages\" />
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="copy $(TargetPath)  E:\Data\Source\AU-X\OX\OX-Wallets\ox.notecase\bin\Debug\net6.0-windows\bapps\wlt\&#xD;&#xA;copy $(TargetPath)  E:\Data\Source\AU-X\OX\OX-Wallets\ox.mix\bin\Debug\net6.0-windows\bapps\wlt\&#xD;&#xA;copy $(TargetPath)  E:\Data\Source\AU-X\OX\OX-Wallets\ox.web\bin\Debug\net6.0-windows\bapps\wlt\&#xD;&#xA;" />
+  </Target>
+
+</Project>

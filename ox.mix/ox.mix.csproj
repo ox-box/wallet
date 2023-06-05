@@ -1,0 +1,54 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <OutputType>WinExe</OutputType>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWindowsForms>True</UseWindowsForms>
+    <RootNamespace>OX.Mix</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Chain_009ABDBC\**" />
+    <Content Remove="Chain_009ABDBC\**" />
+    <EmbeddedResource Remove="Chain_009ABDBC\**" />
+    <None Remove="Chain_009ABDBC\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="appsettings.Development.json" />
+    <Content Remove="appsettings.json" />
+    <Content Remove="wwwroot\assets\ox.png" />
+    <Content Remove="wwwroot\assets\ox.svg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Components\GlobalHeader\AuthState.razor" />
+    <None Include="wwwroot\assets\403.svg" />
+    <None Include="wwwroot\assets\ox.png" />
+    <None Include="wwwroot\assets\ox.svg" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="AntDesign.Charts" Version="0.2.3" />
+    <PackageReference Include="AntDesign.ProLayout" Version="0.12.4" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.13" />
+    <PackageReference Include="System.Net.Http.Json" Version="6.0.0" />
+    <PackageReference Include="Nethereum.Web3" Version="4.14.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ox.metamask\ox.metamask.csproj" />
+    <ProjectReference Include="..\ox.notecase\ox.notecase.csproj" />
+    <ProjectReference Include="..\ox.wallets.ui\ox.wallets.ui.csproj" />
+    <ProjectReference Include="..\ox.wallets.web\ox.wallets.web.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="ox">
+      <HintPath>C:\ox\net6.0\ox.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  
+</Project>
