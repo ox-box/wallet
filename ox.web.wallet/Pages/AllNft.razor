@@ -1,4 +1,4 @@
-﻿@page "/nft/allnft"
+﻿@page "/_pc/nft/allnft"
 @inherits WalletComponentBase
 <Microsoft.AspNetCore.Components.Web.Extensions.Head.Title Value=@PageTitle />
 <PageContainer Title=@PageTitle>
@@ -44,7 +44,7 @@
                                     @{
                                         var url = $"https://ipfs.io/ipfs/{context.NftCopyright.NftID.CID}/{context.NftCopyright.NftName}";
                                         var url2 = $"ipfs://{context.NftCopyright.NftID.CID}/{context.NftCopyright.NftName}";
-                                        var url3 = $"/nft/nftline/{context.NftCopyright.NftID.ToArray().ToHexString()}";
+                                        var url3 = $"/_pc/nft/nftline/{context.NftCopyright.NftID.ToArray().ToHexString()}";
                                     }
                                     <Space>
                                         <SpaceItem>

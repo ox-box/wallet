@@ -19,7 +19,8 @@ using Microsoft.AspNetCore.Components.Authorization;
 using OX.Wallets;
 using OX.Wallets.States;
 using OX.MetaMask;
-using Blazored.SessionStorage;
+using Blazored.LocalStorage;
+using Microsoft.AspNetCore.Mvc.Razor;
 
 namespace OX.Mix
 {
@@ -40,7 +41,9 @@ namespace OX.Mix
             services.AddServerSideBlazor().AddCircuitOptions(options => { options.DetailedErrors = true; }); ;
             services.AddAntDesign();
             services.AddHttpContextAccessor();
-            services.AddBlazoredSessionStorage();
+            services.AddBlazoredLocalStorage();   // local storage
+            services.AddBlazoredLocalStorage(config =>
+                config.JsonSerializerOptions.WriteIndented = true);  // local storage
             services.AddMetaMaskBlazor();
             services.AddScoped(sp => new HttpClient
             {
@@ -57,7 +60,9 @@ namespace OX.Mix
             });
             //services.Configure<ProSettings>(Configuration.GetSection("ProSettings"));
             services.AddSingleton<IStateDispatch, StateDispatcher>();
-
+            //services.Configure<RazorViewEngineOptions>(o => {
+            //    o.ViewLocationExpanders.Add(new CustomViewLocationExpander());
+            //});
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -78,6 +83,7 @@ namespace OX.Mix
             app.UseStaticFiles();
             app.UseRouting();
             //app.UseOXAuthentication();
+            app.UseCheckMobileBrowser();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

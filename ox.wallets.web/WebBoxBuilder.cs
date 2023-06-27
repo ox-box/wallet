@@ -13,6 +13,7 @@ namespace OX.Wallets
     public class WebBoxBuilder: WebBoxBuilderBase
     {
         public static MenuDataItem[] Menus { get { return WebBox.Boxes.OrderBy(m => m.BoxIndex).SelectMany(m => (m as WebBoxBlazor).GetMemus()).ToArray(); } }
-       
+        public static MenuDataItem[] MobileMenus { get { return WebBox.MobileBoxes.OrderBy(m => m.BoxIndex).SelectMany(m => (m as WebBoxBlazor).GetMobileMemus()).ToArray(); } }
+
     }
 }

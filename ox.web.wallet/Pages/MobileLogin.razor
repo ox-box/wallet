@@ -1,0 +1,27 @@
+﻿@page "/_m/easyauthorize"
+@layout MobileLayout
+@inherits MobileAuthComponentBase
+<Microsoft.AspNetCore.Components.Web.Extensions.Head.Title Value=@PageTitle />
+<div class="box">
+    <Divider Orientation="center">@PageTitle</Divider>
+    <Form Model="@EasyAuthorizeViewModel"
+          LabelColSpan="8"
+          WrapperColSpan="16"
+          OnFinish="Authentication">
+        <FormItem Label="@UIHelper.LocalString("简易码","Easy Code")">
+            <Input @bind-Value="@context.EasyCode" />
+        </FormItem>
+
+        <FormItem WrapperColOffset="8" WrapperColSpan="16">
+            <Button Type="@ButtonType.Primary" HtmlType="submit">
+                @UIHelper.LocalString("认证","Authentication")
+            </Button>
+        </FormItem>
+    </Form>
+</div>
+<style>
+    .box {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+</style>

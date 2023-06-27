@@ -17,7 +17,7 @@ using Nethereum.Hex.HexConvertors.Extensions;
 using OX.IO;
 using NBitcoin.Secp256k1;
 using Org.BouncyCastle.Asn1.Ocsp;
-using Blazored.SessionStorage;
+using Blazored.LocalStorage;
 using System.Xml.Linq;
 
 namespace OX.Wallets.Authentication
@@ -60,13 +60,6 @@ namespace OX.Wallets.Authentication
             var request = httpContextAccessor.HttpContext.Request;
             return request.Host.Host.ToLower() == "localhost" || request.Host.Host.ToLower() == "127.0.0.1";
         }
-        public static async Task<string> GetEthAddress(this ISessionStorageService sessionStorage)
-        {
-            return await sessionStorage.GetItemAsync<string>("_ox_map_ethaddress");
-        }
-        public static async Task SaveEthAddress(this ISessionStorageService sessionStorage, string ethAddress)
-        {
-            await sessionStorage.SetItemAsync("_ox_map_ethaddress", ethAddress);
-        }
+       
     }
 }

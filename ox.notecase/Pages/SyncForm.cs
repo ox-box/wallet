@@ -143,10 +143,12 @@ namespace OX.Notecase.Pages
             if (NotecaseApp.Instance.Container == default)
             {
                 var mc = new ModuleContainer();
-                var ip = Dns.GetHostEntry(Dns.GetHostName()).AddressList.FirstOrDefault(p => p.AddressFamily.ToString() == "InterNetwork")?.ToString();
-                var apiurl = $"http://{ip}:{Settings.Default.P2P.ApiPort}";
-                //mc.Text = apiurl;
-                mc.WebApiUrl = apiurl;
+                var ips = Dns.GetHostEntry(Dns.GetHostName()).AddressList.Where(p => p.AddressFamily.ToString() == "InterNetwork" && !p.IsIPv6LinkLocal);
+                foreach (var ip in ips)
+                {
+                    var apiurl = $"http://{ip.ToString()}:{Settings.Default.P2P.ApiPort}";
+                    OXRunTime.WebApiUrls.Add(apiurl);
+                }
                 NotecaseApp.Instance.Container = mc;
             }
 

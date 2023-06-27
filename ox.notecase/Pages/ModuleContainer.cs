@@ -33,7 +33,7 @@ namespace OX.Wallets
 
         #region 变量
         private DateTime persistence_time = DateTime.MinValue;
-        public string WebApiUrl { get; set; }
+     
         #endregion
         public ModuleContainer() : base()
         {

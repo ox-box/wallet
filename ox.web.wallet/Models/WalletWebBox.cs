@@ -10,7 +10,8 @@ namespace OX.Web.Models
 {
     public class WalletWebBox : WebBoxBlazor
     {
-
+        public override string Name => UIHelper.LocalString("钱包", "Wallet");
+        public override bool SupportMobile => false;
         public override uint BoxIndex { get { return 10; } }
         public WalletWebBox() : base()
         {
@@ -26,26 +27,26 @@ namespace OX.Web.Models
             {
                 list.Add(new MenuDataItem
                 {
-                    Path = "/blockchain",
+                    Path = "/_pc/blockchain",
                     Name = UIHelper.LocalString("区块链", "Blockchain"),
                     Key = "blockchain",
                     //Icon = "smile",
                     Children = new MenuDataItem[] {
                     new MenuDataItem
                     {
-                        Path = "/blockchain/explorer",
+                        Path = "/_pc/blockchain/explorer",
                         Name =  UIHelper.LocalString("区块浏览", "Block Explorer"),
                         Key = "explorer"
                     },
                      new MenuDataItem
                     {
-                        Path = "/blockchain/transaction",
+                        Path = "/_pc/blockchain/transaction",
                         Name =  UIHelper.LocalString("交易浏览", "Transaction Explorer"),
                         Key = "transaction"
                     },
                       new MenuDataItem
                     {
-                        Path = "/blockchain/address",
+                        Path = "/_pc/blockchain/address",
                         Name =  UIHelper.LocalString("地址浏览", "Address Explorer"),
                         Key = "address"
                     }
@@ -54,14 +55,14 @@ namespace OX.Web.Models
 
                 list.Add(new MenuDataItem
                 {
-                    Path = "/wallet",
+                    Path = "/_pc/wallet",
                     Name = UIHelper.LocalString("账户", "Account"),
                     Key = "wallet",
                     //Icon = "smile",
                     Children = new MenuDataItem[] {
                     new MenuDataItem
                     {
-                        Path = "/wallet/accountasset",
+                        Path = "/_pc/wallet/accountasset",
                         Name =  UIHelper.LocalString("账户资产", "Account Asset"),
                         Key = "accountasset"
                     }
@@ -69,32 +70,32 @@ namespace OX.Web.Models
                 });
                 list.Add(new MenuDataItem
                 {
-                    Path = "/nft",
+                    Path = "/_pc/nft",
                     Name = UIHelper.LocalString("NFT", "NFT"),
                     Key = "nft",
                     //Icon = "smile",
                     Children = new MenuDataItem[] {
                     new MenuDataItem
                     {
-                        Path = "/nft/resale",
+                        Path = "/_pc/nft/resale",
                         Name =  UIHelper.LocalString("待售NFT", "For sale NFTs"),
                         Key = "resale"
                     },
                      new MenuDataItem
                     {
-                        Path = "/nft/allnft",
+                        Path = "/_pc/nft/allnft",
                         Name =  UIHelper.LocalString("所有NFT", "All NFTs"),
                         Key = "allnft"
                     },
                      new MenuDataItem
                     {
-                        Path = "/nft/mynft",
+                        Path = "/_pc/nft/mynft",
                         Name = UIHelper.LocalString("我持有的NFT", "My hold NFTs"),
                         Key = "mynft"
                     },
                      new MenuDataItem
                     {
-                        Path = "/nft/buynft",
+                        Path = "/_pc/nft/buynft",
                         Name = UIHelper.LocalString("购买NFT", "Buy NFT"),
                         Key = "buynft"
                     }
@@ -103,6 +104,11 @@ namespace OX.Web.Models
             }
             return list.ToArray();
         }
+        public override MenuDataItem[] GetMobileMemus()
+        {
+            List<MenuDataItem> list = new List<MenuDataItem>();
 
+            return list.ToArray();
+        }
     }
 }

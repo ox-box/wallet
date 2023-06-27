@@ -45,27 +45,43 @@ namespace OX.Wallets.Base.DNP
             dnpSettingMenu.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
             //isingMenu.Image = global::Example.Icons.NewFile_6276;
             dnpSettingMenu.Name = "newLetterMenu";
-            dnpSettingMenu.ShortcutKeys = Keys.Control | Keys.N;
+            dnpSettingMenu.ShortcutKeys = Keys.Control | Keys.S;
             dnpSettingMenu.Size = new System.Drawing.Size(170, 22);
             dnpSettingMenu.Text = UIHelper.LocalString("&节点设置", "&Node Setting");
             dnpSettingMenu.Click += DnpSettingMenu_Click;
+
+            ToolStripMenuItem showPortalUrlMenu = new ToolStripMenuItem();
+            showPortalUrlMenu.BackColor = System.Drawing.Color.FromArgb(60, 63, 65);
+            showPortalUrlMenu.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
+            //isingMenu.Image = global::Example.Icons.NewFile_6276;
+            showPortalUrlMenu.Name = "showPortalUrlMenu";
+            showPortalUrlMenu.ShortcutKeys = Keys.Control | Keys.W;
+            showPortalUrlMenu.Size = new System.Drawing.Size(170, 22);
+            showPortalUrlMenu.Text = UIHelper.LocalString("&显示门户地址", "&Show Portal Url");
+            showPortalUrlMenu.Click += ShowPortalUrlMenu_Click;
 
             ToolStripMenuItem goPortalMenu = new ToolStripMenuItem();
             goPortalMenu.BackColor = System.Drawing.Color.FromArgb(60, 63, 65);
             goPortalMenu.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
             //isingMenu.Image = global::Example.Icons.NewFile_6276;
             goPortalMenu.Name = "goPortalMenu";
-            goPortalMenu.ShortcutKeys = Keys.Control | Keys.N;
+            goPortalMenu.ShortcutKeys = Keys.Control | Keys.O;
             goPortalMenu.Size = new System.Drawing.Size(170, 22);
             goPortalMenu.Text = UIHelper.LocalString("&打开门户", "&Open Portal");
             goPortalMenu.Click += GoPortalMenu_Click;
 
             walletMenu.DropDownItems.AddRange(new ToolStripItem[] {
                 dnpSettingMenu,
+                showPortalUrlMenu,
                 goPortalMenu
                 });
             Container.TopMenus.Items.AddRange(new ToolStripItem[] {
             walletMenu});
+        }
+
+        private void ShowPortalUrlMenu_Click(object sender, EventArgs e)
+        {
+            new ShowPortalUrl(OXRunTime.WebApiUrls).ShowDialog();
         }
 
         private void GoPortalMenu_Click(object sender, EventArgs e)

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using AntDesign;
 using Microsoft.AspNetCore.Components.Authorization;
 using OX.Wallets.States;
-using Blazored.SessionStorage;
+using Blazored.LocalStorage;
 using OX.Wallets.Authentication;
 using Nethereum.ABI.FunctionEncoding;
 using Nethereum.ABI.Model;
@@ -29,7 +29,7 @@ namespace OX.Mix.Components
         //[Inject]
         //protected IEthereumContext EthereumContext { get; set; }
         [Inject]
-        protected ISessionStorageService SessionStorage { get; set; }
+        protected ILocalStorageService LocalStorage { get; set; }
         public EthID EthID { get; set; }
         public Block LastBlock { get; set; }
         public bool HaveEthID { get { return EthID.IsNotNull(); } }

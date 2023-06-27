@@ -42,6 +42,7 @@
     <PackageReference Include="Akka" Version="1.5.3" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
     <PackageReference Include="Nethereum.Signer" Version="4.14.0" />
+    <PackageReference Include="QRCoder" Version="1.4.3" />
   </ItemGroup>
 
   <ItemGroup>
@@ -49,15 +50,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="ox">
-      <HintPath>C:\ox\net6.0\ox.dll</HintPath>
-    </Reference>
-    <Reference Include="ox.vm">
-      <HintPath>C:\ox\net6.0\ox.vm.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
+    <Compile Update="DNP\ShowPortalUrl.cs" />
     <Compile Update="DNP\SetPortalHome.cs" />
     <Compile Update="NFT\MyNFTDetails.cs">
       <SubType>Form</SubType>
@@ -85,6 +78,9 @@
     </Compile>
     <Compile Update="Trust\MyTrusterContracts.cs">
       <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Wallets\EasyCodeAccountDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Update="Wallets\ViewBlockDialog.cs">
       <SubType>Form</SubType>
@@ -199,6 +195,15 @@
 
   <ItemGroup>
     <Folder Include="Messages\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="ox">
+      <HintPath>..\libs\ox.dll</HintPath>
+    </Reference>
+    <Reference Include="ox.vm">
+      <HintPath>..\libs\ox.vm.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

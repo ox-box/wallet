@@ -144,11 +144,29 @@ namespace OX.Wallets.Base
                             sm.Tag = account;
                             sm.Click += SmNoteAccount_Click;
                             menu.Items.Add(sm);
+                            //重置简易访问码
+                            sm = new ToolStripMenuItem(UIHelper.LocalString("重置简易码", "Reset Easy Code"));
+                            sm.Tag = account;
+                            sm.Click += Sm_Click6;
+                            menu.Items.Add(sm);
                         }
                     }
                 }
                 if (menu.Items.Count > 0)
                     menu.Show(this.treeAsset, e.Location);
+            }
+        }
+
+        private void Sm_Click6(object sender, EventArgs e)
+        {
+            if (this.Operater != default && this.Operater.Wallet != default)
+            {
+                ToolStripMenuItem ToolStripMenuItem = sender as ToolStripMenuItem;
+                WalletAccount account = ToolStripMenuItem.Tag as WalletAccount;
+                if (this.Operater.Wallet is NEP6Wallet wallet)
+                {
+                    new EasyCodeAccountDialog(wallet, account).ShowDialog();
+                }
             }
         }
 
@@ -164,7 +182,7 @@ namespace OX.Wallets.Base
                 using (DialogSinglePayToEth dialog = new DialogSinglePayToEth(this.Operater, from))
                 {
                     if (dialog.ShowDialog() != DialogResult.OK) return;
-                    TxOutListBoxItem item = dialog.GetOutput(out string ethAddress,out uint lockIndex);
+                    TxOutListBoxItem item = dialog.GetOutput(out string ethAddress, out uint lockIndex);
                     if (item.IsNotNull())
                     {
                         SingleTransactionWrapper<EthereumMapTransaction> stw = new SingleTransactionWrapper<EthereumMapTransaction>(from, item.ToTxOutput());

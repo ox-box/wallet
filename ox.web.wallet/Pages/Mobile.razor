@@ -1,0 +1,30 @@
+﻿@page "/_m"
+@page "/_m/accesscode/{accesscode}"
+@layout MobileLayout
+@inherits MobileAuthComponentBase
+<Microsoft.AspNetCore.Components.Web.Extensions.Head.Title Value=@PageTitle />
+<Divider Orientation="center">Dapps</Divider>
+@{
+    if (WebBox.MobileBoxes.IsNotNullAndEmpty())
+    {
+        <div class="dapps">
+
+            @foreach (var menu in WebBoxBuilder.MobileMenus)
+            {
+                <Button Size="@ButtonSize.Large" Type="@ButtonType.Primary" Block OnClick="_=>Go(menu.Path)">@menu.Name</Button>
+            }
+        </div>
+    }
+}
+<style>
+    .dapps {
+        margin-top: 20px;
+        margin-left: 20px;
+        margin-right: 20px;
+        margin-bottom: 12px;
+    }
+
+        .dapps > * {
+            margin-bottom: 12px;
+        }
+</style>

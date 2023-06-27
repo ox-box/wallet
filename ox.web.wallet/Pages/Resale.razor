@@ -1,4 +1,4 @@
-﻿@page "/nft/resale"
+﻿@page "/_pc/nft/resale"
 @inherits WalletComponentBase
 @using OX.Wallets.Base.NFT
 <Microsoft.AspNetCore.Components.Web.Extensions.Head.Title Value=@PageTitle />
@@ -76,8 +76,8 @@
                                         @{
                                                 var url = $"https://ipfs.io/ipfs/{context.NFCState.NFC.NftCopyright.NftID.CID}/{context.NFCState.NFC.NftCopyright.NftName}";
                                                 var url2 = $"ipfs://{context.NFCState.NFC.NftCopyright.NftID.CID}/{context.NFCState.NFC.NftCopyright.NftName}";
-                                                var url3 = $"/nft/nftline/{context.NFCState.NFC.NftCopyright.NftID.ToArray().ToHexString()}";
-                                                var url4 = $"/nft/buynft/{context.IssueId}";
+                                                var url3 = $"/_pc/nft/nftline/{context.NFCState.NFC.NftCopyright.NftID.ToArray().ToHexString()}";
+                                                var url4 = $"/_pc/nft/buynft/{context.IssueId}";
                                             }
                                             <Space>
                                                 <SpaceItem>

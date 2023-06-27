@@ -75,16 +75,7 @@ namespace OX.Wallets.Base.Help
             introducemenu.Size = new System.Drawing.Size(170, 22);
             introducemenu.Text = UIHelper.LocalString("&钱包社区", "&Notecase Community");
             introducemenu.Click += IntroduceMenu_Click;
-            //introduce
-            ToolStripMenuItem copyApiUrlmenu = new ToolStripMenuItem();
-            copyApiUrlmenu.BackColor = System.Drawing.Color.FromArgb(60, 63, 65);
-            copyApiUrlmenu.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
-            //exitmenu.Image = global::Example.Icons.NewFile_6276;
-            copyApiUrlmenu.Name = "copyApiUrlmenu";
-            copyApiUrlmenu.ShortcutKeys = Keys.Control | Keys.A;
-            copyApiUrlmenu.Size = new System.Drawing.Size(170, 22);
-            copyApiUrlmenu.Text = UIHelper.LocalString("&复制WebApi地址", "&Copy Web Api Url");
-            copyApiUrlmenu.Click += CopyApiUrlmenu_Click;
+           
             //about
             ToolStripMenuItem aboutmenu = new ToolStripMenuItem();
             aboutmenu.BackColor = System.Drawing.Color.FromArgb(60, 63, 65);
@@ -100,7 +91,6 @@ namespace OX.Wallets.Base.Help
                 signMenu,
                 pubkeyViewMenu,
                 introducemenu,
-                copyApiUrlmenu,
                 aboutmenu});
             Container.TopMenus.Items.AddRange(new ToolStripItem[] {
             walletMenu});
@@ -116,10 +106,6 @@ namespace OX.Wallets.Base.Help
             new SignatureDialog(Operater).ShowDialog();
         }
 
-        private void CopyApiUrlmenu_Click(object sender, EventArgs e)
-        {
-            Clipboard.SetText(Container.WebApiUrl);
-        }
 
         public override void OnBappEvent(BappEvent be) { }
 

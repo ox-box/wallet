@@ -1,4 +1,4 @@
-﻿@page "/wallet/accountasset"
+﻿@page "/_pc/wallet/accountasset"
 @inherits WalletComponentBase
 <Microsoft.AspNetCore.Components.Web.Extensions.Head.Title Value=@PageTitle />
 <PageContainer Title=@PageTitle>
@@ -51,10 +51,10 @@
                             <div class="listContentItem">
                                 <Space>
                                     <SpaceItem>
-                                        <a href="/wallet/balancedetail/@context.AssetId.ToString()">@UIHelper.LocalString("明细","Detail")</a>
+                                            <a href="/_pc/wallet/balancedetail/@context.AssetId.ToString()">@UIHelper.LocalString("明细","Detail")</a>
                                     </SpaceItem>
                                     <SpaceItem>
-                                        <a href="/wallet/transferasset/@context.AssetId.ToString()">@UIHelper.LocalString("转帐","Transfer")</a>
+                                            <a href="/_pc/wallet/transferasset/@context.AssetId.ToString()">@UIHelper.LocalString("转帐","Transfer")</a>
                                     </SpaceItem>
                                 </Space>
                             </div>

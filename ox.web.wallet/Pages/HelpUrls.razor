@@ -1,0 +1,80 @@
+﻿@page "/_pc/help/urls"
+@layout BlockchainLayout
+@inherits BlockchainComponentBase
+<Microsoft.AspNetCore.Components.Web.Extensions.Head.Title Value=@PageTitle />
+<p class="empty-title">
+    <span class="blocktext30">Welcome</span>
+    <span class="blocktext31">to ox ecosystem</span>
+</p>
+<div>
+    @foreach (var url in OXRunTime.WebApiUrls)
+    {
+        QRCodeGenerator qrGenerator = new QRCodeGenerator();
+        QRCodeData qrCodeData = qrGenerator.CreateQrCode(url, QRCodeGenerator.ECCLevel.Q);
+        Base64QRCode qrCode = new Base64QRCode(qrCodeData);
+        string qrCodeImageAsBase64 = qrCode.GetGraphic(20);
+        var s = $"data:image/jpeg;base64,{qrCodeImageAsBase64}";
+        <Image Width="200px"
+           Height="200px"
+               src="@s" />
+        <Divider>   <Text Copyable>@url</Text></Divider>
+    }
+</div>
+
+<style>
+    .empty-title {
+        margin-top: 300px;
+        width: 100%;
+        text-align: center;
+    }
+
+    .secondtitle {
+        margin-left: 30px;
+        margin-right: 200px;
+    }
+
+    .blocktext30 {
+        margin-right: 12px;
+        font-size: 32px;
+        line-height: 39px;
+        letter-spacing: 0;
+        /*margin-right: 20px;*/
+        font-family: Gotham,sans-serif;
+        /*color: #fff;*/
+        /*font-size: 70px;*/
+        /*line-height: 86px;*/
+        font-weight: 700;
+        /*letter-spacing: -1.88px;*/
+        text-transform: uppercase;
+        white-space: nowrap;
+    }
+
+    .blocktext31 {
+        font-size: 32px;
+        line-height: 39px;
+        letter-spacing: 0;
+        font-family: Gotham,sans-serif;
+        /*color: #fff;*/
+        /*font-size: 70px;*/
+        /*line-height: 86px;*/
+        font-weight: 300;
+        /*letter-spacing: -1.88px;*/
+        text-transform: uppercase;
+        white-space: nowrap;
+    }
+
+    .blocktext32 {
+        font-size: 24px;
+        line-height: 39px;
+        letter-spacing: 0;
+        font-family: Gotham,sans-serif;
+        /*color: #fff;*/
+        /*font-size: 70px;*/
+        /*line-height: 86px;*/
+        font-weight: 100;
+        /*letter-spacing: -1.88px;*/
+        /* text-transform: uppercase;*/
+        white-space: nowrap;
+    }
+
+</style>

@@ -47,7 +47,7 @@
 
   <ItemGroup>
     <Reference Include="ox">
-      <HintPath>C:\ox\net6.0\ox.dll</HintPath>
+      <HintPath>..\libs\ox.dll</HintPath>
     </Reference>
   </ItemGroup>
   

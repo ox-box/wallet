@@ -59,7 +59,7 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
     <PackageReference Include="Nethereum.Signer" Version="4.14.0" />
-    
+    <PackageReference Include="QRCoder" Version="1.4.3" />
   </ItemGroup>
 
   <ItemGroup>
@@ -68,7 +68,7 @@
 
   <ItemGroup>
     <Reference Include="ox">
-      <HintPath>C:\ox\net6.0\ox.dll</HintPath>
+      <HintPath>..\libs\ox.dll</HintPath>
     </Reference>
   </ItemGroup>
 

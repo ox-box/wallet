@@ -2,6 +2,7 @@
 using OX.Network.P2P.Payloads;
 using OX.IO.Json;
 using System.Diagnostics;
+using System.Collections.Generic;
 
 namespace OX.Wallets
 {
@@ -21,6 +22,7 @@ namespace OX.Wallets
         public static int Port { get; set; }
         public static RunMode RunMode { get; set; }
         public static RunStatus RunState { get; set; }
+        public static List<string> WebApiUrls { get; private set; } = new List<string>();
         public static void GoWeb(string url)
         {
             var baseUrl = $"http://localhost:{Port}";

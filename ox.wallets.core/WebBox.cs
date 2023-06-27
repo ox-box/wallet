@@ -9,8 +9,11 @@ namespace OX.Wallets
     {
         static List<WebBox> boxes = new List<WebBox>();
         public INotecase Notecase { get; private set; } = default;
+        public abstract string Name { get; }
+        public abstract bool SupportMobile { get; }
         public abstract uint BoxIndex { get; }
         public static IEnumerable<WebBox> Boxes { get { return boxes; } }
+        public static IEnumerable<WebBox> MobileBoxes { get { return boxes.Where(m => m.SupportMobile); } }
         public bool Valid { get { return Notecase.IsNotNull() && Notecase.Wallet.IsNotNull(); } }
 
         public WebBox()
@@ -29,6 +32,11 @@ namespace OX.Wallets
             return boxes.FirstOrDefault(m => m is T) as T;
         }
         public abstract void Init();
-
+        public WalletAccount GetWalletAccountByAccessCode(string accessCode)
+        {
+            if (Notecase.IsNull()) return default;
+            if (Notecase.Wallet.IsNull()) return default;
+            return Notecase.Wallet.GetHeldAccounts().FirstOrDefault(m => m.AccessCode == accessCode);
+        }
     }
 }

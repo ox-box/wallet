@@ -21,15 +21,8 @@
     <PackageReference Include="AntDesign.Charts" Version="0.2.3" />
     <PackageReference Include="AntDesign.ProLayout" Version="0.12.4" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.13" />
-    <PackageReference Include="System.Net.Http.Json" Version="6.0.0" /> 
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="ox">
-      <HintPath>C:\ox\net6.0\ox.dll</HintPath>
-    </Reference>
-    <Reference Include="ox.vm">
-      <HintPath>C:\ox\net6.0\ox.vm.dll</HintPath>
-    </Reference>
+    <PackageReference Include="System.Net.Http.Json" Version="6.0.0" />
+    <PackageReference Include="QRCoder" Version="1.4.3" />
   </ItemGroup>
 	<ItemGroup>
 	  <Folder Include="Shared\" />
@@ -41,6 +34,14 @@
 	  <ProjectReference Include="..\ox.metamask\ox.metamask.csproj" />
 	  <ProjectReference Include="..\ox.wallets.core\ox.wallets.core.csproj" />
 	  <ProjectReference Include="..\ox.wallets.web\ox.wallets.web.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Reference Include="ox">
+	    <HintPath>..\libs\ox.dll</HintPath>
+	  </Reference>
+	  <Reference Include="ox.vm">
+	    <HintPath>..\libs\ox.vm.dll</HintPath>
+	  </Reference>
 	</ItemGroup>
 	<ItemGroup>
 	  <Content Update="Pages\Resale.razor">

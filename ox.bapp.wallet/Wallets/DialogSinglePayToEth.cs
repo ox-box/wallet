@@ -39,11 +39,7 @@ namespace OX.Wallets.Base
             this.lb_balance.Text = UIHelper.LocalString("余额:", "Balance:");
             this.lb_lockindex.Text = UIHelper.LocalString("锁仓高度:", "Lock Height:");
             btnOk.Enabled = false;
-
-            foreach (var asset in Blockchain.Singleton.Store.GetAssets().Find().OrderByDescending(m => m.Key == Blockchain.OXS).ThenByDescending(m => m.Key == Blockchain.OXC))
-            {
-                this.cb_assets.Items.Add(new AssetDesc { AssetState = asset.Value });
-            }
+            
         }
 
         public UInt160 From;
@@ -121,6 +117,14 @@ namespace OX.Wallets.Base
 
         private void PayToDialog_Load(object sender, EventArgs e)
         {
+            var accountState = Blockchain.Singleton.CurrentSnapshot.Accounts.TryGet(this.From);
+            if (accountState.IsNotNull())
+            {
+                foreach (var asset in Blockchain.Singleton.Store.GetAssets().Find().Where(m => accountState.Balances.ContainsKey(m.Key)).OrderByDescending(m => m.Key == Blockchain.OXS).ThenByDescending(m => m.Key == Blockchain.OXC))
+                {
+                    this.cb_assets.Items.Add(new AssetDesc { AssetState = asset.Value });
+                }
+            }
             RefreshBalance();
         }
 

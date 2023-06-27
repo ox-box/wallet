@@ -1,5 +1,5 @@
 ﻿
-using Blazored.SessionStorage;
+using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +18,7 @@ namespace OX.Wallets.Authentication
         [Inject]
         protected IHttpContextAccessor HttpContextAccessor { get; set; }
         [Inject]
-        protected ISessionStorageService SessionStorage { get; set; }
+        protected ILocalStorageService LocalStorage { get; set; }
 
 
 
@@ -40,14 +40,8 @@ namespace OX.Wallets.Authentication
                 this.User = oxuser;
             }
         }
-        public void Dispose()
-        {
-            this.OnDispose();
-        }
-        public async Task<string> GetEthAddress()
-        {
-            return await SessionStorage.GetEthAddress();
-        }
+        
+      
 
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using AntDesign;
 using Microsoft.AspNetCore.Components.Authorization;
 using OX.Wallets.States;
-using Blazored.SessionStorage;
+using Blazored.LocalStorage;
 using OX.Wallets.Authentication;
 using Nethereum.ABI.FunctionEncoding;
 using Nethereum.ABI.Model;

@@ -13,6 +13,5 @@ namespace OX.Wallets
         DarkDockPanel DockPanel { get; }
         List<DarkDockContent> ToolWindows { get; }
         DockPanelState DockPanelState { get; }
-        string WebApiUrl { get; set; }
     }
 }
