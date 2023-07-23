@@ -13,16 +13,19 @@ namespace OX.Wallets
             {
                 DNP_Name = dnp["dnp_name"]?.AsString();
                 DNP_Introduce = dnp["dnp_introduce"]?.AsString();
+                Base_Url = dnp["base_url"]?.AsString();
             }
         }
         public string DNP_Name { get; set; }
         public string DNP_Introduce { get; set; }
+        public string Base_Url { get; set; }
 
         public JObject Build()
         {
             JObject dnp = new JObject();
             dnp["dnp_name"] = DNP_Name;
             dnp["dnp_introduce"] = DNP_Introduce;
+            dnp["base_url"] = Base_Url;
             return dnp;
         }
     }

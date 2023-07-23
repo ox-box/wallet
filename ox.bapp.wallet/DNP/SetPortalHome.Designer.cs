@@ -34,8 +34,10 @@
             tb_remark = new UI.Controls.DarkTextBox();
             lb_remark = new UI.Controls.DarkLabel();
             panel = new System.Windows.Forms.Panel();
-            bt_ok = new UI.Controls.DarkButton();
+            tb_baseUrl = new UI.Controls.DarkTextBox();
+            lb_baseUrl = new UI.Controls.DarkLabel();
             bt_cancel = new UI.Controls.DarkButton();
+            bt_ok = new UI.Controls.DarkButton();
             panel.SuspendLayout();
             SuspendLayout();
             // 
@@ -69,6 +71,8 @@
             // 
             // panel
             // 
+            panel.Controls.Add(tb_baseUrl);
+            panel.Controls.Add(lb_baseUrl);
             panel.Controls.Add(bt_cancel);
             panel.Controls.Add(bt_ok);
             panel.Controls.Add(lb_remark);
@@ -78,14 +82,19 @@
             resources.ApplyResources(panel, "panel");
             panel.Name = "panel";
             // 
-            // bt_ok
+            // tb_baseUrl
             // 
-            resources.ApplyResources(bt_ok, "bt_ok");
-            bt_ok.Name = "bt_ok";
-            bt_ok.SpecialBorderColor = null;
-            bt_ok.SpecialFillColor = null;
-            bt_ok.SpecialTextColor = null;
-            bt_ok.Click += bt_ok_Click;
+            tb_baseUrl.BackColor = System.Drawing.Color.FromArgb(69, 73, 74);
+            tb_baseUrl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            tb_baseUrl.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
+            resources.ApplyResources(tb_baseUrl, "tb_baseUrl");
+            tb_baseUrl.Name = "tb_baseUrl";
+            // 
+            // lb_baseUrl
+            // 
+            resources.ApplyResources(lb_baseUrl, "lb_baseUrl");
+            lb_baseUrl.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
+            lb_baseUrl.Name = "lb_baseUrl";
             // 
             // bt_cancel
             // 
@@ -95,6 +104,15 @@
             bt_cancel.SpecialFillColor = null;
             bt_cancel.SpecialTextColor = null;
             bt_cancel.Click += bt_cancel_Click;
+            // 
+            // bt_ok
+            // 
+            resources.ApplyResources(bt_ok, "bt_ok");
+            bt_ok.Name = "bt_ok";
+            bt_ok.SpecialBorderColor = null;
+            bt_ok.SpecialFillColor = null;
+            bt_ok.SpecialTextColor = null;
+            bt_ok.Click += bt_ok_Click;
             // 
             // SetPortalHome
             // 
@@ -121,5 +139,7 @@
         private System.Windows.Forms.Panel panel;
         private UI.Controls.DarkButton bt_cancel;
         private UI.Controls.DarkButton bt_ok;
+        private UI.Controls.DarkTextBox tb_baseUrl;
+        private UI.Controls.DarkLabel lb_baseUrl;
     }
 }

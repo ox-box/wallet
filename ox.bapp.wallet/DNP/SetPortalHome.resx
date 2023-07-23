@@ -92,7 +92,7 @@
     <value>panel</value>
   </data>
   <data name="&gt;&gt;lb_name.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>7</value>
   </data>
   <data name="tb_name.Location" type="System.Drawing.Point, System.Drawing">
     <value>193, 24</value>
@@ -116,7 +116,7 @@
     <value>panel</value>
   </data>
   <data name="&gt;&gt;tb_name.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>6</value>
   </data>
   <data name="tb_remark.Location" type="System.Drawing.Point, System.Drawing">
     <value>193, 88</value>
@@ -143,7 +143,7 @@
     <value>panel</value>
   </data>
   <data name="&gt;&gt;tb_remark.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>5</value>
   </data>
   <data name="lb_remark.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -176,7 +176,64 @@
     <value>panel</value>
   </data>
   <data name="&gt;&gt;lb_remark.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>4</value>
+  </data>
+  <data name="tb_baseUrl.Location" type="System.Drawing.Point, System.Drawing">
+    <value>886, 26</value>
+  </data>
+  <data name="tb_baseUrl.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>6, 6, 6, 6</value>
+  </data>
+  <data name="tb_baseUrl.Size" type="System.Drawing.Size, System.Drawing">
+    <value>475, 30</value>
+  </data>
+  <data name="tb_baseUrl.TabIndex" type="System.Int32, mscorlib">
+    <value>27</value>
+  </data>
+  <data name="&gt;&gt;tb_baseUrl.Name" xml:space="preserve">
+    <value>tb_baseUrl</value>
+  </data>
+  <data name="&gt;&gt;tb_baseUrl.Type" xml:space="preserve">
+    <value>OX.Wallets.UI.Controls.DarkTextBox, ox.wallets.ui, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;tb_baseUrl.Parent" xml:space="preserve">
+    <value>panel</value>
+  </data>
+  <data name="&gt;&gt;tb_baseUrl.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="lb_baseUrl.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lb_baseUrl.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lb_baseUrl.Location" type="System.Drawing.Point, System.Drawing">
+    <value>679, 30</value>
+  </data>
+  <data name="lb_baseUrl.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>5, 0, 5, 0</value>
+  </data>
+  <data name="lb_baseUrl.Size" type="System.Drawing.Size, System.Drawing">
+    <value>86, 24</value>
+  </data>
+  <data name="lb_baseUrl.TabIndex" type="System.Int32, mscorlib">
+    <value>26</value>
+  </data>
+  <data name="lb_baseUrl.Text" xml:space="preserve">
+    <value>Claim to:</value>
+  </data>
+  <data name="&gt;&gt;lb_baseUrl.Name" xml:space="preserve">
+    <value>lb_baseUrl</value>
+  </data>
+  <data name="&gt;&gt;lb_baseUrl.Type" xml:space="preserve">
+    <value>OX.Wallets.UI.Controls.DarkLabel, ox.wallets.ui, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;lb_baseUrl.Parent" xml:space="preserve">
+    <value>panel</value>
+  </data>
+  <data name="&gt;&gt;lb_baseUrl.ZOrder" xml:space="preserve">
+    <value>1</value>
   </data>
   <data name="bt_cancel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -206,7 +263,7 @@
     <value>panel</value>
   </data>
   <data name="&gt;&gt;bt_cancel.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>2</value>
   </data>
   <data name="bt_ok.Location" type="System.Drawing.Point, System.Drawing">
     <value>960, 554</value>
@@ -233,7 +290,7 @@
     <value>panel</value>
   </data>
   <data name="&gt;&gt;bt_ok.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>3</value>
   </data>
   <data name="panel.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>

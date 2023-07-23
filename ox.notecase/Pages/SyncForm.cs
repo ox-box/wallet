@@ -149,6 +149,16 @@ namespace OX.Notecase.Pages
                     var apiurl = $"http://{ip.ToString()}:{Settings.Default.P2P.ApiPort}";
                     OXRunTime.WebApiUrls.Add(apiurl);
                 }
+                var baseUrl = DNPHelper.GetDNPSetting()?.Base_Url;
+                if (baseUrl.IsNotNullAndEmpty())
+                {
+                    if (!baseUrl.ToLower().StartsWith("http"))
+                    {
+                        baseUrl = "http://" + baseUrl;
+                    }
+                    var apiurl = $"{baseUrl}:{Settings.Default.P2P.ApiPort}";
+                    OXRunTime.WebApiUrls.Add(apiurl);
+                }
                 NotecaseApp.Instance.Container = mc;
             }
 
