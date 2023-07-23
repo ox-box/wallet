@@ -14,7 +14,37 @@
     <base href="~/" />
     <link href="_content/AntDesign/css/ant-design-blazor.css" rel="stylesheet" />
     <link href="_content/AntDesign.ProLayout/css/ant-design-pro-layout-blazor.css" rel="stylesheet" />
-    <link href="./css/site.css" rel="stylesheet" />  
+    <link href="./css/site.css" rel="stylesheet" />
+    <script>
+        (function () {
+
+            if (typeof WeixinJSBridge == "object" && typeof WeixinJSBridge.invoke == "function") {
+
+                handleFontSize();
+
+            } else {
+
+                document.addEventListener("WeixinJSBridgeReady", handleFontSize, false);
+
+            }
+
+            function handleFontSize() {
+
+                WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize': 0 });
+
+                WeixinJSBridge.on('menu:setfont', function () {
+
+                    WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize': 0 });
+
+                });
+
+            }
+        })();
+
+        window.onload = function () {
+            document.body.style.cssText = "-webkit-text-size-adjust: 100% !important;"
+        }
+    </script>
 </head>
 <body>
     <app>
