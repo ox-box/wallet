@@ -4,7 +4,7 @@
 <PageContainer Title=@PageTitle>
     <ChildContent>
         @{
-            var cardTitle = UIHelper.LocalString("资产列表", "Asset List");
+            var cardTitle = this.WebLocalString("资产列表", "Asset List");
         }
         <div class="standardList">
             <Card Class="listCard"
@@ -19,31 +19,31 @@
 
                             <div class="listContent">
                                 <div class="listContentItem">
-                                    <span>@UIHelper.LocalString("资产名称","Asset Name")</span>
+                                    <span>@this.WebLocalString("资产名称","Asset Name")</span>
                                     <p>@context.AssetName </p>
                                 </div>
                             </div>
                             <div class="listContent">
                                 <div class="listContentItem">
-                                    <span>@UIHelper.LocalString("资产Id","Asset Id")</span>
+                                    <span>@this.WebLocalString("资产Id","Asset Id")</span>
                                     <p>@context.AssetId.ToString() </p>
                                 </div>
                             </div>
                             <div class="listContent">
                                 <div class="listContentItem">
-                                    <span>@UIHelper.LocalString("主账户余额","Master Balance")</span>
+                                    <span>@this.WebLocalString("主账户余额","Master Balance")</span>
                                     <p>@context.MasterBalance </p>
                                 </div>
                             </div>
                             <div class="listContent">
                                 <div class="listContentItem">
-                                    <span>@UIHelper.LocalString("总余额","Total Balance")</span>
+                                    <span>@this.WebLocalString("总余额","Total Balance")</span>
                                     <p>@context.TotalBalance </p>
                                 </div>
                             </div>
                             <div class="listContent">
                                 <div class="listContentItem">
-                                    <span>@UIHelper.LocalString("可用余额","Available Balance")</span>
+                                    <span>@this.WebLocalString("可用余额","Available Balance")</span>
                                     <p>@context.AvailableBalance </p>
                                 </div>
                             </div>
@@ -51,10 +51,10 @@
                             <div class="listContentItem">
                                 <Space>
                                     <SpaceItem>
-                                            <a href="/_pc/wallet/balancedetail/@context.AssetId.ToString()">@UIHelper.LocalString("明细","Detail")</a>
+                                            <a href="/_pc/wallet/balancedetail/@context.AssetId.ToString()">@this.WebLocalString("明细","Detail")</a>
                                     </SpaceItem>
                                     <SpaceItem>
-                                            <a href="/_pc/wallet/transferasset/@context.AssetId.ToString()">@UIHelper.LocalString("转帐","Transfer")</a>
+                                            <a href="/_pc/wallet/transferasset/@context.AssetId.ToString()">@this.WebLocalString("转帐","Transfer")</a>
                                     </SpaceItem>
                                 </Space>
                             </div>

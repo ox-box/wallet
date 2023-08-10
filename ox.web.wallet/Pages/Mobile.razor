@@ -3,13 +3,17 @@
 @layout MobileLayout
 @inherits MobileAuthComponentBase
 <Microsoft.AspNetCore.Components.Web.Extensions.Head.Title Value=@PageTitle />
-<Divider Orientation="center">Dapps</Divider>
+@{
+    var s = this.WebLocalString("English", "中文");
+}
+
+<Divider Orientation="center">Dapps <Button Style="margin-left:30px;" Size="small" OnClick="_=>ChangeLanguage(s)">@s</Button></Divider>
 @{
     if (WebBox.MobileBoxes.IsNotNullAndEmpty())
     {
         <div class="dapps">
 
-            @foreach (var menu in WebBoxBuilder.MobileMenus)
+            @foreach (var menu in WebBoxBuilder.GetMobileMenus(this.Language))
             {
                 <Button Size="@ButtonSize.Large" Type="@ButtonType.Primary" Block OnClick="_=>Go(menu.Path)">@menu.Name</Button>
             }

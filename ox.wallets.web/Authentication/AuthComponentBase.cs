@@ -17,8 +17,7 @@ namespace OX.Wallets.Authentication
         public IMetaMaskService MetaMaskService { get; set; } = default!;
         [Inject]
         protected IHttpContextAccessor HttpContextAccessor { get; set; }
-        [Inject]
-        protected ILocalStorageService LocalStorage { get; set; }
+       
 
 
 

@@ -8,7 +8,7 @@ namespace OX.Wallets
 {
     public interface IWebBox
     {
-        string Name { get; }
+        //string Name { get; }
         bool SupportMobile { get; }
     }
 }

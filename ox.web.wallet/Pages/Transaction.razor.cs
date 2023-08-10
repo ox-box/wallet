@@ -31,7 +31,7 @@ namespace OX.Web.Pages
 {
     public partial class Transaction
     {
-        public override string PageTitle => UIHelper.LocalString("交易浏览", "Transaction Explorer");
+        public override string PageTitle => this.WebLocalString("交易浏览", "Transaction Explorer");
         [Parameter]
         public string? txid { get; set; }
         UInt256 TxHash;

@@ -15,6 +15,7 @@ using OX.Wallets.Eths;
 using Nethereum.Util;
 using OX.Wallets.Messages;
 using OX.Network.P2P.Payloads;
+using OX.Wallets.Mnemonics;
 
 namespace OX.Mix.Components
 {
@@ -28,8 +29,8 @@ namespace OX.Mix.Components
         protected IHttpContextAccessor HttpContextAccessor { get; set; }
         //[Inject]
         //protected IEthereumContext EthereumContext { get; set; }
-        [Inject]
-        protected ILocalStorageService LocalStorage { get; set; }
+        [CascadingParameter]
+        public EventCallback LanguageCallBack { get; set; }
         public EthID EthID { get; set; }
         public Block LastBlock { get; set; }
         public bool HaveEthID { get { return EthID.IsNotNull(); } }
@@ -62,7 +63,10 @@ namespace OX.Mix.Components
                 await GetSelectedAddress();
                 await GetSelectedNetwork();
             }
-
+            if (this.Language.IsNotNullAndEmpty())
+            {
+                await this.LanguageCallBack.InvokeAsync(this.Language);
+            }
         }
 
         private void StateDispatcher_MixStateNotice(IMixStateMessage message)
@@ -147,6 +151,17 @@ namespace OX.Mix.Components
             IMetaMaskService.OnDisconnectEvent -= IMetaMaskService_OnDisconnectEvent;
             StateDispatcher.MixStateNotice -= StateDispatcher_MixStateNotice;
             base.Dispose();
+        }
+        public async void ChangeLanguage(string language)
+        {
+            var u = language == "English" ? "en-us" : "zh-cn";
+            this.Language = u;
+            await this.SetLocalStorage("_ox_box_language", u);
+            if (this.Language.IsNotNullAndEmpty())
+            {
+                await this.LanguageCallBack.InvokeAsync(this.Language);
+            }
+            await InvokeAsync(StateHasChanged);
         }
     }
 }

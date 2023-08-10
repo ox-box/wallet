@@ -30,7 +30,7 @@ namespace OX.Web.Pages
 {
     public partial class Home
     {
-        public override string PageTitle => UIHelper.LocalString("首页", "Home");
+        public override string PageTitle => this.WebLocalString("首页", "Home");
 
         protected override void OnBlockchainInit()
         {

@@ -31,7 +31,7 @@ namespace OX.Web.Pages
 {
     public partial class Address
     {
-        public override string PageTitle => UIHelper.LocalString("地址浏览", "Address Explorer");
+        public override string PageTitle => this.WebLocalString("地址浏览", "Address Explorer");
         [Parameter]
         public string? addr { get; set; }
         UInt160 SH;

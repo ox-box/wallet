@@ -32,7 +32,7 @@ namespace OX.Web.Pages
 {
     public partial class Mobile
     {
-        public override string PageTitle => UIHelper.LocalString("首页", "Home");
+        public override string PageTitle => this.WebLocalString("首页", "Home");
         [Parameter]
         public string accesscode { get; set; }
         protected override async Task OnInit()
@@ -58,6 +58,13 @@ namespace OX.Web.Pages
         void Go(string url)
         {
             NavigationManager.NavigateTo(url);
+        }
+        public async void ChangeLanguage(string language)
+        {
+            var u = language == "English" ? "en-us" : "zh-cn";
+            this.Language = u;
+            await this.SetLocalStorage("_ox_box_language", u);            
+            await InvokeAsync(StateHasChanged);
         }
     }
 }

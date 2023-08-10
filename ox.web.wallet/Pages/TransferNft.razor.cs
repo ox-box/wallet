@@ -40,7 +40,7 @@ namespace OX.Web.Pages
 
     public partial class TransferNft
     {
-        public override string PageTitle => UIHelper.LocalString("转售 NFT", "Transfer NFT");
+        public override string PageTitle => this.WebLocalString("转售 NFT", "Transfer NFT");
         [Parameter]
         public string transferhex { get; set; }
         TransferNftViewModel Model = new TransferNftViewModel();
@@ -112,7 +112,7 @@ namespace OX.Web.Pages
                 }
                 catch
                 {
-                    msg = UIHelper.LocalString($"参数格式错误", $"Parameter format error");
+                    msg = this.WebLocalString($"参数格式错误", $"Parameter format error");
                 }
             }
         }

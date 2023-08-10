@@ -8,13 +8,13 @@
           LabelColSpan="8"
           WrapperColSpan="16"
           OnFinish="Authentication">
-        <FormItem Label="@UIHelper.LocalString("简易码","Easy Code")">
+        <FormItem Label="@this.WebLocalString("简易码","Easy Code")">
             <Input @bind-Value="@context.EasyCode" />
         </FormItem>
 
         <FormItem WrapperColOffset="8" WrapperColSpan="16">
             <Button Type="@ButtonType.Primary" HtmlType="submit">
-                @UIHelper.LocalString("认证","Authentication")
+                @this.WebLocalString("认证","Authentication")
             </Button>
         </FormItem>
     </Form>

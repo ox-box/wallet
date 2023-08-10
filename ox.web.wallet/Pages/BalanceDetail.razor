@@ -4,7 +4,7 @@
 <PageContainer Title=@PageTitle>
     <ChildContent>
         @{
-            var cardTitle = UIHelper.LocalString("资产列表", "Asset List");
+            var cardTitle = this.WebLocalString("资产列表", "Asset List");
             var assetTitle = string.Empty;
             if (this.AssetState.IsNotNull())
                 assetTitle = $"{this.AssetState.GetName()}    /     {this.AssetState.AssetId.ToString()}";
@@ -22,13 +22,13 @@
 
                             <div class="listContent">
                                 <div class="listContentItem">
-                                    <span>@UIHelper.LocalString("解锁区块高度","Unlock Block Height")</span>
+                                    <span>@this.WebLocalString("解锁区块高度","Unlock Block Height")</span>
                                     <p>@context.LockExpirationIndex </p>
                                 </div>
                             </div>
                             <div class="listContent">
                                 <div class="listContentItem">
-                                    <span>@UIHelper.LocalString("金额","Amount")</span>
+                                    <span>@this.WebLocalString("金额","Amount")</span>
                                     <p>
                                         @context.Output.Value
                                     </p>
@@ -36,9 +36,9 @@
                             </div>
                             <div class="listContent">
                                 <div class="listContentItem">
-                                    <span>@UIHelper.LocalString("状态","State")</span>
+                                    <span>@this.WebLocalString("状态","State")</span>
                                     <p>
-                                        @(context.LockExpirationIndex < Blockchain.Singleton.Height ? UIHelper.LocalString("可用", "Available") : UIHelper.LocalString("不可用", "Not Available"))
+                                        @(context.LockExpirationIndex < Blockchain.Singleton.Height ? this.WebLocalString("可用", "Available") : this.WebLocalString("不可用", "Not Available"))
                                     </p>
                                 </div>
                             </div>

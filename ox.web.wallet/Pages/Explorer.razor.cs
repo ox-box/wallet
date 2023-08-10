@@ -31,7 +31,7 @@ namespace OX.Web.Pages
 {
     public partial class Explorer
     {
-        public override string PageTitle => UIHelper.LocalString("区块浏览", "Block Explorer");
+        public override string PageTitle => this.WebLocalString("区块浏览", "Block Explorer");
         [Parameter]
         public string? blockindex { get; set; }
         uint Index;

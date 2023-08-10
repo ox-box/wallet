@@ -30,7 +30,7 @@ namespace OX.Web.Pages
 {
     public partial class AccountAsset
     {
-        public override string PageTitle => UIHelper.LocalString("账户资产", "Account Asset");
+        public override string PageTitle => this.WebLocalString("账户资产", "Account Asset");
         EthAssetBalanceState[] BalanceState = new EthAssetBalanceState[0];
         protected override void OnWalletInit()
         {

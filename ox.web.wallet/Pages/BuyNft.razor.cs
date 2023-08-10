@@ -42,7 +42,7 @@ namespace OX.Web.Pages
 
     public partial class BuyNft
     {
-        public override string PageTitle => UIHelper.LocalString("购买NFT", "Buy NFT");
+        public override string PageTitle => this.WebLocalString("购买NFT", "Buy NFT");
         [Parameter]
         public string issueid { get; set; }
 
@@ -106,38 +106,38 @@ namespace OX.Web.Pages
                 }
                 catch
                 {
-                    msg = UIHelper.LocalString("签名数据格式错误", "Signature data format error");
+                    msg = this.WebLocalString("签名数据格式错误", "Signature data format error");
                     reload();
                     return;
                 }
                 if (ndv.IsNull() || ndv.Validator.IsNull() || ndv.Key.IsNull() || !ndv.Validator.Verify())
                 {
-                    msg = UIHelper.LocalString("签名验证失败", "Signature verify failed");
+                    msg = this.WebLocalString("签名验证失败", "Signature verify failed");
                     reload();
                     return;
                 }
                 if (ndv.Validator.Target.Amount < Fixed8.Zero || ndv.Validator.Target.MaxIndex < ndv.Validator.Target.MinIndex)
                 {
-                    msg = UIHelper.LocalString("签名内容不合格", "The signature content is invalid");
+                    msg = this.WebLocalString("签名内容不合格", "The signature content is invalid");
                     reload();
                     return;
                 }
                 var nft = Blockchain.Singleton.Store.GetNftState(ndv.Key.NFCID);
                 if (nft.IsNull())
                 {
-                    msg = UIHelper.LocalString("NFT没找到", "not found NFT");
+                    msg = this.WebLocalString("NFT没找到", "not found NFT");
                     return;
                 }
                 var donateState = Blockchain.Singleton.Store.GetNftTransfer(ndv.Key);
                 if (donateState.IsNull())
                 {
-                    msg = UIHelper.LocalString("NFT转售错误", "NFT transfer error");
+                    msg = this.WebLocalString("NFT转售错误", "NFT transfer error");
                     reload();
                     return;
                 }
                 if (donateState.LastNFS.Hash != ndv.Validator.Target.PreHash)
                 {
-                    msg = UIHelper.LocalString("NFT转售错误", "NFT transfer error");
+                    msg = this.WebLocalString("NFT转售错误", "NFT transfer error");
                     reload();
                     return;
                 }
@@ -145,7 +145,7 @@ namespace OX.Web.Pages
                 {
                     if (Blockchain.Singleton.Height <= ndv.Key.IssueBlockIndex + nft.NFC.FirstResaleLock * 10000)
                     {
-                        msg = UIHelper.LocalString("NFT禁售期未到", "NFT  lockdown period has not yet arrived");
+                        msg = this.WebLocalString("NFT禁售期未到", "NFT  lockdown period has not yet arrived");
                         return;
                     }
                 }
@@ -248,7 +248,7 @@ namespace OX.Web.Pages
                                         this.Box.Notecase.Wallet.ApplyTransaction(tx);
                                         this.Box.Notecase.Relay(tx);
                                         this.EthID.SetLastTransactionIndex(Blockchain.Singleton.Height);
-                                        msg = UIHelper.LocalString($"广播转售NFT交易成功  {tx.Hash}", $"Relay transfer nft map  transaction completed  {tx.Hash}");
+                                        msg = this.WebLocalString($"广播转售NFT交易成功  {tx.Hash}", $"Relay transfer nft map  transaction completed  {tx.Hash}");
                                         StateHasChanged();
                                     }
                                 }
@@ -260,7 +260,7 @@ namespace OX.Web.Pages
             }
             catch
             {
-                msg = UIHelper.LocalString($"内部错误", $"internal error");
+                msg = this.WebLocalString($"内部错误", $"internal error");
             }
         }
     }

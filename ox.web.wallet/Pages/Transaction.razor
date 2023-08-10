@@ -9,7 +9,7 @@
             <GridCol Class="col" Span="4">
             </GridCol>
             <GridCol Class="col" Span="16">
-                <Search Placeholder="@UIHelper.LocalString("输入交易哈希","input transaction hash")" Size="@InputSize.Large" EnterButton="@UIHelper.LocalString("查看区块","View Block")" @bind-Value="@this.txid" OnSearch="OnSearch" />
+                <Search Placeholder="@this.WebLocalString("输入交易哈希","input transaction hash")" Size="@InputSize.Large" EnterButton="@this.WebLocalString("查看区块","View Block")" @bind-Value="@this.txid" OnSearch="OnSearch" />
             </GridCol>
             <GridCol Class="col" Span="4">
             </GridCol>
@@ -26,38 +26,38 @@
                                 var s = $"{TX.Type.ToString()} / {TX.Hash.ToString()}";
                                 <Panel Header="@s">
                                     <Collapse>
-                                        <Panel Header='@UIHelper.LocalString("输入","Input")'>
+                                        <Panel Header='@this.WebLocalString("输入","Input")'>
 
                                             @foreach (var refer in TX.References)
                                             {
                                                 <ul>
                                                     <li>
-                                                        @UIHelper.LocalString($"地址:{refer.Value.ScriptHash.ToAddress()}",$"Address:{refer.Value.ScriptHash.ToAddress()}")
+                                                        @this.WebLocalString($"地址:{refer.Value.ScriptHash.ToAddress()}",$"Address:{refer.Value.ScriptHash.ToAddress()}")
                                                     </li>
                                                     <li>
-                                                        @UIHelper.LocalString($"资产Id:{refer.Value.AssetId.ToString()}",$"Asset Id:{refer.Value.AssetId.ToString()}")
+                                                        @this.WebLocalString($"资产Id:{refer.Value.AssetId.ToString()}",$"Asset Id:{refer.Value.AssetId.ToString()}")
                                                     </li>
                                                     <li>
-                                                        @UIHelper.LocalString($"金额:{refer.Value.Value}",$"Amount:{refer.Value.Value}")
+                                                        @this.WebLocalString($"金额:{refer.Value.Value}",$"Amount:{refer.Value.Value}")
                                                     </li>
                                                 </ul>
                                                 <Divider />
                                             }
 
                                         </Panel>
-                                        <Panel Header='@UIHelper.LocalString("输出","Output")'>
+                                        <Panel Header='@this.WebLocalString("输出","Output")'>
 
                                             @foreach (var output in TX.Outputs)
                                             {
                                                 <ul>
                                                     <li>
-                                                        @UIHelper.LocalString($"地址:{output.ScriptHash.ToAddress()}",$"Address:{output.ScriptHash.ToAddress()}")
+                                                        @this.WebLocalString($"地址:{output.ScriptHash.ToAddress()}",$"Address:{output.ScriptHash.ToAddress()}")
                                                     </li>
                                                     <li>
-                                                        @UIHelper.LocalString($"资产Id:{output.AssetId.ToString()}",$"Asset Id:{output.AssetId.ToString()}")
+                                                        @this.WebLocalString($"资产Id:{output.AssetId.ToString()}",$"Asset Id:{output.AssetId.ToString()}")
                                                     </li>
                                                     <li>
-                                                        @UIHelper.LocalString($"金额:{output.Value}",$"Amount:{output.Value}")
+                                                        @this.WebLocalString($"金额:{output.Value}",$"Amount:{output.Value}")
                                                     </li>
                                                 </ul>
                                                 <Divider />

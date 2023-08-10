@@ -32,7 +32,7 @@ namespace OX.Web.Pages
 {
     public partial class MobileLogin
     {
-        public override string PageTitle => UIHelper.LocalString("简易认证", "Easy Authorize");
+        public override string PageTitle => this.WebLocalString("简易认证", "Easy Authorize");
 
         public EasyAuthorizeViewModel EasyAuthorizeViewModel { get; set; } = new EasyAuthorizeViewModel { EasyCode = string.Empty };
         protected override async Task OnInit()

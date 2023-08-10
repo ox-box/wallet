@@ -30,7 +30,7 @@ namespace OX.Web.Pages
 {
     public partial class BalanceDetail
     {
-        public override string PageTitle => UIHelper.LocalString("余额明细", "Balance Detail");
+        public override string PageTitle => this.WebLocalString("余额明细", "Balance Detail");
         [Parameter]
         public string assetid { get; set; }
         AssetState AssetState;

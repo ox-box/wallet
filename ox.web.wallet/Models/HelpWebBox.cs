@@ -12,7 +12,7 @@ namespace OX.Web.Models
     {
 
         public override uint BoxIndex { get { return 1000000; } }
-        public override string Name => UIHelper.LocalString("帮助", "Help");
+        //public override string Name => this.WebLocalString("帮助", "Help");
         public override bool SupportMobile => false;
         public HelpWebBox() : base()
         {
@@ -21,21 +21,21 @@ namespace OX.Web.Models
         {
 
         }
-        public override MenuDataItem[] GetMemus()
+        public override MenuDataItem[] GetMemus(string language)
         {
             List<MenuDataItem> list = new List<MenuDataItem>();
            
                 list.Add(new MenuDataItem
                 {
                     Path = "/_pc/help",
-                    Name = UIHelper.LocalString("帮助", "Help"),
+                    Name = UIHelper.WebLocalString(language, "帮助", "Help"),
                     Key = "help",
                     //Icon = "smile",
                     Children = new MenuDataItem[] {
                     new MenuDataItem
                     {
                         Path = "/_pc/help/urls",
-                        Name =  UIHelper.LocalString("门户地址", "Portal Urls"),
+                        Name = UIHelper.WebLocalString(language, "门户地址", "Portal Urls"),
                         Key = "urls"
                     } 
                 }
@@ -43,7 +43,7 @@ namespace OX.Web.Models
  
             return list.ToArray();
         }
-        public override MenuDataItem[] GetMobileMemus()
+        public override MenuDataItem[] GetMobileMemus(string language)
         {
             List<MenuDataItem> list = new List<MenuDataItem>();
          

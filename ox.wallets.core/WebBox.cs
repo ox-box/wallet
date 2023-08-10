@@ -9,7 +9,7 @@ namespace OX.Wallets
     {
         static List<WebBox> boxes = new List<WebBox>();
         public INotecase Notecase { get; private set; } = default;
-        public abstract string Name { get; }
+        //public abstract string Name { get; }
         public abstract bool SupportMobile { get; }
         public abstract uint BoxIndex { get; }
         public static IEnumerable<WebBox> Boxes { get { return boxes; } }

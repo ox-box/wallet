@@ -8,7 +8,7 @@ namespace OX.Wallets
 {
     public abstract class WebBoxBlazor : WebBox
     {
-        public abstract MenuDataItem[] GetMemus();
-        public abstract MenuDataItem[] GetMobileMemus();
+        public abstract MenuDataItem[] GetMemus(string language);
+        public abstract MenuDataItem[] GetMobileMemus(string language);
     }
 }

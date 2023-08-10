@@ -16,6 +16,8 @@ namespace OX.Web.Models
     {
         [Inject]
         protected IStateDispatch StateDispatcher { get; set; }
+        [CascadingParameter]
+        public EventCallback LanguageCallBack { get; set; }
         protected override async Task OnInit()
         {
             if (OXRunTime.RunMode != RunMode.Server)
@@ -25,7 +27,16 @@ namespace OX.Web.Models
             StateDispatcher.ServerStateNotice += StateDispatcher_ServerStateNotice;
 
             this.OnBlockchainInit();
+
             await Task.CompletedTask;
+        }
+        protected override async void OnInitWebBox()
+        {
+            if (this.Language.IsNotNullAndEmpty())
+            {
+                await this.LanguageCallBack.InvokeAsync(this.Language);
+            }
+            base.OnInitWebBox();
         }
 
         protected abstract void OnBlockchainInit();

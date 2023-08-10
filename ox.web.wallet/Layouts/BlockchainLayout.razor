@@ -1,15 +1,38 @@
 ﻿@namespace OX.Web
 @inherits LayoutComponentBase
 
-<AntDesign.ProLayout.BasicLayout Title="@DNPHelper.GetDNPSetting()?.DNP_Name" Logo="@("/assets/ox.svg")" MenuData=WebBoxBuilder.Menus Theme=MenuTheme.Dark>
+<AntDesign.ProLayout.BasicLayout Title="@DNPHelper.GetDNPSetting()?.DNP_Name" Logo="@("/assets/ox.svg")" MenuData=WebBoxBuilder.GetMenus(this.Language) Theme=MenuTheme.Dark>
     <ChildContent>
-        @Body
+        <CascadingValue Value="LanguageCallBack">
+            @Body
+        </CascadingValue>
     </ChildContent>
     <FooterRender>
         <FooterView Copyright="2023 OX Ecosystem" Links="Links"></FooterView>
     </FooterRender>
 </AntDesign.ProLayout.BasicLayout>
+
 @code{
+    public EventCallback _languageCallBack = EventCallback.Empty;
+    public EventCallback LanguageCallBack
+    {
+        get
+        {
+            if (_languageCallBack.Equals(EventCallback.Empty))
+                _languageCallBack = EventCallback.Factory.Create(this, SetLanguage);
+            return _languageCallBack;
+        }
+    }
+    public string Language { get; set; }
+ 
+    
+    public void SetLanguage(object language)
+    {
+        if (language.IsNotNull())
+        {
+            Language = language.ToString();
+        }
+    }
     public LinkItem[] Links { get; set; } =
        {
         new LinkItem

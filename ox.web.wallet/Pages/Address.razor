@@ -9,7 +9,7 @@
             <GridCol Class="col" Span="4">
             </GridCol>
             <GridCol Class="col" Span="16">
-                <Search Placeholder="@UIHelper.LocalString("输入地址","input address")" Size="@InputSize.Large" EnterButton="@UIHelper.LocalString("查看区块","View Block")" @bind-Value="@this.addr" OnSearch="OnSearch" />
+                <Search Placeholder="@this.WebLocalString("输入地址","input address")" Size="@InputSize.Large" EnterButton="@this.WebLocalString("查看区块","View Block")" @bind-Value="@this.addr" OnSearch="OnSearch" />
             </GridCol>
             <GridCol Class="col" Span="4">
             </GridCol>
@@ -21,7 +21,7 @@
 
                     <ul>
                         <li>
-                            @UIHelper.LocalString("地址","Address"): <Text Code>@this.AccountState.ScriptHash.ToAddress()</Text>
+                            @this.WebLocalString("地址","Address"): <Text Code>@this.AccountState.ScriptHash.ToAddress()</Text>
                     </li>
                 </ul>
                 <Divider />
@@ -34,13 +34,13 @@
                         {
                             <ul>
                                 <li>
-                                    @UIHelper.LocalString($"资产名称:{assetState.GetName()}",$"Asset Name:{assetState.GetName()}")
+                                    @this.WebLocalString($"资产名称:{assetState.GetName()}",$"Asset Name:{assetState.GetName()}")
                             </li>
                             <li>
-                                    @UIHelper.LocalString($"资产Id:{refer.Key.ToString()}",$"Asset Id:{refer.Key.ToString()}")
+                                    @this.WebLocalString($"资产Id:{refer.Key.ToString()}",$"Asset Id:{refer.Key.ToString()}")
                             </li>
                             <li>
-                                @UIHelper.LocalString($"余额:{refer.Value}",$"Balance:{refer.Value}")
+                                    @this.WebLocalString($"余额:{refer.Value}",$"Balance:{refer.Value}")
                             </li>
                         </ul>
                         <Divider />

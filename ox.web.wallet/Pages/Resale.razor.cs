@@ -59,7 +59,7 @@ namespace OX.Web.Pages
                 Sm = new EmbeddedProperty { Span = 10, Offset = 7 },
             }
         };
-        public override string PageTitle => UIHelper.LocalString("待售NFT", "For sale NFTs");
+        public override string PageTitle => this.WebLocalString("待售NFT", "For sale NFTs");
         public PublishResaleViewModel Model { get; set; } = new PublishResaleViewModel();
         bool DrawerVisible = false;
         protected override void OnWalletInit()

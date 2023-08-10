@@ -32,7 +32,7 @@ namespace OX.Web.Pages
 {
     public partial class AllNft
     {
-        public override string PageTitle => UIHelper.LocalString("所有NFT", "All NFTs");
+        public override string PageTitle => this.WebLocalString("所有NFT", "All NFTs");
         int PageIndex = 1;
         int RecordCount = 0;
         NftTransaction[] NFTS = new NftTransaction[0];

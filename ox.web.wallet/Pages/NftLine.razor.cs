@@ -39,7 +39,7 @@ namespace OX.Web.Pages
 {
     public partial class NftLine
     {
-        public override string PageTitle => UIHelper.LocalString("成交走势", "Transfer Trend");
+        public override string PageTitle => this.WebLocalString("成交走势", "Transfer Trend");
 
         [Parameter]
         public string nftidhex { get; set; }

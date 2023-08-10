@@ -21,8 +21,7 @@ namespace OX.Wallets.Authentication
 
         [Inject]
         protected IHttpContextAccessor HttpContextAccessor { get; set; }
-        [Inject]
-        protected ILocalStorageService LocalStorage { get; set; }
+       
         [Inject]
         protected IStateDispatch StateDispatcher { get; set; }
         public Block LastBlock { get; set; }
@@ -57,14 +56,7 @@ namespace OX.Wallets.Authentication
         public abstract Task OnAuthInitialized();
         public abstract Task OnInitCompleted();
 
-        public async Task SetLocalStorage(string key, string value)
-        {
-            await LocalStorage.SetItemAsync(key, value);
-        }
-        public async ValueTask<string> GetLocalStorage(string key)
-        {
-            return await LocalStorage.GetItemAsync<string>(key);
-        }
+     
 
     }
 }

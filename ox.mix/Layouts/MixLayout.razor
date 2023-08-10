@@ -1,12 +1,16 @@
 ﻿@namespace OX.Mix
 @inherits LayoutComponentBase
 
-<AntDesign.ProLayout.BasicLayout Title="@DNPHelper.GetDNPSetting()?.DNP_Name" Logo="@("/assets/ox.svg")" MenuData=WebBoxBuilder.Menus Theme=MenuTheme.Dark>
+<AntDesign.ProLayout.BasicLayout Title="@DNPHelper.GetDNPSetting()?.DNP_Name" Logo="@("/assets/ox.svg")" MenuData=WebBoxBuilder.GetMenus(this.Language) Theme=MenuTheme.Dark>
     <RightContentRender>
-        <OX.Mix.Components.AuthState />
+        <CascadingValue Value="LanguageCallBack">
+            <OX.Mix.Components.AuthState />
+        </CascadingValue>
     </RightContentRender>
     <ChildContent>
+
         @Body
+
     </ChildContent>
     <FooterRender>
 
@@ -14,3 +18,24 @@
 </AntDesign.ProLayout.BasicLayout>
 @*<SettingDrawer />*@
 
+@code {
+    public EventCallback _languageCallBack = EventCallback.Empty;
+    public EventCallback LanguageCallBack
+    {
+        get
+        {
+            if (_languageCallBack.Equals(EventCallback.Empty))
+                _languageCallBack = EventCallback.Factory.Create(this, SetLanguage);
+            return _languageCallBack;
+        }
+    }
+    public string Language { get; set; }
+
+    public void SetLanguage(object language)
+    {
+        if (language.IsNotNull())
+        {
+            Language = language.ToString();
+        }
+    }
+}

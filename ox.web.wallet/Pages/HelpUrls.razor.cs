@@ -30,7 +30,7 @@ namespace OX.Web.Pages
 {
     public partial class HelpUrls
     {
-        public override string PageTitle => UIHelper.LocalString("门户地址", "Portal Urls");
+        public override string PageTitle => this.WebLocalString("门户地址", "Portal Urls");
 
         protected override void OnBlockchainInit()
         {

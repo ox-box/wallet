@@ -10,10 +10,13 @@ using OX.Bapps;
 
 namespace OX.Wallets
 {
-    public class WebBoxBuilder: WebBoxBuilderBase
+    public class WebBoxBuilder : WebBoxBuilderBase
     {
-        public static MenuDataItem[] Menus { get { return WebBox.Boxes.OrderBy(m => m.BoxIndex).SelectMany(m => (m as WebBoxBlazor).GetMemus()).ToArray(); } }
-        public static MenuDataItem[] MobileMenus { get { return WebBox.MobileBoxes.OrderBy(m => m.BoxIndex).SelectMany(m => (m as WebBoxBlazor).GetMobileMemus()).ToArray(); } }
+        public static MenuDataItem[] GetMenus(string language)
+        {
+            return WebBox.Boxes.OrderBy(m => m.BoxIndex).SelectMany(m => (m as WebBoxBlazor).GetMemus(language)).ToArray();
+        }
+        public static MenuDataItem[] GetMobileMenus(string language) { return WebBox.MobileBoxes.OrderBy(m => m.BoxIndex).SelectMany(m => (m as WebBoxBlazor).GetMobileMemus(language)).ToArray(); }
 
     }
 }

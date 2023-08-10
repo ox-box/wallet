@@ -7,13 +7,13 @@
     <ChildContent>
         <GridRow Class="row">
             <GridCol Class="col" Span="8">
-                <Button Type="@ButtonType.Primary" OnClick="Previous">@UIHelper.LocalString("< 上一个","< Previous")</Button>
+                <Button Type="@ButtonType.Primary" OnClick="Previous">@this.WebLocalString("< 上一个","< Previous")</Button>
             </GridCol>
             <GridCol Class="col" Span="8">
-                <Search Placeholder="@UIHelper.LocalString("输入区块高度","input block index")" Size="@InputSize.Large" EnterButton="@UIHelper.LocalString("查看区块","View Block")" @bind-Value="@this.blockindex" OnSearch="OnSearch" />
+                <Search Placeholder="@this.WebLocalString("输入区块高度","input block index")" Size="@InputSize.Large" EnterButton="@this.WebLocalString("查看区块","View Block")" @bind-Value="@this.blockindex" OnSearch="OnSearch" />
             </GridCol>
             <GridCol Class="col" Span="8">
-                <Button Type="@ButtonType.Primary" OnClick="Next">@UIHelper.LocalString("下一个 >","Next >")</Button>
+                <Button Type="@ButtonType.Primary" OnClick="Next">@this.WebLocalString("下一个 >","Next >")</Button>
             </GridCol>
         </GridRow>
         <GridRow Class="row">
@@ -23,10 +23,10 @@
 
                     <ul>
                         <li>
-                            @UIHelper.LocalString("区块时间","Block Time"): <Text Code>@this.block.Timestamp.ToDateTime().ToLongTimeString()</Text>
+                            @this.WebLocalString("区块时间","Block Time"): <Text Code>@this.block.Timestamp.ToDateTime().ToLongTimeString()</Text>
                     </li>
                     <li>
-                        @UIHelper.LocalString("区块随机数","Block Nonce"): <Text Code>@this.block.ConsensusData</Text>
+                        @this.WebLocalString("区块随机数","Block Nonce"): <Text Code>@this.block.ConsensusData</Text>
                     </li>
 
                 </ul>
@@ -42,38 +42,38 @@
                                     var s = $"{tx.Type.ToString()} / {tx.Hash.ToString()}";
                                     <Panel Header="@s" Key="@i.ToString()">
                                         <Collapse>
-                                            <Panel Header='@UIHelper.LocalString("输入","Input")'>
+                                            <Panel Header='@this.WebLocalString("输入","Input")'>
 
                                                 @foreach (var refer in tx.References)
                                                 {
                                                     <ul>
                                                         <li>
-                                                            @UIHelper.LocalString($"地址:{refer.Value.ScriptHash.ToAddress()}",$"Address:{refer.Value.ScriptHash.ToAddress()}")
+                                                            @this.WebLocalString($"地址:{refer.Value.ScriptHash.ToAddress()}",$"Address:{refer.Value.ScriptHash.ToAddress()}")
                                                         </li>
                                                         <li>
-                                                            @UIHelper.LocalString($"资产Id:{refer.Value.AssetId.ToString()}",$"Asset Id:{refer.Value.AssetId.ToString()}")
+                                                            @this.WebLocalString($"资产Id:{refer.Value.AssetId.ToString()}",$"Asset Id:{refer.Value.AssetId.ToString()}")
                                                         </li>
                                                         <li>
-                                                            @UIHelper.LocalString($"金额:{refer.Value.Value}",$"Amount:{refer.Value.Value}")
+                                                            @this.WebLocalString($"金额:{refer.Value.Value}",$"Amount:{refer.Value.Value}")
                                                         </li>
                                                     </ul>
                                                     <Divider />
                                                 }
 
                                             </Panel>
-                                            <Panel Header='@UIHelper.LocalString("输出","Output")'>
+                                            <Panel Header='@this.WebLocalString("输出","Output")'>
 
                                                 @foreach (var output in tx.Outputs)
                                                 {
                                                     <ul>
                                                         <li>
-                                                            @UIHelper.LocalString($"地址:{output.ScriptHash.ToAddress()}",$"Address:{output.ScriptHash.ToAddress()}")
+                                                            @this.WebLocalString($"地址:{output.ScriptHash.ToAddress()}",$"Address:{output.ScriptHash.ToAddress()}")
                                                         </li>
                                                         <li>
-                                                            @UIHelper.LocalString($"资产Id:{output.AssetId.ToString()}",$"Asset Id:{output.AssetId.ToString()}")
+                                                            @this.WebLocalString($"资产Id:{output.AssetId.ToString()}",$"Asset Id:{output.AssetId.ToString()}")
                                                         </li>
                                                         <li>
-                                                            @UIHelper.LocalString($"金额:{output.Value}",$"Amount:{output.Value}")
+                                                            @this.WebLocalString($"金额:{output.Value}",$"Amount:{output.Value}")
                                                         </li>
                                                     </ul>
                                                     <Divider />

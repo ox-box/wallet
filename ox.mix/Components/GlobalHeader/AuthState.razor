@@ -30,22 +30,20 @@
             }
             else
             {
-                <a @onclick="ConnectMetaMask"><Avatar Src="/_content/ox.metamask/img/metamask-fox.svg" />@UIHelper.LocalString("连接钱包","Connect Wallet")</a>
+                <a @onclick="ConnectMetaMask"><Avatar Src="/_content/ox.metamask/img/metamask-fox.svg" />@this.WebLocalString("连接钱包","Connect Wallet")</a>
             }
         }
         else
         {
-            <a href="https://metamask.io" target="_blank">@UIHelper.LocalString("Metamask 没有安装,请点击安装","No MetaMask detected. Please install") </a>
+            <a href="https://metamask.io" target="_blank">@this.WebLocalString("Metamask 没有安装,请点击安装","No MetaMask detected. Please install") </a>
         }
+
     </SpaceItem>
     <SpaceItem>
         @{
-            var userName = UIHelper.LocalString("外机", "Remote Host");
-            if (HttpContextAccessor.IsLocalHost())
-            {
-                userName = UIHelper.LocalString("本机", "Local Host");
-            }
+            var s = this.WebLocalString("English", "中文");
         }
+        <Button Size="small" OnClick="_=>ChangeLanguage(s)">@s</Button>
     </SpaceItem>
 </Space>
 <style>

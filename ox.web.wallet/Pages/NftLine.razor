@@ -22,11 +22,11 @@
                     {
                         var author = Contract.CreateSignatureRedeemScript(nfcstate.NFC.Author).ToScriptHash().ToAddress();
                         <ul>
-                            <li>@UIHelper.LocalString($"作者:{author}",$"Author:{author}")</li>
-                            <li>@UIHelper.LocalString($"作者名称:{nfcstate.NFC.NftCopyright.AuthorName}",$"Author Name:{nfcstate.NFC.NftCopyright.AuthorName}")</li>
-                            <li>@UIHelper.LocalString($"已发行{nfcstate.TotalIssue}份",$"{nfcstate.TotalIssue} copies issued")</li>
-                            <li>@UIHelper.LocalString($"转售{nfcstate.TotalTransfer}次",$"Resale {nfcstate.TotalTransfer} times")</li>
-                            <li>@UIHelper.LocalString($"累计交易{nfcstate.TotalAmountTransfer} OXC",$"Total  exchange amount {nfcstate.TotalAmountTransfer} OXC")</li>
+                            <li>@this.WebLocalString($"作者:{author}",$"Author:{author}")</li>
+                            <li>@this.WebLocalString($"作者名称:{nfcstate.NFC.NftCopyright.AuthorName}",$"Author Name:{nfcstate.NFC.NftCopyright.AuthorName}")</li>
+                            <li>@this.WebLocalString($"已发行{nfcstate.TotalIssue}份",$"{nfcstate.TotalIssue} copies issued")</li>
+                            <li>@this.WebLocalString($"转售{nfcstate.TotalTransfer}次",$"Resale {nfcstate.TotalTransfer} times")</li>
+                            <li>@this.WebLocalString($"累计交易{nfcstate.TotalAmountTransfer} OXC",$"Total  exchange amount {nfcstate.TotalAmountTransfer} OXC")</li>
                         </ul>
                     }
                     <AntDesign.Charts.Line @ref="@chart1" Config="config1" OnFirstRender="OnChart_Render" />

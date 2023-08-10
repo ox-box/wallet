@@ -36,7 +36,7 @@ namespace OX.Web.Pages
 {
     public partial class MyNft
     {
-        public override string PageTitle => UIHelper.LocalString("我持有的NFT", "My hold NFTs");
+        public override string PageTitle => this.WebLocalString("我持有的NFT", "My hold NFTs");
 
         IEnumerable<KeyValuePair<EthNftTransferKey, NftTransferTransaction>> Data = default;
         protected override void OnWalletInit()
