@@ -50,7 +50,7 @@
                                                 var url = $"https://ipfs.io/ipfs/{nft.NftCopyright.NftID.CID}/{nft.NftCopyright.NftName}";
                                                 var url2 = $"ipfs://{nft.NftCopyright.NftID.CID}/{nft.NftCopyright.NftName}";
                                                 var url3 = $"/_pc/nft/transfernft/{context.Value.NFSStateKey.ToArray().ToHexString()}";
-                                                var url4 = $"/_pc/nft/nftline/{context.Value.NFSStateKey.NFCID.ToArray().ToHexString()}";
+                                                var url4 = $"/_pc/nft/nftline/{context.Value.NFSStateKey.NFCID.ToArray().ToHexString()}/{context.Value.NFSStateKey.ToArray().ToHexString()}";
                                             }
                                             <Space>
                                                 <SpaceItem>

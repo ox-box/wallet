@@ -1,11 +1,16 @@
-﻿@page "/_pc/nft/nftline/{nftidhex}"
+﻿@page "/_pc/nft/nftline/{nftidhex}/{transferhex}"
+@page "/_pc/nft/nftline/{nftidhex}"
+@page "/_pc/nft/nftline/issue/{issueid}"
 @inherits WalletComponentBase
+@using OX.Persistence
 <Microsoft.AspNetCore.Components.Web.Extensions.Head.Title Value=@PageTitle />
 <PageContainer Title=@PageTitle>
+    <Extra>
+        <Search Placeholder="@this.WebLocalString("输入发行ID","input issue ID")" Size="@InputSize.Small" EnterButton="@this.WebLocalString("查看","View")" @bind-Value=@nftissueid OnSearch="View" />
+    </Extra>
     <ChildContent>
         @{
             string s = string.Empty;
-            NFCState nfcstate = default;
             if (this.NftID.IsNotNull())
             {
                 s = this.NftID.CID;
@@ -17,17 +22,52 @@
                   Title="@s"
                   Style="margin-top: 24px;"
                   BodyStyle="padding: 0 10px 40px 10px">
+                <Extra>
+                    @if (nfcstate.IsNotNull())
+                    {
+                        <Space>
+                            @{
+                                var url = $"https://ipfs.io/ipfs/{nfcstate.NFC.NftCopyright.NftID.CID}/{nfcstate.NFC.NftCopyright.NftName}";
+                                var url2 = $"ipfs://{nfcstate.NFC.NftCopyright.NftID.CID}/{nfcstate.NFC.NftCopyright.NftName}";
+                            }
+                            <SpaceItem>
+                                <a href="@url" target="_blank">@this.WebLocalString("预览","Preview")</a>
+                            </SpaceItem>
+                            <SpaceItem>
+                                <a href="@url2" target="_blank">@this.WebLocalString("节点预览","Node Preview")</a>
+                            </SpaceItem>
+                        </Space>
+                    }
+                </Extra>
                 <ChildContent>
                     @if (nfcstate.IsNotNull())
                     {
                         var author = Contract.CreateSignatureRedeemScript(nfcstate.NFC.Author).ToScriptHash().ToAddress();
                         <ul>
-                            <li>@this.WebLocalString($"作者:{author}",$"Author:{author}")</li>
-                            <li>@this.WebLocalString($"作者名称:{nfcstate.NFC.NftCopyright.AuthorName}",$"Author Name:{nfcstate.NFC.NftCopyright.AuthorName}")</li>
-                            <li>@this.WebLocalString($"已发行{nfcstate.TotalIssue}份",$"{nfcstate.TotalIssue} copies issued")</li>
-                            <li>@this.WebLocalString($"转售{nfcstate.TotalTransfer}次",$"Resale {nfcstate.TotalTransfer} times")</li>
-                            <li>@this.WebLocalString($"累计交易{nfcstate.TotalAmountTransfer} OXC",$"Total  exchange amount {nfcstate.TotalAmountTransfer} OXC")</li>
-                        </ul>
+                            <li>@this.WebLocalString($"NFT名称:",$"NFT Name:")<Text Copyable>@nfcstate.NFC.NftCopyright.NftName</Text></li>
+                        <li>@this.WebLocalString($"NFT简介:",$"NFT Description:")<Text Copyable>@nfcstate.NFC.NftCopyright.Description</Text></li>
+                        <li>@this.WebLocalString($"作者:",$"Author:")<Text Copyable>@author</Text></li>
+                        <li>@this.WebLocalString($"作者名称:",$"Author Name:")<Text Copyable>@nfcstate.NFC.NftCopyright.AuthorName</Text></li>
+                        <li>@this.WebLocalString($"NFT 标号:",$"NFT Seal:")<Text Copyable>@nfcstate.NFC.NftCopyright.Seal</Text></li>
+                        <li>@this.WebLocalString($"已发行{nfcstate.TotalIssue}份",$"{nfcstate.TotalIssue} copies issued")</li>
+                        <li>@this.WebLocalString($"转售{nfcstate.TotalTransfer}次",$"Resale {nfcstate.TotalTransfer} times")</li>
+                        <li>@this.WebLocalString($"累计交易{nfcstate.TotalAmountTransfer} OXC",$"Total  exchange amount {nfcstate.TotalAmountTransfer} OXC")</li>
+                    </ul>
+
+                    }
+                    @if (NftTransfer.IsNotNull())
+                    {
+                        var holderName = NftTransfer.NFSCopyright.HolderName;
+                        var sn = NftTransfer.NFSCopyright.SN;
+                        var issueId = $"{Mykey.IssueBlockIndex}-{Mykey.IssueN}";
+                        <Divider></Divider>
+                        <ul>
+                            <li>
+                                @this.WebLocalString($"发行 ID:",$"Issue ID:") <Text Copyable>@issueId</Text>
+                        </li>
+                        <li>@this.WebLocalString($"持有人全名:",$"Holder Fullname:") <Text Copyable>@holderName</Text></li>
+                        <li>@this.WebLocalString($"NFT 编号:",$"NFT SN:") <Text Copyable>@sn</Text></li>
+                    </ul>
                     }
                     <AntDesign.Charts.Line @ref="@chart1" Config="config1" OnFirstRender="OnChart_Render" />
                 </ChildContent>
@@ -39,7 +79,10 @@
 @code {
     IChartComponent chart1;
     NftID NftID;
-
+    NftTransferTransaction NftTransfer;
+    NFSStateKey Mykey = default;
+    NFCState nfcstate = default;
+    string nftissueid;
     private async Task OnChart_Render(IChartComponent chart)
     {
         reload();
@@ -56,32 +99,96 @@
                 TickCount = 5
             }
         };
-    void reload()
+    void View()
     {
-        Points = new NftLineViewModel[0];
-        if (nftidhex.IsNotNullAndEmpty())
+        if (nftissueid.IsNotNullAndEmpty())
         {
-            try
+            var ss = nftissueid.Split('-');
+            if (uint.TryParse(ss[0], out uint index) && ushort.TryParse(ss[1], out ushort N))
             {
-                var bs = nftidhex.HexToBytes();
-                NftID = bs.AsSerializable<NftID>();
-                if (NftID.IsNotNull())
-                {
-                    var records = WalletBappProvider.Instance.GetAll<NFTSellKey, NFTSellValue>(WalletBizPersistencePrefixes.NFT_Transfer_Record, NftID);
-                    if (records.IsNotNullAndEmpty())
-                    {
-                        Points = records.OrderBy(m => m.Value.Time).Select(m => new NftLineViewModel { scales = (int)(m.Value.Amount.GetInternalValue() / Fixed8.D), Date = m.Value.Time.ToDateTime().ToString("yyyy-MM-dd HH:mm") }).ToArray();
-                    }
-                }
-            }
-            catch
-            {
-
+                var url = $"/_pc/nft/nftline/issue/{nftissueid}";
+                NavigationManager.NavigateTo(url, true);
+                StateHasChanged();
             }
         }
     }
+    void reload()
+    {
+        Points = new NftLineViewModel[0];
+        if (issueid.IsNotNullAndEmpty())
+        {
+            var ss = issueid.Split('-');
+            if (uint.TryParse(ss[0], out uint index) && ushort.TryParse(ss[1], out ushort N))
+            {
+                var nfsState = Blockchain.Singleton.CurrentSnapshot.GetNftTransfer(index, N);
+                if (nfsState.IsNotNull())
+                {
+                    try
+                    {
+                        Mykey = nfsState.LastNFS.NFSStateKey;
+                        NftTransfer = nfsState.LastNFS;
+                        NftID = nfsState.LastNFS.NFSStateKey.NFCID;
+                        if (NftID.IsNotNull())
+                        {
+                            var records = WalletBappProvider.Instance.GetAll<NFTSellKey, NFTSellValue>(WalletBizPersistencePrefixes.NFT_Transfer_Record, NftID);
+                            if (records.IsNotNullAndEmpty())
+                            {
+                                Points = records.OrderBy(m => m.Value.Time).Select(m => new NftLineViewModel { scales = (int)(m.Value.Amount.GetInternalValue() / Fixed8.D), Date = m.Value.Time.ToDateTime().ToString("yyyy-MM-dd HH:mm") }).ToArray();
+                            }
+                        }
+                    }
+                    catch
+                    {
 
+                    }
+                }
+            }
+        }
+        else
+        {
+            if (nftidhex.IsNotNullAndEmpty())
+            {
+                try
+                {
+                    var bs = nftidhex.HexToBytes();
+                    NftID = bs.AsSerializable<NftID>();
+                    if (NftID.IsNotNull())
+                    {
+                        var records = WalletBappProvider.Instance.GetAll<NFTSellKey, NFTSellValue>(WalletBizPersistencePrefixes.NFT_Transfer_Record, NftID);
+                        if (records.IsNotNullAndEmpty())
+                        {
+                            Points = records.OrderBy(m => m.Value.Time).Select(m => new NftLineViewModel { scales = (int)(m.Value.Amount.GetInternalValue() / Fixed8.D), Date = m.Value.Time.ToDateTime().ToString("yyyy-MM-dd HH:mm") }).ToArray();
+                        }
+                    }
+                }
+                catch
+                {
 
+                }
+            }
+            Mykey = default;
+            NftTransfer = default;
+            if (transferhex.IsNotNullAndEmpty())
+            {
+                try
+                {
+                    var bs = transferhex.HexToBytes();
+                    var NFSStateKey = bs.AsSerializable<NFSStateKey>();
+                    if (NFSStateKey.IsNotNull())
+                    {
+                        var nfsState = Blockchain.Singleton.CurrentSnapshot.GetNftTransfer(NFSStateKey);
+                        if (nfsState.IsNotNull())
+                        {
+                            Mykey = NFSStateKey;
+                            NftTransfer = nfsState.LastNFS;
+                        }
+                    }
+                }
+                catch
+                {
 
-
+                }
+            }
+        }
+    }
 }

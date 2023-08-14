@@ -43,7 +43,13 @@ namespace OX.Web.Pages
 
         [Parameter]
         public string nftidhex { get; set; }
-       
+        [Parameter]
+        public string transferhex { get; set; }
+        [Parameter]
+        public string issueid { get; set; }
+
+
+
         NftLineViewModel[] Points = new NftLineViewModel[0];
         protected override void OnWalletInit()
         {

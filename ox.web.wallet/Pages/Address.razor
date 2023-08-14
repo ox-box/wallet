@@ -18,7 +18,6 @@
             @if (this.AccountState.IsNotNull() && this.AccountState.Balances.IsNotNullAndEmpty())
             {
                 <GridCol Span="8">
-
                     <ul>
                         <li>
                             @this.WebLocalString("地址","Address"): <Text Code>@this.AccountState.ScriptHash.ToAddress()</Text>
