@@ -4,14 +4,14 @@
 <PageContainer Title=@PageTitle>
     <ChildContent>
         @{
-            var cardTitle = this.WebLocalString("资产列表", "Asset List");
+            //var cardTitle = this.WebLocalString("资产列表", "Asset List");
             var assetTitle = string.Empty;
             if (this.AssetState.IsNotNull())
                 assetTitle = $"{this.AssetState.GetName()}    /     {this.AssetState.AssetId.ToString()}";
         }
         <div class="standardList">
             <Card Class="listCard"
-                  Title=@cardTitle
+                  Title=@assetTitle
                   Style="margin-top: 24px;"
                   BodyStyle="padding: 0 10px 40px 10px">
                 <ChildContent>

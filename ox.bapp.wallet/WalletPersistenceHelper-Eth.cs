@@ -21,7 +21,7 @@ namespace OX.Wallets.Base
     {
         public static void Save_EthereumMapTransaction(this WriteBatch batch, WalletBappProvider provider, Block block, EthereumMapTransaction emt, ushort blockN)
         {
-            if (emt.IsNotNull() && emt.EthMapContract.Equals(Blockchain.EthereumMapContractScriptHash) && provider.Wallet.IsNotNull())
+            if (emt.IsNotNull() && emt.EthMapContract.Equals(Blockchain.EthereumMapContractScriptHash)/* && provider.Wallet.IsNotNull()*/)
             {
                 var sh = emt.GetContract().ScriptHash;
                 EthereumMapTransactionMerge emtm = new EthereumMapTransactionMerge { EthereumMapTransaction = emt, LastIndex = block.Index };
