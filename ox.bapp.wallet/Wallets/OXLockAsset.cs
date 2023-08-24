@@ -164,9 +164,10 @@ namespace OX.Wallets.Base
                                 Inputs = crs.ToArray(),
                                 Witnesses = new Witness[0]
                             };
+                            this.Operater.Wallet.MakeTransaction(tx, act.ScriptHash, act.ScriptHash);
                             tx = LockAssetHelper.Build(tx, acts.Values.ToArray());
                             if (tx.IsNotNull())
-                            {
+                            {                              
                                 this.Operater.Wallet.ApplyTransaction(tx);
                                 this.Operater.Relay(tx);
                                 if (this.Operater != default)
@@ -338,7 +339,7 @@ namespace OX.Wallets.Base
                                         subsubnode.NodeType = 2;
                                         subsubnode.Tag = t;
                                         subnode.Nodes.Add(subsubnode);
-                                        subsubnode = new DarkTreeNode() { Text = UIHelper.LocalString($"锁仓地址:{t.Value.Output.ScriptHash.ToAddress()}", $"Lock Address:{t.Value.Output.ScriptHash.ToAddress()}")  };
+                                        subsubnode = new DarkTreeNode() { Text = UIHelper.LocalString($"锁仓地址:{t.Value.Output.ScriptHash.ToAddress()}", $"Lock Address:{t.Value.Output.ScriptHash.ToAddress()}") };
                                         subsubnode.NodeType = 2;
                                         subsubnode.Tag = t;
                                         subnode.Nodes.Add(subsubnode);
