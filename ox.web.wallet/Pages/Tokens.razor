@@ -7,6 +7,7 @@
         <Divider Orientation="left" Style="font-weight:bold">@this.WebLocalString("原生资产", "Native Asset")</Divider>
         <Collapse>
             @{
+                var block = Blockchain.Singleton.CurrentSnapshot.Blocks.TryGet(Blockchain.Singleton.CurrentBlockHash);
                 var sOXS = $"OXS   /   {Blockchain.OXS.ToString()}";
                 var sOXC = $"OXC   /   {Blockchain.OXC.ToString()}";
 
@@ -104,6 +105,8 @@
                         }
                     }
                 }
+                var x = oxcIssued - totalLockOXC;
+                x -= Fixed8.One * block.SystemFeeAmount;
             }
             <Panel Header="@sOXS" Key="@Blockchain.OXS.ToString()">
                 <Collapse>
@@ -125,7 +128,8 @@
                     <div>
                         <Paragraph><Text Code>@this.WebLocalString($"已发行", $"Issued")</Text> <Text Copyable>@oxcIssued</Text></Paragraph>
                         <Paragraph><Text Code>@this.WebLocalString($"累计锁仓", $"Total Lock")</Text> <Text Copyable>@totalLockOXC</Text></Paragraph>
-                        <Paragraph><Text Code>@this.WebLocalString($"流通总量", $"Total Liquid")</Text> <Text Copyable>@(oxcIssued - totalLockOXC)</Text></Paragraph>
+                        <Paragraph><Text Code>@this.WebLocalString($"GAS总量", $"Total GAS")</Text> <Text Copyable>@block.SystemFeeAmount</Text></Paragraph>
+                        <Paragraph><Text Code>@this.WebLocalString($"流通总量", $"Total Liquid")</Text> <Text Copyable>@x</Text></Paragraph>
                             <Paragraph><Text Code>@this.WebLocalString($"剩余锁仓时间超过半年", $"Remaining total lock later 0.5 year")</Text> <Text Copyable>@c1</Text></Paragraph>
                         <Paragraph><Text Code>@this.WebLocalString($"剩余锁仓时间超过1年", $"Remaining total lock later 1 year")</Text> <Text Copyable>@c2</Text></Paragraph>
                         <Paragraph><Text Code>@this.WebLocalString($"剩余锁仓时间超过1.5年", $"Remaining total lock later 1.5 year")</Text> <Text Copyable>@c3</Text></Paragraph>

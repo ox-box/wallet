@@ -65,12 +65,16 @@ namespace OX.Wallets.Base
 
         private void DialogNativeAsset_Load(object sender, System.EventArgs e)
         {
+            var block = Blockchain.Singleton.CurrentSnapshot.Blocks.TryGet(Blockchain.Singleton.CurrentBlockHash);
+            this.lb_total_gas.Text = UIHelper.LocalString($"GAS总量： {block.SystemFeeAmount}", $"Total GAS: {block.SystemFeeAmount}");
             this.lb_OXS_Name.Text = $"OXS ({Blockchain.OXS.ToString()})";
             this.lb_OXC_Name.Text = $"OXC ({Blockchain.OXC.ToString()})";
             var oxsIssued = Blockchain.Singleton.CurrentSnapshot.Assets.TryGet(Blockchain.OXS).Available;
             this.lb_OXS_Issued.Text = UIHelper.LocalString($"已发行： {oxsIssued}", $"Issued: {oxsIssued}");
             var oxcIssued = WalletBappProvider.Instance.TotalIssuedOXC;
             this.lb_OXC_Issued.Text = UIHelper.LocalString($"已发行： {oxcIssued}", $"Issued: {oxcIssued}");
+
+
 
             Fixed8 totalLockOXS = Fixed8.Zero;
             Fixed8 totalLockOXC = Fixed8.Zero;
@@ -166,8 +170,11 @@ namespace OX.Wallets.Base
             this.lb_OXS_Locked.Text = UIHelper.LocalString($"总锁仓： {totalLockOXS}", $"Total Lock: {totalLockOXS}");
             this.lb_OXC_Locked.Text = UIHelper.LocalString($"总锁仓： {totalLockOXC}", $"Total Lock: {totalLockOXC}");
 
+            var x = oxcIssued - totalLockOXC;
+            x -= Fixed8.One * block.SystemFeeAmount;
+
             this.lb_lq_oxs.Text = UIHelper.LocalString($"流通总量： {oxsIssued - totalLockOXS}", $"Total Liquid: {oxsIssued - totalLockOXS}");
-            this.lb_lq_oxc.Text = UIHelper.LocalString($"流通总量： {oxcIssued - totalLockOXC}", $"Total Liquid: {oxcIssued - totalLockOXC}");
+            this.lb_lq_oxc.Text = UIHelper.LocalString($"流通总量： {x}", $"Total Liquid: {x}");
 
             this.lb_s_1.Text = UIHelper.LocalString($"剩余锁仓时间超过半年： {s1}", $"Remaining total lock later 0.5 year: {s1}");
             this.lb_s_2.Text = UIHelper.LocalString($"剩余锁仓时间超过1年： {s2}", $"Remaining total lock later 1 year: {s2}");
