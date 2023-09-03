@@ -50,6 +50,13 @@ namespace OX.Web.Models
                         Name = UIHelper.WebLocalString(language, "地址浏览", "Address Explorer"),
                         Key = "address"
                     }
+                      ,
+                      new MenuDataItem
+                    {
+                        Path = "/_pc/blockchain/tokens",
+                        Name = UIHelper.WebLocalString(language, "资产详情", "Asset Details"),
+                        Key = "tokens"
+                    }
                 }
                 });
 

@@ -32,7 +32,7 @@ namespace OX.Wallets.Base
         public Dictionary<UInt256, AccountPack> HashAccounts = new Dictionary<UInt256, AccountPack>();
         internal Dictionary<WalletSettingKey, WalletSettingValue> WalletSettings { get; set; } = new Dictionary<WalletSettingKey, WalletSettingValue>();
         internal Dictionary<OutputKey, LockAssetMerge> MyLockAssets { get; set; } = new Dictionary<OutputKey, LockAssetMerge>();
-        internal Dictionary<OutputKey, LockAssetMerge> AllLockAssets { get; set; } = new Dictionary<OutputKey, LockAssetMerge>();
+        public Dictionary<OutputKey, LockAssetMerge> AllLockAssets { get; set; } = new Dictionary<OutputKey, LockAssetMerge>();
         internal Dictionary<UInt160, AssetTrustContract> AssetTrustContacts { get; set; } = new Dictionary<UInt160, AssetTrustContract>();
         internal Dictionary<AssetTrustOutputKey, TransactionOutput> AssetTrustUTXO { get; set; } = new Dictionary<AssetTrustOutputKey, TransactionOutput>();
         internal Dictionary<EthMapOutputKey, TransactionOutput> EthMapUTXO { get; set; } = new Dictionary<EthMapOutputKey, TransactionOutput>();

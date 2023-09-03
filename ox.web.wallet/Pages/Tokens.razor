@@ -1,0 +1,217 @@
+﻿@page "/_pc/blockchain/tokens"
+@layout BlockchainLayout
+@inherits BlockchainComponentBase
+<Microsoft.AspNetCore.Components.Web.Extensions.Head.Title Value=@PageTitle />
+<PageContainer Title=@PageTitle>
+    <ChildContent>
+        <Divider Orientation="left" Style="font-weight:bold">@this.WebLocalString("原生资产", "Native Asset")</Divider>
+        <Collapse>
+            @{
+                var sOXS = $"OXS   /   {Blockchain.OXS.ToString()}";
+                var sOXC = $"OXC   /   {Blockchain.OXC.ToString()}";
+
+                var oxsIssued = Blockchain.Singleton.CurrentSnapshot.Assets.TryGet(Blockchain.OXS).Available;
+                var oxcIssued = WalletBappProvider.Instance.TotalIssuedOXC;
+
+                Fixed8 totalLockOXS = Fixed8.Zero;
+                Fixed8 totalLockOXC = Fixed8.Zero;
+                Fixed8 s1 = Fixed8.Zero, s2 = Fixed8.Zero, s3 = Fixed8.Zero, s4 = Fixed8.Zero, s5 = Fixed8.Zero, s6 = Fixed8.Zero;
+                Fixed8 c1 = Fixed8.Zero, c2 = Fixed8.Zero, c3 = Fixed8.Zero, c4 = Fixed8.Zero, c5 = Fixed8.Zero, c6 = Fixed8.Zero;
+                if (WalletBappProvider.Instance.AllLockAssets.IsNotNullAndEmpty())
+                {
+                    var tsoxs = WalletBappProvider.Instance.AllLockAssets.Values.Where(m => m.Output.AssetId.Equals(Blockchain.OXS));
+                    if (tsoxs.IsNotNullAndEmpty())
+                    {
+                        totalLockOXS = tsoxs.Sum(m => m.Output.Value);
+                        var tsoxsTime = tsoxs.Where(m => m.Tx.IsTimeLock);
+                        var tsoxsBlock = tsoxs.Where(m => !m.Tx.IsTimeLock);
+                        var t1 = DateTime.Now.AddDays(182).ToTimestamp();
+                        var t2 = DateTime.Now.AddDays(365).ToTimestamp();
+                        var t3 = DateTime.Now.AddDays(365 + 182).ToTimestamp();
+                        var ts = DateTime.Now.ToTimestamp();
+                        var t1p = tsoxsTime.Where(m => m.Tx.LockExpiration - ts > t1);
+                        if (t1p.IsNotNullAndEmpty())
+                        {
+                            s1 = t1p.Sum(m => m.Output.Value);
+                        }
+                        var t2p = tsoxsTime.Where(m => m.Tx.LockExpiration - ts > t2);
+                        if (t2p.IsNotNullAndEmpty())
+                        {
+                            s2 = t2p.Sum(m => m.Output.Value);
+                        }
+                        var t3p = tsoxsTime.Where(m => m.Tx.LockExpiration - ts > t3);
+                        if (t3p.IsNotNullAndEmpty())
+                        {
+                            s3 = t3p.Sum(m => m.Output.Value);
+                        }
+                        var h = Blockchain.Singleton.HeaderHeight;
+                        var b1p = tsoxsBlock.Where(m => m.Tx.LockExpiration - h > 1000000);
+                        if (b1p.IsNotNullAndEmpty())
+                        {
+                            s4 = b1p.Sum(m => m.Output.Value);
+                        }
+                        var b2p = tsoxsBlock.Where(m => m.Tx.LockExpiration - h > 2000000);
+                        if (b2p.IsNotNullAndEmpty())
+                        {
+                            s5 = b2p.Sum(m => m.Output.Value);
+                        }
+                        var b3p = tsoxsBlock.Where(m => m.Tx.LockExpiration - h > 3000000);
+                        if (b3p.IsNotNullAndEmpty())
+                        {
+                            s6 = b3p.Sum(m => m.Output.Value);
+                        }
+                    }
+                    var tsoxc = WalletBappProvider.Instance.AllLockAssets.Values.Where(m => m.Output.AssetId.Equals(Blockchain.OXC));
+                    if (tsoxc.IsNotNullAndEmpty())
+                    {
+                        totalLockOXC = tsoxc.Sum(m => m.Output.Value);
+                        var tsoxcTime = tsoxc.Where(m => m.Tx.IsTimeLock);
+                        var tsoxcBlock = tsoxc.Where(m => !m.Tx.IsTimeLock);
+                        var t1 = DateTime.Now.AddDays(182).ToTimestamp();
+                        var t2 = DateTime.Now.AddDays(365).ToTimestamp();
+                        var t3 = DateTime.Now.AddDays(365 + 182).ToTimestamp();
+                        var ts = DateTime.Now.ToTimestamp();
+                        var t1p = tsoxcTime.Where(m => m.Tx.LockExpiration - ts > t1);
+                        if (t1p.IsNotNullAndEmpty())
+                        {
+                            c1 = t1p.Sum(m => m.Output.Value);
+                        }
+                        var t2p = tsoxcTime.Where(m => m.Tx.LockExpiration - ts > t2);
+                        if (t2p.IsNotNullAndEmpty())
+                        {
+                            c2 = t2p.Sum(m => m.Output.Value);
+                        }
+                        var t3p = tsoxcTime.Where(m => m.Tx.LockExpiration - ts > t3);
+                        if (t3p.IsNotNullAndEmpty())
+                        {
+                            c3 = t3p.Sum(m => m.Output.Value);
+                        }
+                        var h = Blockchain.Singleton.HeaderHeight;
+                        var b1p = tsoxcBlock.Where(m => m.Tx.LockExpiration - h > 1000000);
+                        if (b1p.IsNotNullAndEmpty())
+                        {
+                            c4 = b1p.Sum(m => m.Output.Value);
+                        }
+                        var b2p = tsoxcBlock.Where(m => m.Tx.LockExpiration - h > 2000000);
+                        if (b2p.IsNotNullAndEmpty())
+                        {
+                            c5 = b2p.Sum(m => m.Output.Value);
+                        }
+                        var b3p = tsoxcBlock.Where(m => m.Tx.LockExpiration - h > 3000000);
+                        if (b3p.IsNotNullAndEmpty())
+                        {
+                            c6 = b3p.Sum(m => m.Output.Value);
+                        }
+                    }
+                }
+            }
+            <Panel Header="@sOXS" Key="@Blockchain.OXS.ToString()">
+                <Collapse>
+                    <div>
+                        <Paragraph><Text Code>@this.WebLocalString($"已发行", $"Issued")</Text> <Text Copyable>@oxsIssued</Text></Paragraph>
+                        <Paragraph><Text Code>@this.WebLocalString($"累计锁仓", $"Total Lock")</Text> <Text Copyable>@totalLockOXS</Text></Paragraph>
+                        <Paragraph><Text Code>@this.WebLocalString($"流通总量", $"Total Liquid")</Text> <Text Copyable>@(oxsIssued - totalLockOXS)</Text></Paragraph>
+                            <Paragraph><Text Code>@this.WebLocalString($"剩余锁仓时间超过半年", $"Remaining total lock later 0.5 year")</Text> <Text Copyable>@s1</Text></Paragraph>
+                        <Paragraph><Text Code>@this.WebLocalString($"剩余锁仓时间超过1年", $"Remaining total lock later 1 year")</Text> <Text Copyable>@s2</Text></Paragraph>
+                        <Paragraph><Text Code>@this.WebLocalString($"剩余锁仓时间超过1.5年", $"Remaining total lock later 1.5 year")</Text> <Text Copyable>@s3</Text></Paragraph>
+                        <Paragraph><Text Code>@this.WebLocalString($"剩余锁仓区块>1000000", $"Remaining total lock blocks than 1000000")</Text> <Text Copyable>@s4</Text></Paragraph>
+                        <Paragraph><Text Code>@this.WebLocalString($"剩余锁仓区块>2000000", $"Remaining total lock blocks than 2000000")</Text> <Text Copyable>@s5</Text></Paragraph>
+                        <Paragraph><Text Code>@this.WebLocalString($"剩余锁仓区块>3000000", $"Remaining total lock blocks than 3000000")</Text> <Text Copyable>@s6</Text></Paragraph>
+                    </div>
+                </Collapse>
+            </Panel>
+            <Panel Header="@sOXC" Key="@Blockchain.OXC.ToString()">
+                <Collapse>
+                    <div>
+                        <Paragraph><Text Code>@this.WebLocalString($"已发行", $"Issued")</Text> <Text Copyable>@oxcIssued</Text></Paragraph>
+                        <Paragraph><Text Code>@this.WebLocalString($"累计锁仓", $"Total Lock")</Text> <Text Copyable>@totalLockOXC</Text></Paragraph>
+                        <Paragraph><Text Code>@this.WebLocalString($"流通总量", $"Total Liquid")</Text> <Text Copyable>@(oxcIssued - totalLockOXC)</Text></Paragraph>
+                            <Paragraph><Text Code>@this.WebLocalString($"剩余锁仓时间超过半年", $"Remaining total lock later 0.5 year")</Text> <Text Copyable>@c1</Text></Paragraph>
+                        <Paragraph><Text Code>@this.WebLocalString($"剩余锁仓时间超过1年", $"Remaining total lock later 1 year")</Text> <Text Copyable>@c2</Text></Paragraph>
+                        <Paragraph><Text Code>@this.WebLocalString($"剩余锁仓时间超过1.5年", $"Remaining total lock later 1.5 year")</Text> <Text Copyable>@c3</Text></Paragraph>
+                        <Paragraph><Text Code>@this.WebLocalString($"剩余锁仓区块>1000000", $"Remaining total lock blocks than 1000000")</Text> <Text Copyable>@c4</Text></Paragraph>
+                        <Paragraph><Text Code>@this.WebLocalString($"剩余锁仓区块>2000000", $"Remaining total lock blocks than 2000000")</Text> <Text Copyable>@c5</Text></Paragraph>
+                        <Paragraph><Text Code>@this.WebLocalString($"剩余锁仓区块>3000000", $"Remaining total lock blocks than 3000000")</Text> <Text Copyable>@c6</Text></Paragraph>
+                    </div>
+                </Collapse>
+            </Panel>
+        </Collapse>
+        <Divider Orientation="left" Style="font-weight:bold">@this.WebLocalString($"私营资产", $"Private Asset")</Divider>
+        <Collapse>
+            @foreach (var asset in Blockchain.Singleton.Store.GetAssets().Find().Where(m => !m.Key.Equals(Blockchain.OXS) && !m.Key.Equals(Blockchain.OXC)))
+            {
+                Fixed8 totalLock = Fixed8.Zero;
+                Fixed8 s1 = Fixed8.Zero, s2 = Fixed8.Zero, s3 = Fixed8.Zero, s4 = Fixed8.Zero, s5 = Fixed8.Zero, s6 = Fixed8.Zero;
+                if (WalletBappProvider.Instance.AllLockAssets.IsNotNullAndEmpty())
+                {
+                    var alats = WalletBappProvider.Instance.AllLockAssets.Values.Where(m => m.Output.AssetId.Equals(asset.Key));
+                    if (alats.IsNotNullAndEmpty())
+                    {
+                        totalLock = alats.Sum(m => m.Output.Value);
+                        var tsoxsTime = alats.Where(m => m.Tx.IsTimeLock);
+                        var tsoxsBlock = alats.Where(m => !m.Tx.IsTimeLock);
+                        var t1 = DateTime.Now.AddDays(182).ToTimestamp();
+                        var t2 = DateTime.Now.AddDays(365).ToTimestamp();
+                        var t3 = DateTime.Now.AddDays(365 + 182).ToTimestamp();
+                        var ts = DateTime.Now.ToTimestamp();
+                        var t1p = tsoxsTime.Where(m => m.Tx.LockExpiration - ts > t1);
+                        if (t1p.IsNotNullAndEmpty())
+                        {
+                            s1 = t1p.Sum(m => m.Output.Value);
+                        }
+                        var t2p = tsoxsTime.Where(m => m.Tx.LockExpiration - ts > t2);
+                        if (t2p.IsNotNullAndEmpty())
+                        {
+                            s2 = t2p.Sum(m => m.Output.Value);
+                        }
+                        var t3p = tsoxsTime.Where(m => m.Tx.LockExpiration - ts > t3);
+                        if (t3p.IsNotNullAndEmpty())
+                        {
+                            s3 = t3p.Sum(m => m.Output.Value);
+                        }
+                        var h = Blockchain.Singleton.HeaderHeight;
+                        var b1p = tsoxsBlock.Where(m => m.Tx.LockExpiration - h > 1000000);
+                        if (b1p.IsNotNullAndEmpty())
+                        {
+                            s4 = b1p.Sum(m => m.Output.Value);
+                        }
+                        var b2p = tsoxsBlock.Where(m => m.Tx.LockExpiration - h > 2000000);
+                        if (b2p.IsNotNullAndEmpty())
+                        {
+                            s5 = b2p.Sum(m => m.Output.Value);
+                        }
+                        var b3p = tsoxsBlock.Where(m => m.Tx.LockExpiration - h > 3000000);
+                        if (b3p.IsNotNullAndEmpty())
+                        {
+                            s6 = b3p.Sum(m => m.Output.Value);
+                        }
+                    }
+                }
+                var s = $"{asset.Value.GetName()}   /   {asset.Key.ToString()}";
+                var owner = Contract.CreateSignatureRedeemScript(asset.Value.Owner).ToScriptHash().ToAddress();
+                var cap = asset.Value.Amount == -Fixed8.Satoshi ? UIHelper.LocalString("无限", "unlimited") : asset.Value.Amount.ToString();
+                var Available = asset.Value.Available.ToString();
+                <Panel Header="@s" Key="@asset.Key.ToString()">
+                    <Collapse>
+                        <div>
+                            <Paragraph><Text Code>@this.WebLocalString($"资产所有者", $"Asset Owner")</Text> <Text Copyable>@owner</Text></Paragraph>
+                         <Paragraph><Text Code>@this.WebLocalString($"资产管理者", $"Asset Admin")</Text> <Text Copyable>@asset.Value.Admin.ToAddress()</Text></Paragraph>
+                         <Paragraph><Text Code>@this.WebLocalString($"资产分发者", $"Asset Issuer")</Text> <Text Copyable>@asset.Value.Issuer.ToAddress()</Text></Paragraph>
+                         <Paragraph><Text Code>@this.WebLocalString($"精度", $"Precision")</Text> <Text Copyable>@asset.Value.Precision</Text></Paragraph>
+                         <Paragraph><Text Code>@this.WebLocalString($"总量", $"Cap")</Text> <Text Copyable>@cap</Text></Paragraph>
+                         <Paragraph><Text Code>@this.WebLocalString($"已发行", $"Issued")</Text> <Text Copyable>@Available</Text></Paragraph>
+                         <Paragraph><Text Code>@this.WebLocalString($"累计锁仓", $"Total Lock")</Text> <Text Copyable>@totalLock</Text></Paragraph>
+                         <Paragraph><Text Code>@this.WebLocalString($"流通总量", $"Total Liquid")</Text> <Text Copyable>@(asset.Value.Available - totalLock)</Text></Paragraph>
+                                <Paragraph><Text Code>@this.WebLocalString($"剩余锁仓时间超过半年", $"Remaining total lock later 0.5 year")</Text> <Text Copyable>@s1</Text></Paragraph>
+                         <Paragraph><Text Code>@this.WebLocalString($"剩余锁仓时间超过1年", $"Remaining total lock later 1 year")</Text> <Text Copyable>@s2</Text></Paragraph>
+                         <Paragraph><Text Code>@this.WebLocalString($"剩余锁仓时间超过1.5年", $"Remaining total lock later 1.5 year")</Text> <Text Copyable>@s3</Text></Paragraph>
+                         <Paragraph><Text Code>@this.WebLocalString($"剩余锁仓区块>1000000", $"Remaining total lock blocks than 1000000")</Text> <Text Copyable>@s4</Text></Paragraph>
+                         <Paragraph><Text Code>@this.WebLocalString($"剩余锁仓区块>2000000", $"Remaining total lock blocks than 2000000")</Text> <Text Copyable>@s5</Text></Paragraph>
+                         <Paragraph><Text Code>@this.WebLocalString($"剩余锁仓区块>3000000", $"Remaining total lock blocks than 3000000")</Text> <Text Copyable>@s6</Text></Paragraph>
+                     </div>
+                 </Collapse>
+             </Panel>
+            }
+        </Collapse>
+    </ChildContent>
+</PageContainer>
