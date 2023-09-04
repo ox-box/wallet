@@ -30,8 +30,8 @@ namespace OX.Wallets.Base
             this.darkLabel2.Text = UIHelper.LocalString("余额:", "Balance:");
             this.darkLabel3.Text = UIHelper.LocalString("收款公钥:", "Public Key:");
             this.darkLabel5.Text = UIHelper.LocalString("锁定类型:", "Lock Type:");
-            this.rbTime.Text = UIHelper.LocalString("时间锁定:", "Lock Time:");
-            this.rbBlock.Text = UIHelper.LocalString("区块锁定:", "Lock Block:");
+            this.rbTime.Text = UIHelper.LocalString("解锁时间:", "Unlock Time:");
+            this.rbBlock.Text = UIHelper.LocalString("解锁区块:", "Unlock Block:");
         }
         /// <summary>
         /// 1:GTC,2:GTS
