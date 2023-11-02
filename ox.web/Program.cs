@@ -12,7 +12,6 @@ using System.Windows.Forms;
 using OX.Notecase;
 using OX.Notecase.Pages;
 using OX.Wallets;
-
 namespace OX.Mix
 {
     public class Program
