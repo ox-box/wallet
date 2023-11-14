@@ -142,7 +142,7 @@ namespace OX.Wallets.Base
 
         private void PayToDialog_Load(object sender, EventArgs e)
         {
-            var accountState = Blockchain.Singleton.CurrentSnapshot.Accounts.TryGet(this.From);
+            var accountState =this.From.IsNotNull()? Blockchain.Singleton.CurrentSnapshot.Accounts.TryGet(this.From):default;
             if (accountState.IsNotNull())
             {
                 foreach (var asset in Blockchain.Singleton.Store.GetAssets().Find().Where(m => accountState.Balances.ContainsKey(m.Key)).OrderByDescending(m => m.Key == Blockchain.OXS).ThenByDescending(m => m.Key == Blockchain.OXC))
