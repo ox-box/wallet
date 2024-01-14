@@ -33,7 +33,7 @@ namespace OX.Wallets
 
         #region 变量
         private DateTime persistence_time = DateTime.MinValue;
-     
+
         #endregion
         public ModuleContainer() : base()
         {
@@ -273,9 +273,24 @@ namespace OX.Wallets
         {
 
         }
-
+        System.Timers.Timer timer = default;
         private void ModuleContainer_Shown(object sender, EventArgs e)
         {
+            if (WebStarter.Instance.NeedWebService)
+            {
+                timer = new System.Timers.Timer();
+                // 60000ms is one minute
+                timer.Interval = 60000;
+                timer.Elapsed += DoWebService;
+                timer.Start();
+            }
+        }
+        private void DoWebService(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            timer.Enabled = false;
+            timer.Close();
+            timer.Dispose();
+            WebStarter.Instance.StartWeb();
         }
     }
 }

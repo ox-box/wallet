@@ -30,10 +30,13 @@ namespace OX.Mix
             Application.SetCompatibleTextRenderingDefault(false);
             app = NotecaseApp.Instance;
             app.OnHeartBeat += App_OnHeartBeat;
-            Task.Factory.StartNew(() =>
+            WebStarter.Instance.WebStartAction = () =>
             {
-                CreateHostBuilder(args).Build().Run();
-            });
+                Task.Factory.StartNew(() =>
+                {
+                    CreateHostBuilder(args).Build().Run();
+                });
+            };
             Application.Run(app.SyncForm = new SyncForm());
         }
 

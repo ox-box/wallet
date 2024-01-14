@@ -12,6 +12,7 @@ using System.Windows.Forms;
 using OX.Notecase;
 using OX.Notecase.Pages;
 using OX.Wallets;
+
 namespace OX.Mix
 {
     public class Program
@@ -29,16 +30,20 @@ namespace OX.Mix
             Application.SetCompatibleTextRenderingDefault(false);
             app = NotecaseApp.Instance;
             app.OnHeartBeat += App_OnHeartBeat;
-            Task.Factory.StartNew(() =>
+            WebStarter.Instance.WebStartAction = () =>
             {
-                CreateHostBuilder(args).Build().Run();
-            });
+                Task.Factory.StartNew(() =>
+                {
+                    CreateHostBuilder(args).Build().Run();
+                });
+            };
+
             Application.Run(app.SyncForm = new SyncForm());
         }
 
         private static void App_OnHeartBeat(Wallets.HeartBeatContext obj)
         {
-           
+
         }
 
         private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
