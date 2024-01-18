@@ -14,10 +14,10 @@ namespace OX.Wallets.Base
         {
             InitializeComponent();
             this.Text = UIHelper.LocalString("关于", "About");
-            this.darkLabel1.Text = UIHelper.LocalString("生态钱包OX BOX", "ECO Wallet OX BOX");
+            this.darkLabel1.Text = UIHelper.LocalString("OX-ECO 钱包 OX BOX", "OX-ECO Wallet OX BOX");
             this.darkLabel2.Text = UIHelper.LocalString("基于区块链技术的去中心化价值生态", "Decentralized value ecology based on blockchain technology");
             var kernelVersion = OX.Bapps.Bapp.KernelVersion;
-            lblVersion.Text = UIHelper.LocalString($"应用版本: {Application.ProductVersion.ToString()}         内核版本:{kernelVersion}", $"Application Version: {Application.ProductVersion.ToString()}         Kernel Version:{kernelVersion}");
+            lblVersion.Text = UIHelper.LocalString($"内核版本:{kernelVersion}", $"Kernel Version:{kernelVersion}");
             btnOk.Text = UIHelper.LocalString("关闭", "Close");
         }
 
