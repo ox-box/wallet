@@ -335,8 +335,9 @@ namespace OX.Wallets.Base
                                 provider.AssetTrustContacts[sh] = contract;
                             }
                             var key = new AssetTrustOutputKey { TxId = att.Hash, N = n };
-                            batch.Put(SliceBuilder.Begin(WalletBizPersistencePrefixes.AssetTrust_UTXO).Add(key), SliceBuilder.Begin().Add(output));
-                            provider.AssetTrustUTXO[key] = output;
+                            AssetTrustOutput ato = new AssetTrustOutput(output);
+                            batch.Put(SliceBuilder.Begin(WalletBizPersistencePrefixes.AssetTrust_UTXO).Add(key), SliceBuilder.Begin().Add(ato));
+                            provider.AssetTrustUTXO[key] = ato;
                         }
                     }
                 }

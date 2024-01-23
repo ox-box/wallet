@@ -61,13 +61,11 @@ namespace OX.Wallets.Base
                         sm.Tag = node.Tag;
                         sm.Click += Sm_Click3;
                         menu.Items.Add(sm);
-                        if (Blockchain.Singleton.Height > p.Value.LastTransferIndex + 10)
-                        {
-                            sm = new ToolStripMenuItem(UIHelper.LocalString("信托转帐", "Trust Transfer"));
-                            sm.Tag = node.Tag;
-                            sm.Click += Sm_Click4;
-                            menu.Items.Add(sm);
-                        }
+
+                        sm = new ToolStripMenuItem(UIHelper.LocalString("信托转帐", "Trust Transfer"));
+                        sm.Tag = node.Tag;
+                        sm.Click += Sm_Click4;
+                        menu.Items.Add(sm);
                     }
                     else if (nt == 4)
                     {

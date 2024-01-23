@@ -45,6 +45,29 @@ namespace OX.Wallets
             return $"{TxId.ToString()}-{N}";
         }
     }
+    public class AssetTrustOutput : ISerializable
+    {
+        public TransactionOutput OutPut;
+        public bool WaitSpent;
+        public virtual int Size => OutPut.Size + sizeof(bool);
+        public AssetTrustOutput() { }
+        public AssetTrustOutput(TransactionOutput output)
+        {
+            this.OutPut = output;
+            this.WaitSpent = false;
+        }
+        public void Serialize(BinaryWriter writer)
+        {
+            writer.Write(OutPut);
+            writer.Write(WaitSpent);
+        }
+        public void Deserialize(BinaryReader reader)
+        {
+            OutPut = reader.ReadSerializable<TransactionOutput>();
+            WaitSpent = reader.ReadBoolean();
+        }
+
+    }
     public class AssetTrustContract : ISerializable
     {
         public ECPoint Trustee;
@@ -56,7 +79,6 @@ namespace OX.Wallets
 
 
         public int Size => Trustee.Size + Truster.Size + sizeof(bool) + Targets.GetVarSize() + SideScopes.GetVarSize() + TrustContract.Size;
-        public uint LastTransferIndex = 0;
         public void Deserialize(BinaryReader reader)
         {
             Trustee = reader.ReadSerializable<ECPoint>();
@@ -94,7 +116,7 @@ namespace OX.Wallets
                 {
                     sideDatas = sideDatas.Concat(sideScope.ToArray()).ToArray();
                 }
-                sb.EmitPush(sideDatas);             
+                sb.EmitPush(sideDatas);
                 sb.EmitAppCall(this.TrustContract);
                 return Contract.Create(new[] { ContractParameterType.Signature }, sb.ToArray());
             }

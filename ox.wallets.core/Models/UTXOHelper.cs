@@ -17,6 +17,10 @@ namespace OX.Wallets
             return $"{TxId.ToString()}-{N}";
         }
     }
+    public class AssetTrustUTXO : UTXO
+    {
+        public AssetTrustOutput AssetTrustOutput;
+    }
     public class EthMapUTXO: UTXO
     {
         public string EthAddress { get; set; }

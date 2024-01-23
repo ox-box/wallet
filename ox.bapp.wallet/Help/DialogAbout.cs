@@ -17,7 +17,9 @@ namespace OX.Wallets.Base
             this.darkLabel1.Text = UIHelper.LocalString("OX-ECO 钱包 OX BOX", "OX-ECO Wallet OX BOX");
             this.darkLabel2.Text = UIHelper.LocalString("基于区块链技术的去中心化价值生态", "Decentralized value ecology based on blockchain technology");
             var kernelVersion = OX.Bapps.Bapp.KernelVersion;
-            lblVersion.Text = UIHelper.LocalString($"内核版本:{kernelVersion}", $"Kernel Version:{kernelVersion}");
+            var appVersion = typeof(OpenWallet).Assembly.GetName().Version.ToString(3);
+
+            lblVersion.Text = UIHelper.LocalString($"应用版本: {appVersion}         内核版本:{kernelVersion}", $"Application Version: {appVersion}         Kernel Version:{kernelVersion}");
             btnOk.Text = UIHelper.LocalString("关闭", "Close");
         }
 

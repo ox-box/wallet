@@ -34,7 +34,7 @@ namespace OX.Wallets.Base
         internal Dictionary<OutputKey, LockAssetMerge> MyLockAssets { get; set; } = new Dictionary<OutputKey, LockAssetMerge>();
         public Dictionary<OutputKey, LockAssetMerge> AllLockAssets { get; set; } = new Dictionary<OutputKey, LockAssetMerge>();
         internal Dictionary<UInt160, AssetTrustContract> AssetTrustContacts { get; set; } = new Dictionary<UInt160, AssetTrustContract>();
-        internal Dictionary<AssetTrustOutputKey, TransactionOutput> AssetTrustUTXO { get; set; } = new Dictionary<AssetTrustOutputKey, TransactionOutput>();
+        internal Dictionary<AssetTrustOutputKey, AssetTrustOutput> AssetTrustUTXO { get; set; } = new Dictionary<AssetTrustOutputKey, AssetTrustOutput>();
         internal Dictionary<EthMapOutputKey, TransactionOutput> EthMapUTXO { get; set; } = new Dictionary<EthMapOutputKey, TransactionOutput>();
         internal Dictionary<UInt160, EthereumMapTransactionMerge> AllEthereumMaps { get; set; } = new Dictionary<UInt160, EthereumMapTransactionMerge>();
         internal Dictionary<CoinReference, EthOutputMerge> AllEthereumMapUTXOs { get; set; } = new Dictionary<CoinReference, EthOutputMerge>();
@@ -46,7 +46,7 @@ namespace OX.Wallets.Base
             this.MyLockAssets = new Dictionary<OutputKey, LockAssetMerge>(this.GetMyAllLockAssets());
             this.AllLockAssets = new Dictionary<OutputKey, LockAssetMerge>(this.GeTAllLockAssets());
             this.AssetTrustContacts = new Dictionary<UInt160, AssetTrustContract>(this.GetAllAssetTrustContracts());
-            this.AssetTrustUTXO = new Dictionary<AssetTrustOutputKey, TransactionOutput>(this.GetAllAssetTrustUTXOs());
+            this.AssetTrustUTXO = new Dictionary<AssetTrustOutputKey, AssetTrustOutput>(this.GetAllAssetTrustUTXOs());
             this.EthMapUTXO = new Dictionary<EthMapOutputKey, TransactionOutput>(this.GetAllEthMapUTXOs());
             this.TotalIssuedOXC = this.Get<Fixed8>(WalletBizPersistencePrefixes.OXC_ALL_Issued, Blockchain.OXC);
             if (this.TotalIssuedOXC == Fixed8.Zero) this.TotalIssuedOXC = Fixed8.One * 40000000;
@@ -230,8 +230,9 @@ namespace OX.Wallets.Base
                         if (this.AssetTrustContacts.ContainsKey(output.ScriptHash))
                         {
                             var key = new AssetTrustOutputKey { TxId = tx.Hash, N = k };
-                            batch.Put(SliceBuilder.Begin(WalletBizPersistencePrefixes.AssetTrust_UTXO).Add(key), SliceBuilder.Begin().Add(output));
-                            this.AssetTrustUTXO[key] = output;
+                            AssetTrustOutput ato = new AssetTrustOutput(output);
+                            batch.Put(SliceBuilder.Begin(WalletBizPersistencePrefixes.AssetTrust_UTXO).Add(key), SliceBuilder.Begin().Add(ato));
+                            this.AssetTrustUTXO[key] = ato;
                         }
                         if (this.Wallet is OpenWallet openWallet && openWallet.TryGetEthAccount(output.ScriptHash, out OpenAccount _))
                         {
@@ -420,7 +421,7 @@ namespace OX.Wallets.Base
                 return new KeyValuePair<UInt160, AssetTrustContract>(ks.AsSerializable<UInt160>(), data.AsSerializable<AssetTrustContract>());
             });
         }
-        public IEnumerable<KeyValuePair<AssetTrustOutputKey, TransactionOutput>> GetAllAssetTrustUTXOs()
+        public IEnumerable<KeyValuePair<AssetTrustOutputKey, AssetTrustOutput>> GetAllAssetTrustUTXOs()
         {
             return this.Db.Find(ReadOptions.Default, SliceBuilder.Begin(WalletBizPersistencePrefixes.AssetTrust_UTXO), (k, v) =>
             {
@@ -428,16 +429,16 @@ namespace OX.Wallets.Base
                 var length = ks.Length - sizeof(byte);
                 ks = ks.TakeLast(length).ToArray();
                 byte[] data = v.ToArray();
-                return new KeyValuePair<AssetTrustOutputKey, TransactionOutput>(ks.AsSerializable<AssetTrustOutputKey>(), data.AsSerializable<TransactionOutput>());
+                return new KeyValuePair<AssetTrustOutputKey, AssetTrustOutput>(ks.AsSerializable<AssetTrustOutputKey>(), data.AsSerializable<AssetTrustOutput>());
             });
         }
 
-        public IEnumerable<KeyValuePair<AssetTrustOutputKey, TransactionOutput>> GetAssetTrustUTXOs(UInt160 contractScriptHash, UInt256 assetId = default)
+        public IEnumerable<KeyValuePair<AssetTrustOutputKey, AssetTrustOutput>> GetUnspentAssetTrustUTXOs(UInt160 contractScriptHash, UInt256 assetId = default)
         {
             if (assetId.IsNotNull())
-                return this.AssetTrustUTXO.Where(m => m.Value.ScriptHash.Equals(contractScriptHash) && m.Value.AssetId.Equals(assetId));
+                return this.AssetTrustUTXO.Where(m =>!m.Value.WaitSpent&& m.Value.OutPut.ScriptHash.Equals(contractScriptHash) && m.Value.OutPut.AssetId.Equals(assetId));
             else
-                return this.AssetTrustUTXO.Where(m => m.Value.ScriptHash.Equals(contractScriptHash));
+                return this.AssetTrustUTXO.Where(m => !m.Value.WaitSpent && m.Value.OutPut.ScriptHash.Equals(contractScriptHash));
         }
         public IEnumerable<KeyValuePair<EthMapOutputKey, TransactionOutput>> GetAllEthMapUTXOs()
         {

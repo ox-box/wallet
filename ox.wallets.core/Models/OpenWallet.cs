@@ -19,7 +19,7 @@ namespace OX.Wallets
     public class OpenWallet : NEP6Wallet
     {
         public Func<Dictionary<UInt160, AssetTrustContract>> GetAssetTrustContacts { get; set; }
-        public Func<Dictionary<AssetTrustOutputKey, TransactionOutput>> GetAssetTrustUTXO { get; set; }
+        public Func<Dictionary<AssetTrustOutputKey, AssetTrustOutput>> GetAssetTrustUTXO { get; set; }
         public Func<Dictionary<EthMapOutputKey, TransactionOutput>> GetEthMapUTXO { get; set; }
         public Func<Dictionary<UInt160, EthereumMapTransactionMerge>> GetAllEthereumMaps { get; set; }
         public Func<Dictionary<CoinReference, EthOutputMerge>> GetAllEthereumMapUTXOs { get; set; }
