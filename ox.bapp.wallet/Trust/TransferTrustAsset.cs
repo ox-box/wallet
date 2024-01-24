@@ -205,7 +205,7 @@ namespace OX.Wallets.Base
                             this.Operater.Relay(tx);
                             foreach(var u in selectedUtxos)
                             {
-                                u.AssetTrustOutput.WaitSpent = true;
+                                u.AssetTrustOutput.SpendIndex = Blockchain.Singleton.HeaderHeight;
                             }
                             if (this.Operater != default)
                             {

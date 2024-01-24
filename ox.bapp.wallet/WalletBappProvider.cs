@@ -252,6 +252,16 @@ namespace OX.Wallets.Base
                 m++;
             }
             this.Db.Write(WriteOptions.Default, batch);
+            if (this.AssetTrustUTXO.IsNotNullAndEmpty())
+            {
+                foreach (var u in this.AssetTrustUTXO.Values)
+                {
+                    if (u.SpendIndex < block.Index - 100)
+                    {
+                        u.SpendIndex = 0;
+                    }
+                }
+            }
             if (hasEventTransaction)
                 Bapp.PushEvent(new BappEvent { EventItems = new BappEventItem[] { new BappEventItem() { EventType = WalletBappEventType.EventTransactionEvent.Value(), Arg = block } } });
         }
@@ -436,9 +446,9 @@ namespace OX.Wallets.Base
         public IEnumerable<KeyValuePair<AssetTrustOutputKey, AssetTrustOutput>> GetUnspentAssetTrustUTXOs(UInt160 contractScriptHash, UInt256 assetId = default)
         {
             if (assetId.IsNotNull())
-                return this.AssetTrustUTXO.Where(m =>!m.Value.WaitSpent&& m.Value.OutPut.ScriptHash.Equals(contractScriptHash) && m.Value.OutPut.AssetId.Equals(assetId));
+                return this.AssetTrustUTXO.Where(m => m.Value.SpendIndex == 0 && m.Value.OutPut.ScriptHash.Equals(contractScriptHash) && m.Value.OutPut.AssetId.Equals(assetId));
             else
-                return this.AssetTrustUTXO.Where(m => !m.Value.WaitSpent && m.Value.OutPut.ScriptHash.Equals(contractScriptHash));
+                return this.AssetTrustUTXO.Where(m => m.Value.SpendIndex == 0 && m.Value.OutPut.ScriptHash.Equals(contractScriptHash));
         }
         public IEnumerable<KeyValuePair<EthMapOutputKey, TransactionOutput>> GetAllEthMapUTXOs()
         {
