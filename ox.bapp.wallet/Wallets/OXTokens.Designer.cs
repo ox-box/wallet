@@ -53,7 +53,7 @@ namespace OX.Wallets.Base
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.treeAsset);
             this.DefaultDockArea = OX.Wallets.UI.Docking.DarkDockArea.Right;
-            this.DockText = UIHelper.LocalString("私营资产列表", "Private Asset List");
+            this.DockText = UIHelper.LocalString("私营资产详情", "Private Asset Details");
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             //this.Icon = global::OX.GT.Icons.properties_16xLG;
             this.Name = "PrivateAssetList";

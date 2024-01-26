@@ -25,9 +25,8 @@ namespace OX.Wallets.Base
     {
         public override string ModuleName { get { return "walletmodule"; } }
         public override uint Index { get { return 0; } }
-     
-        protected OXAsset OXAsset;
-        protected OXLockAsset OXLockAsset;
+
+        protected AccountAsset AccountAsset;
         protected EthAsset EthAsset;
         protected BTCAsset BTCAsset;
         protected ClaimOXC ClaimForm;
@@ -49,24 +48,27 @@ namespace OX.Wallets.Base
             walletMenu.Name = "walletMenu";
             walletMenu.Size = new System.Drawing.Size(39, 21);
             walletMenu.Text = UIHelper.LocalString("&钱包", "&Wallet");
-            ToolStripMenuItem assetmenu = new ToolStripMenuItem();
-            assetmenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            assetmenu.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+
+            ToolStripMenuItem accountAssetMenu = new ToolStripMenuItem();
+            accountAssetMenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            accountAssetMenu.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             //exitmenu.Image = global::Example.Icons.NewFile_6276;
-            assetmenu.Name = "assetmenu";
-            assetmenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.A)));
-            assetmenu.Size = new System.Drawing.Size(170, 22);
-            assetmenu.Text = UIHelper.LocalString("&原生资产", "&Native Asset");
-            assetmenu.Click += Assetmenu_Click;
-            ToolStripMenuItem lockassetmenu = new ToolStripMenuItem();
-            lockassetmenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            lockassetmenu.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            //exitmenu.Image = global::Example.Icons.NewFile_6276;
-            lockassetmenu.Name = "lockassetmenu";
-            lockassetmenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
-            lockassetmenu.Size = new System.Drawing.Size(170, 22);
-            lockassetmenu.Text = UIHelper.LocalString("&锁仓资产", "&Lock Asset");
-            lockassetmenu.Click += Localassetmenu_Click;
+            accountAssetMenu.Name = "accountAssetMenu";
+            accountAssetMenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.A)));
+            accountAssetMenu.Size = new System.Drawing.Size(170, 22);
+            accountAssetMenu.Text = UIHelper.LocalString("&账户资产", "&Account Asset");
+            accountAssetMenu.Click += AccountAssetMenu_Click;
+  
+
+            ToolStripMenuItem nativeAssetDetailsListmenu = new ToolStripMenuItem();
+            nativeAssetDetailsListmenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            nativeAssetDetailsListmenu.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            //nativeAssetDetailsListmenu.Image = global::Example.Icons.NewFile_6276;
+            nativeAssetDetailsListmenu.Name = "nativeAssetDetailsListmenu";
+            nativeAssetDetailsListmenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
+            nativeAssetDetailsListmenu.Size = new System.Drawing.Size(170, 22);
+            nativeAssetDetailsListmenu.Text = UIHelper.LocalString("&原生资产详情", "&Native Asset Details");
+            nativeAssetDetailsListmenu.Click += NativeAssetDetailsListmenu_Click;
 
             ToolStripMenuItem regAssetmenu = new ToolStripMenuItem();
             regAssetmenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
@@ -93,9 +95,9 @@ namespace OX.Wallets.Base
             tokenListmenu.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             //tokenListmenu.Image = global::Example.Icons.NewFile_6276;
             tokenListmenu.Name = "tokenListmenu";
-            tokenListmenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.T)));
+            tokenListmenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.W)));
             tokenListmenu.Size = new System.Drawing.Size(170, 22);
-            tokenListmenu.Text = UIHelper.LocalString("&私营资产列表", "&Private Asset List");
+            tokenListmenu.Text = UIHelper.LocalString("&私营资产详情", "&Private Asset Details");
             tokenListmenu.Click += TokenListmenu_Click;
 
             ToolStripMenuItem transfermenu = new ToolStripMenuItem();
@@ -105,8 +107,9 @@ namespace OX.Wallets.Base
             transfermenu.Name = "transfermenu";
             transfermenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.T)));
             transfermenu.Size = new System.Drawing.Size(170, 22);
-            transfermenu.Text = UIHelper.LocalString("&转账", "&Transfer");
+            transfermenu.Text = UIHelper.LocalString("&合并转账", "&Merge Transfer");
             transfermenu.Click += Transfermenu_Click;
+
             ToolStripMenuItem claimmenu = new ToolStripMenuItem();
             claimmenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             claimmenu.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
@@ -114,7 +117,7 @@ namespace OX.Wallets.Base
             claimmenu.Name = "claimmenu";
             claimmenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
             claimmenu.Size = new System.Drawing.Size(170, 22);
-            claimmenu.Text = UIHelper.LocalString("&提取", "&Claim");
+            claimmenu.Text = UIHelper.LocalString("&合并提取 OXC", "&Merge Claim OXC");
             claimmenu.Click += Claimmenu_Click;
 
             ToolStripMenuItem exportMnemonicsMenu = new ToolStripMenuItem();
@@ -223,8 +226,8 @@ namespace OX.Wallets.Base
             exitmenu.Text = UIHelper.LocalString("&退出", "&Exit");
             exitmenu.Click += Exitmenu_Click;
             walletMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-                assetmenu,
-                lockassetmenu,
+                accountAssetMenu,
+                nativeAssetDetailsListmenu,
                 regAssetmenu,
                 issueAssetmenu,
                 tokenListmenu,
@@ -244,6 +247,26 @@ namespace OX.Wallets.Base
                 exitmenu});
             this.Container.TopMenus.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             walletMenu});
+        }
+
+        private void AccountAssetMenu_Click(object sender, EventArgs e)
+        {
+            if (this.AccountAsset == default)
+            {
+                //this.AssetView = new AssetView(this.Res("view_asset"), OX.Wallets.Icons.document_16xLG);
+                this.AccountAsset = new  AccountAsset();
+                this.AccountAsset.Module = this;
+                if (this.Operater != default && this.Operater.Wallet != default)
+                    this.AccountAsset.ChangeWallet(this.Operater);
+                this.Container.ToolWindows.Add(this.AccountAsset);
+            }
+
+            this.Container.DockPanel.AddContent(this.AccountAsset);
+        }
+
+        private void NativeAssetDetailsListmenu_Click(object sender, EventArgs e)
+        {
+            new DialogNativeAsset().ShowDialog();
         }
 
         private void BlockRecordsmenu_Click(object sender, EventArgs e)
@@ -345,19 +368,7 @@ namespace OX.Wallets.Base
             }
         }
 
-        private void Localassetmenu_Click(object sender, EventArgs e)
-        {
-            if (this.OXLockAsset == default)
-            {
-                this.OXLockAsset = new OXLockAsset();
-                this.OXLockAsset.Module = this;
-                if (this.Operater != default && this.Operater.Wallet != default)
-                    this.OXLockAsset.ChangeWallet(this.Operater);
-                this.Container.ToolWindows.Add(this.OXLockAsset);
-            }
-
-            this.Container.DockPanel.AddContent(this.OXLockAsset);
-        }
+       
 
         private void LockWalletmenu_Click(object sender, EventArgs e)
         {
@@ -470,10 +481,8 @@ namespace OX.Wallets.Base
 
         public override void OnBappEvent(BappEvent be)
         {
-            if (this.OXAsset != default)
-                this.OXAsset.OnBappEvent(be);
-            if (this.OXLockAsset != default)
-                this.OXLockAsset.OnBappEvent(be);
+            if (this.AccountAsset != default)
+                this.AccountAsset.OnBappEvent(be);
             if (this.EthAsset != default)
                 this.EthAsset.OnBappEvent(be);
             if (this.BTCAsset != default)
@@ -544,10 +553,8 @@ namespace OX.Wallets.Base
 
         public override void HeartBeat(HeartBeatContext context)
         {
-            if (this.OXAsset != default)
-                this.OXAsset.HeartBeat(context);
-            if (this.OXLockAsset != default)
-                this.OXLockAsset.HeartBeat(context);
+            if (this.AccountAsset != default)
+                this.AccountAsset.HeartBeat(context);
             if (this.EthAsset != default)
                 this.EthAsset.HeartBeat(context);
             if (this.BTCAsset != default)
@@ -563,10 +570,8 @@ namespace OX.Wallets.Base
         }
         public override void BeforeOnBlock(Block block)
         {
-            if (this.OXAsset != default)
-                this.OXAsset.BeforeOnBlock(block);
-            if (this.OXLockAsset != default)
-                this.OXLockAsset.BeforeOnBlock(block);
+            if (this.AccountAsset != default)
+                this.AccountAsset.BeforeOnBlock(block);
             if (this.EthAsset != default)
                 this.EthAsset.BeforeOnBlock(block);
             if (this.BTCAsset != default)
@@ -582,10 +587,8 @@ namespace OX.Wallets.Base
         }
         public override void AfterOnBlock(Block block)
         {
-            if (this.OXAsset != default)
-                this.OXAsset.AfterOnBlock(block);
-            if (this.OXLockAsset != default)
-                this.OXLockAsset.AfterOnBlock(block);
+            if (this.AccountAsset != default)
+                this.AccountAsset.AfterOnBlock(block);
             if (this.EthAsset != default)
                 this.EthAsset.AfterOnBlock(block);
             if (this.BTCAsset != default)
@@ -602,10 +605,8 @@ namespace OX.Wallets.Base
         }
         public override void OnBlock(Block block)
         {
-            if (this.OXAsset != default)
-                this.OXAsset.OnBlock(block);
-            if (this.OXLockAsset != default)
-                this.OXLockAsset.OnBlock(block);
+            if (this.AccountAsset != default)
+                this.AccountAsset.OnBlock(block);
             if (this.EthAsset != default)
                 this.EthAsset.OnBlock(block);
             if (this.BTCAsset != default)
@@ -622,10 +623,8 @@ namespace OX.Wallets.Base
         public override void ChangeWallet(INotecase operater)
         {
             this.Operater = operater;
-            if (this.OXAsset != default)
-                this.OXAsset.ChangeWallet(operater);
-            if (this.OXLockAsset != default)
-                this.OXLockAsset.ChangeWallet(operater);
+            if (this.AccountAsset != default)
+                this.AccountAsset.ChangeWallet(operater);
             if (this.EthAsset != default)
                 this.EthAsset.ChangeWallet(operater);
             if (this.BTCAsset != default)
@@ -641,10 +640,8 @@ namespace OX.Wallets.Base
         }
         public override void OnRebuild()
         {
-            if (this.OXAsset != default)
-                this.OXAsset.OnRebuild();
-            if (this.OXLockAsset != default)
-                this.OXLockAsset.OnRebuild();
+            if (this.AccountAsset != default)
+                this.AccountAsset.OnRebuild();
             if (this.EthAsset != default)
                 this.EthAsset.OnRebuild();
             if (this.BTCAsset != default)
@@ -660,9 +657,9 @@ namespace OX.Wallets.Base
         }
         public override void OnLoadBappModuleWalletSection(JObject bappSectionObject)
         {
-           
+
         }
-       
+
 
         private void Exitmenu_Click(object sender, EventArgs e)
         {
@@ -689,17 +686,6 @@ namespace OX.Wallets.Base
 
         private void Transfermenu_Click(object sender, EventArgs e)
         {
-            //using (DialogPayToDialog dialog = new DialogPayToDialog(this.Operater))
-            //{
-            //    if (dialog.ShowDialog() != DialogResult.OK) return;
-            //    TxOutListBoxItem item = dialog.GetOutput();
-            //    Transaction tx = new ContractTransaction();
-            //    List<TransactionAttribute> attributes = new List<TransactionAttribute>();
-            //    tx.Attributes = attributes.ToArray();
-            //    tx.Outputs = new TransactionOutput[] { item.ToTxOutput() };
-            //    tx = this.Operater.Wallet.MakeTransaction(tx);
-            //    this.Operater.SignAndSendTx(tx);
-            //}
             Transaction tx;
             UInt160 change_address;
             Fixed8 fee;
@@ -731,17 +717,17 @@ namespace OX.Wallets.Base
 
         private void Assetmenu_Click(object sender, EventArgs e)
         {
-            if (this.OXAsset == default)
-            {
-                //this.AssetView = new AssetView(this.Res("view_asset"), OX.Wallets.Icons.document_16xLG);
-                this.OXAsset = new OXAsset();
-                this.OXAsset.Module = this;
-                if (this.Operater != default && this.Operater.Wallet != default)
-                    this.OXAsset.ChangeWallet(this.Operater);
-                this.Container.ToolWindows.Add(this.OXAsset);
-            }
+            //if (this.AccountAsset == default)
+            //{
+            //    //this.AssetView = new AssetView(this.Res("view_asset"), OX.Wallets.Icons.document_16xLG);
+            //    this.AccountAsset = new AccountAsset();
+            //    this.AccountAsset.Module = this;
+            //    if (this.Operater != default && this.Operater.Wallet != default)
+            //        this.AccountAsset.ChangeWallet(this.Operater);
+            //    this.Container.ToolWindows.Add(this.AccountAsset);
+            //}
 
-            this.Container.DockPanel.AddContent(this.OXAsset);
+            //this.Container.DockPanel.AddContent(this.AccountAsset);
         }
     }
 }

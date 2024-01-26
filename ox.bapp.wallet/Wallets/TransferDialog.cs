@@ -30,7 +30,7 @@ namespace OX.Wallets.Base
             InitializeComponent();
             this.txOutListBox1.Operater = operater;
             textBoxFee.Text = "0";
-            this.Text = UIHelper.LocalString("转账", "Transfer");
+            this.Text = UIHelper.LocalString("合并转账", "Merge Transfer");
             this.groupBox1.Text = UIHelper.LocalString("高级", "Advanced");
             this.groupBox1.ForeColor = Color.White;
             this.groupBox3.Text = UIHelper.LocalString("收款人列表", "Recipient List");

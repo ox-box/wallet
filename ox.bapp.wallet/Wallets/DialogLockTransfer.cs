@@ -20,40 +20,49 @@ namespace OX.Wallets.Base
 {
     public partial class DialogLockTransfer : DarkDialog
     {
+        public class AssetDesc
+        {
+            public AssetState AssetState;
+            public override string ToString()
+            {
+                return $"{AssetState.GetName()}   /   {AssetState.AssetId.ToString()}";
+            }
+        }
         INotecase Operater;
         public DialogLockTransfer()
         {
             InitializeComponent();
             btnOk.Text = UIHelper.LocalString("确定", "OK");
             btnOk.Enabled = false;
-            this.darkLabel1.Text = UIHelper.LocalString("资产类型:", "Asset Type:");
+            this.lb_asset.Text = UIHelper.LocalString("资产:", "Asset:");
             this.darkLabel2.Text = UIHelper.LocalString("余额:", "Balance:");
             this.darkLabel3.Text = UIHelper.LocalString("收款公钥:", "Public Key:");
             this.darkLabel5.Text = UIHelper.LocalString("锁定类型:", "Lock Type:");
             this.rbTime.Text = UIHelper.LocalString("解锁时间:", "Unlock Time:");
             this.rbBlock.Text = UIHelper.LocalString("解锁区块:", "Unlock Block:");
+            this.cb_lockself.Text = UIHelper.LocalString("自主锁仓", "Lock Self");
         }
-        /// <summary>
-        /// 1:GTC,2:GTS
-        /// </summary>
-        public int AssetType
-        {
-            get
-            {
-                return rbGTC.Checked ? 1 : 2;
-            }
 
-        }
-        public UInt160 From;
-        public DialogLockTransfer(INotecase operater, UInt160 from = null) : this()
+        WalletAccount Account;
+        public DialogLockTransfer(INotecase operater, WalletAccount account) : this()
         {
             this.Operater = operater;
-            this.From = from;
+            this.Account = account;
         }
-
+        private UInt256 SelectedAssetID(out string AssetName)
+        {
+            AssetName = string.Empty;
+            var item = this.cb_assets.SelectedItem;
+            if (item.IsNull()) return default;
+            if (item is AssetDesc assetDesc)
+            {
+                return assetDesc.AssetState.AssetId;
+            }
+            return default;
+        }
         public TransactionOutput GetOutput(out ECPoint ecp, out bool isTime, out uint expiration)
         {
-            UInt256 AssetID = SelectedAssetID();
+            UInt256 AssetID = SelectedAssetID(out string assetName);
             ecp = ECPoint.Parse(textBox1.Text, ECCurve.Secp256r1);
             isTime = this.rbTime.Checked;
             if (isTime)
@@ -108,30 +117,27 @@ namespace OX.Wallets.Base
             btnOk.Enabled = true;
         }
 
-        private void rbGTC_CheckedChanged(object sender, EventArgs e)
-        {
-            RefreshBalance();
-        }
         private void RefreshBalance()
         {
-            UInt256 assetid = SelectedAssetID();
-            textBox3.Text = this.From == null ? this.Operater.Wallet.GetAvailable(assetid).ToString() : this.Operater.Wallet.GeAccountAvailable(this.From, assetid).ToString();
-            textBox_TextChanged(this, EventArgs.Empty);
-        }
-        private UInt256 SelectedAssetID()
-        {
-            if (this.AssetType == 1)
+            UInt256 assetid = SelectedAssetID(out string assetName);
+            if (assetid.IsNotNull())
             {
-                return Blockchain.OXC;
-            }
-            else
-            {
-                return Blockchain.OXS;
+                textBox3.Text = this.Operater.Wallet.GeAccountAvailable(this.Account.ScriptHash, assetid).ToString();
+                textBox_TextChanged(this, EventArgs.Empty);
             }
         }
 
+
         private void PayToDialog_Load(object sender, EventArgs e)
         {
+            var accountState =Blockchain.Singleton.CurrentSnapshot.Accounts.TryGet(this.Account.ScriptHash);
+            if (accountState.IsNotNull())
+            {
+                foreach (var asset in Blockchain.Singleton.Store.GetAssets().Find().Where(m => accountState.Balances.ContainsKey(m.Key)).OrderByDescending(m => m.Key == Blockchain.OXS).ThenByDescending(m => m.Key == Blockchain.OXC))
+                {
+                    this.cb_assets.Items.Add(new AssetDesc { AssetState = asset.Value });
+                }
+            }
             RefreshBalance();
         }
 
@@ -153,6 +159,26 @@ namespace OX.Wallets.Base
                     tb.Clear();
                     tb.AppendText(s);
                 }
+            }
+        }
+
+        private void cb_assets_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            RefreshBalance();
+        }
+
+        private void cb_lockself_CheckedChanged(object sender, EventArgs e)
+        {
+            if (this.cb_lockself.Checked)
+            {
+                this.textBox1.ReadOnly = true;
+                this.textBox1.Text = this.Account.GetKey().PublicKey.ToString();
+            }
+            else
+            {
+                this.textBox1.Text = string.Empty;
+                this.darkLabel6.Text = string.Empty;
+                this.textBox1.ReadOnly = false;
             }
         }
     }

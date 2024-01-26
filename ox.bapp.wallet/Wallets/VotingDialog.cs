@@ -43,6 +43,9 @@ namespace OX.Wallets.Base
             this.groupBox1.Text = UIHelper.LocalString("候选人", "Candidates");
             this.button1.Text = UIHelper.LocalString("确定", "OK");
             this.button2.Text = UIHelper.LocalString("取消", "Cancel");
+            this.button1.Enabled = false;
+            if (account.Balances.TryGetValue(Blockchain.OXS, out Fixed8 balance) && balance > Fixed8.Zero)
+                this.button1.Enabled = true;
         }
     }
 }

@@ -55,8 +55,6 @@ namespace OX.Wallets.Base
                 var ks = WalletBappProvider.Instance.GetAll<OutputKey, LockOXS>(WalletBizPersistencePrefixes.TX_Once_MyLockOXS);
                 if (ks.IsNotNullAndEmpty())
                 {
-
-
                     List<LockOXS> unspendlos = new List<LockOXS>();
                     foreach (var pair in ks.Where(m => m.Value.Holder.Equals(holder)))
                     {
