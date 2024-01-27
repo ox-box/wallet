@@ -189,7 +189,7 @@ namespace OX.Wallets.Base
                     Dictionary<UInt160, AvatarAccount> acts = new Dictionary<UInt160, AvatarAccount>();
                     List<CoinReference> crs = new List<CoinReference>();
 
-                    var rs = bizPlugin.GetMyAllLockAssets()?.Where(m => m.Value.Tx.Recipient.Equals(tag.Item1.GetKey().PublicKey) && m.Value.Output.AssetId.Equals(tag.Item2));
+                    var rs = bizPlugin.MyLockAssets?.Where(m => m.Value.Tx.Recipient.Equals(tag.Item1.GetKey().PublicKey) && m.Value.Output.AssetId.Equals(tag.Item2));
                     int c = 0;
                     Fixed8 amount = Fixed8.Zero;
                     foreach (var r in rs)
@@ -675,7 +675,7 @@ namespace OX.Wallets.Base
                 {
                     var acts = this.Operater.Wallet.GetAccounts();
                     this.bt_Fresh.Text = UIHelper.LocalString($"{acts.Count()}个账户", $"{acts.Count()} accounts");
-                    var assetRecords = bizPlugin.GetMyAllLockAssets();
+                    var assetRecords = bizPlugin.MyLockAssets;
                     foreach (var act in acts)
                     {
                         var lockAssetRecords = act.WatchOnly ? default : assetRecords.Where(m => m.Value.Tx.Recipient.Equals(act.GetKey().PublicKey));

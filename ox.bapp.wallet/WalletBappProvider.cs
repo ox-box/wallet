@@ -44,7 +44,7 @@ namespace OX.Wallets.Base
             Instance = this;
             this.WalletSettings = new Dictionary<WalletSettingKey, WalletSettingValue>(this.GetAll<WalletSettingKey, WalletSettingValue>(WalletBizPersistencePrefixes.Wallet_Setting));
             this.MyLockAssets = new Dictionary<OutputKey, LockAssetMerge>(this.GetMyAllLockAssets());
-            this.AllLockAssets = new Dictionary<OutputKey, LockAssetMerge>(this.GeTAllLockAssets());
+            this.AllLockAssets = new Dictionary<OutputKey, LockAssetMerge>(this.GetAllLockAssets());
             this.AssetTrustContacts = new Dictionary<UInt160, AssetTrustContract>(this.GetAllAssetTrustContracts());
             this.AssetTrustUTXO = new Dictionary<AssetTrustOutputKey, AssetTrustOutput>(this.GetAllAssetTrustUTXOs());
             this.EthMapUTXO = new Dictionary<EthMapOutputKey, TransactionOutput>(this.GetAllEthMapUTXOs());
@@ -409,7 +409,7 @@ namespace OX.Wallets.Base
                 return new KeyValuePair<OutputKey, LockAssetMerge>(ks.AsSerializable<OutputKey>(), data.AsSerializable<LockAssetMerge>());
             });
         }
-        public IEnumerable<KeyValuePair<OutputKey, LockAssetMerge>> GeTAllLockAssets()
+        public IEnumerable<KeyValuePair<OutputKey, LockAssetMerge>> GetAllLockAssets()
         {
             return this.Db.Find(ReadOptions.Default, SliceBuilder.Begin(WalletBizPersistencePrefixes.TX_LockAsset_Record), (k, v) =>
             {
