@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWindowsForms>True</UseWindowsForms>
     <RootNamespace>OX.Mix</RootNamespace>
+    <Version>1.2.0</Version>
   </PropertyGroup>
 
   <ItemGroup>

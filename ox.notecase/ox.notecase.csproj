@@ -10,7 +10,7 @@
     <Copyright>gt</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <Version>1.0.2</Version>
+    <Version>1.2.0</Version>
     <AssemblyName>ox.box</AssemblyName>
   </PropertyGroup>
 

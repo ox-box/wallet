@@ -9,7 +9,7 @@
     <Copyright>gt</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <AssemblyName>ox.wallets.module.base</AssemblyName>
-    <Version>1.0.2</Version>
+    <Version>1.2.0</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
