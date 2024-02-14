@@ -18,6 +18,7 @@ using OX.Ledger;
 using OX.Wallets.Base.Wallets;
 using OX.Wallets.States;
 using OX.Wallets.Messages;
+using Nethereum.Model;
 
 namespace OX.Wallets.Base
 {
@@ -29,7 +30,7 @@ namespace OX.Wallets.Base
         protected AccountAsset AccountAsset;
         protected EthAsset EthAsset;
         protected BTCAsset BTCAsset;
-        protected ClaimOXC ClaimForm;
+        //protected ClaimOXC ClaimForm;
         protected DockTransactionHistory TransactionHistoryView;
         protected Partners PartnersView;
         protected INotecase Operater;
@@ -58,7 +59,7 @@ namespace OX.Wallets.Base
             accountAssetMenu.Size = new System.Drawing.Size(170, 22);
             accountAssetMenu.Text = UIHelper.LocalString("&账户资产", "&Account Asset");
             accountAssetMenu.Click += AccountAssetMenu_Click;
-  
+
 
             ToolStripMenuItem nativeAssetDetailsListmenu = new ToolStripMenuItem();
             nativeAssetDetailsListmenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
@@ -100,25 +101,25 @@ namespace OX.Wallets.Base
             tokenListmenu.Text = UIHelper.LocalString("&私营资产详情", "&Private Asset Details");
             tokenListmenu.Click += TokenListmenu_Click;
 
-            ToolStripMenuItem transfermenu = new ToolStripMenuItem();
-            transfermenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            transfermenu.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            //exitmenu.Image = global::Example.Icons.NewFile_6276;
-            transfermenu.Name = "transfermenu";
-            transfermenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.T)));
-            transfermenu.Size = new System.Drawing.Size(170, 22);
-            transfermenu.Text = UIHelper.LocalString("&合并转账", "&Merge Transfer");
-            transfermenu.Click += Transfermenu_Click;
+            //ToolStripMenuItem transfermenu = new ToolStripMenuItem();
+            //transfermenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            //transfermenu.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            ////exitmenu.Image = global::Example.Icons.NewFile_6276;
+            //transfermenu.Name = "transfermenu";
+            //transfermenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.T)));
+            //transfermenu.Size = new System.Drawing.Size(170, 22);
+            //transfermenu.Text = UIHelper.LocalString("&合并转账", "&Merge Transfer");
+            //transfermenu.Click += Transfermenu_Click;
 
-            ToolStripMenuItem claimmenu = new ToolStripMenuItem();
-            claimmenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            claimmenu.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            //exitmenu.Image = global::Example.Icons.NewFile_6276;
-            claimmenu.Name = "claimmenu";
-            claimmenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
-            claimmenu.Size = new System.Drawing.Size(170, 22);
-            claimmenu.Text = UIHelper.LocalString("&合并提取 OXC", "&Merge Claim OXC");
-            claimmenu.Click += Claimmenu_Click;
+            //ToolStripMenuItem claimmenu = new ToolStripMenuItem();
+            //claimmenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            //claimmenu.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            ////exitmenu.Image = global::Example.Icons.NewFile_6276;
+            //claimmenu.Name = "claimmenu";
+            //claimmenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
+            //claimmenu.Size = new System.Drawing.Size(170, 22);
+            //claimmenu.Text = UIHelper.LocalString("&合并提取 OXC", "&Merge Claim OXC");
+            //claimmenu.Click += Claimmenu_Click;
 
             ToolStripMenuItem exportMnemonicsMenu = new ToolStripMenuItem();
             exportMnemonicsMenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
@@ -162,15 +163,7 @@ namespace OX.Wallets.Base
             reindexmenu.Size = new System.Drawing.Size(170, 22);
             reindexmenu.Text = UIHelper.LocalString("&重建索引", "&Rebuild Index");
             reindexmenu.Click += Reindexmenu_Click;
-            ToolStripMenuItem electionmenu = new ToolStripMenuItem();
-            electionmenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            electionmenu.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            //electionmenu.Image = global::Example.Icons.NewFile_6276;
-            electionmenu.Name = "electionmenu";
-            electionmenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            electionmenu.Size = new System.Drawing.Size(170, 22);
-            electionmenu.Text = UIHelper.LocalString("&选举", "&Election");
-            electionmenu.Click += Electionmenu_Click;
+            
             ToolStripMenuItem btcmenu = new ToolStripMenuItem();
             btcmenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             btcmenu.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
@@ -231,14 +224,13 @@ namespace OX.Wallets.Base
                 regAssetmenu,
                 issueAssetmenu,
                 tokenListmenu,
-                transfermenu,
-                claimmenu,
+                //transfermenu,
+                //claimmenu,
                 exportMnemonicsMenu,
                 blockRecordsmenu,
                 recordmenu,
                 partnermenu,
                 reindexmenu,
-                electionmenu,
                 btcmenu,
                 ethnmenu,
                 copyWalletmenu,
@@ -254,7 +246,7 @@ namespace OX.Wallets.Base
             if (this.AccountAsset == default)
             {
                 //this.AssetView = new AssetView(this.Res("view_asset"), OX.Wallets.Icons.document_16xLG);
-                this.AccountAsset = new  AccountAsset();
+                this.AccountAsset = new AccountAsset();
                 this.AccountAsset.Module = this;
                 if (this.Operater != default && this.Operater.Wallet != default)
                     this.AccountAsset.ChangeWallet(this.Operater);
@@ -368,7 +360,7 @@ namespace OX.Wallets.Base
             }
         }
 
-       
+
 
         private void LockWalletmenu_Click(object sender, EventArgs e)
         {
@@ -431,26 +423,7 @@ namespace OX.Wallets.Base
 
             this.Container.DockPanel.AddContent(this.EthAsset);
         }
-
-        private void Electionmenu_Click(object sender, EventArgs e)
-        {
-            if (this.Operater.IsNotNull() && this.Operater.Wallet.IsNotNull())
-                using (ElectionDialog dialog = new ElectionDialog(this.Operater.Wallet))
-                {
-                    if (dialog.ShowDialog() != DialogResult.OK) return;
-                    try
-                    {
-                        var tx = dialog.GetTransaction();
-                        this.Operater.SignAndSendTx(tx);
-                        string msg = $"{UIHelper.LocalString("选举交易已广播", "Relay election transaction completed")}   {tx.Hash}";
-                        Bapp.PushCrossBappMessage(new CrossBappMessage() { Content = msg, From = this.Bapp });
-                    }
-                    catch
-                    {
-                        return;
-                    }
-                }
-        }
+ 
 
         private void Partnermenu_Click(object sender, EventArgs e)
         {
@@ -487,8 +460,8 @@ namespace OX.Wallets.Base
                 this.EthAsset.OnBappEvent(be);
             if (this.BTCAsset != default)
                 this.BTCAsset.OnBappEvent(be);
-            if (this.ClaimForm != default)
-                this.ClaimForm.OnBappEvent(be);
+            //if (this.ClaimForm != default)
+            //this.ClaimForm.OnBappEvent(be);
             if (this.TransactionHistoryView != default)
                 this.TransactionHistoryView.OnBappEvent(be);
             if (this.PartnersView != default)
@@ -505,44 +478,18 @@ namespace OX.Wallets.Base
                 var request = message.Attachment as TransferRequest;
                 if (request.IsNotNull())
                 {
-                    if (request.Asset == Blockchain.OXC || request.Asset == Blockchain.OXS)
+                    using (DialogSinglePayTo dialog = new DialogSinglePayTo(this.Operater, request))
                     {
-                        using (DialogSinglePayTo dialog = new DialogSinglePayTo(this.Operater, request))
+                        if (dialog.ShowDialog() != DialogResult.OK) return;
+                        var tx = dialog.BuildTransaction();
+                        if (tx.IsNotNull() && this.Operater.Wallet.IsNotNull())
                         {
-                            if (dialog.ShowDialog() != DialogResult.OK) return;
-                            TxOutListBoxItem item = dialog.GetOutput();
-                            SingleTransactionWrapper<ContractTransaction> stw = new SingleTransactionWrapper<ContractTransaction>(request.From, item.ToTxOutput());
-                            var tx = this.Operater.Wallet.MakeSingleTransaction(stw);
-                            if (tx != null)
+                            this.Operater.Wallet.MixBuildAndRelaySingleOutputTransaction(tx, request.From, tx =>
                             {
-                                this.Operater.SignAndSendTx(tx);
-                                if (this.Operater != default)
-                                {
-                                    string msg = $"{UIHelper.LocalString("交易已广播", "Relay transaction completed")}   {tx.Hash}";
-                                    Bapp.PushCrossBappMessage(new CrossBappMessage() { Content = msg, From = this.Bapp });
-                                    OX.Wallets.UI.Forms.DarkMessageBox.ShowInformation(msg, "");
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        using (DialogSingleTokenPayTo dialog = new DialogSingleTokenPayTo(this.Operater, request))
-                        {
-                            if (dialog.ShowDialog() != DialogResult.OK) return;
-                            TxOutListBoxItem item = dialog.GetOutput();
-                            SingleTransactionWrapper<ContractTransaction> stw = new SingleTransactionWrapper<ContractTransaction>(request.From, item.ToTxOutput());
-                            var tx = this.Operater.Wallet.MakeSingleTransaction(stw);
-                            if (tx != null)
-                            {
-                                this.Operater.SignAndSendTx(tx);
-                                if (this.Operater != default)
-                                {
-                                    string msg = $"{UIHelper.LocalString("交易已广播", "Relay transaction completed")}   {tx.Hash}";
-                                    Bapp.PushCrossBappMessage(new CrossBappMessage() { Content = msg, From = this.Bapp });
-                                    OX.Wallets.UI.Forms.DarkMessageBox.ShowInformation(msg, "");
-                                }
-                            }
+                                string msg = $"{UIHelper.LocalString("交易已广播", "Relay transaction completed")}   {tx.Hash}";
+                                Bapp.PushCrossBappMessage(new CrossBappMessage() { Content = msg, From = this.Bapp });
+                                DarkMessageBox.ShowInformation(msg, "");
+                            });
                         }
                     }
                 }
@@ -559,8 +506,8 @@ namespace OX.Wallets.Base
                 this.EthAsset.HeartBeat(context);
             if (this.BTCAsset != default)
                 this.BTCAsset.HeartBeat(context);
-            if (this.ClaimForm != default)
-                this.ClaimForm.HeartBeat(context);
+            //if (this.ClaimForm != default)
+            //this.ClaimForm.HeartBeat(context);
             if (this.TransactionHistoryView != default)
                 this.TransactionHistoryView.HeartBeat(context);
             if (this.PartnersView != default)
@@ -576,8 +523,8 @@ namespace OX.Wallets.Base
                 this.EthAsset.BeforeOnBlock(block);
             if (this.BTCAsset != default)
                 this.BTCAsset.BeforeOnBlock(block);
-            if (this.ClaimForm != default)
-                this.ClaimForm.BeforeOnBlock(block);
+            //if (this.ClaimForm != default)
+            //    this.ClaimForm.BeforeOnBlock(block);
             if (this.TransactionHistoryView != default)
                 this.TransactionHistoryView.BeforeOnBlock(block);
             if (this.PartnersView != default)
@@ -593,8 +540,8 @@ namespace OX.Wallets.Base
                 this.EthAsset.AfterOnBlock(block);
             if (this.BTCAsset != default)
                 this.BTCAsset.AfterOnBlock(block);
-            if (this.ClaimForm != default)
-                this.ClaimForm.AfterOnBlock(block);
+            //if (this.ClaimForm != default)
+            //    this.ClaimForm.AfterOnBlock(block);
             if (this.TransactionHistoryView != default)
                 this.TransactionHistoryView.AfterOnBlock(block);
             if (this.PartnersView != default)
@@ -611,8 +558,8 @@ namespace OX.Wallets.Base
                 this.EthAsset.OnBlock(block);
             if (this.BTCAsset != default)
                 this.BTCAsset.OnBlock(block);
-            if (this.ClaimForm != default)
-                this.ClaimForm.OnBlock(block);
+            //if (this.ClaimForm != default)
+            //    this.ClaimForm.OnBlock(block);
             if (this.TransactionHistoryView != default)
                 this.TransactionHistoryView.OnBlock(block);
             if (this.PartnersView != default)
@@ -629,8 +576,8 @@ namespace OX.Wallets.Base
                 this.EthAsset.ChangeWallet(operater);
             if (this.BTCAsset != default)
                 this.BTCAsset.ChangeWallet(operater);
-            if (this.ClaimForm != default)
-                this.ClaimForm.ChangeWallet(operater);
+            //if (this.ClaimForm != default)
+            //    this.ClaimForm.ChangeWallet(operater);
             if (this.TransactionHistoryView != default)
                 this.TransactionHistoryView.ChangeWallet(operater);
             if (this.PartnersView != default)
@@ -646,8 +593,8 @@ namespace OX.Wallets.Base
                 this.EthAsset.OnRebuild();
             if (this.BTCAsset != default)
                 this.BTCAsset.OnRebuild();
-            if (this.ClaimForm != default)
-                this.ClaimForm.OnRebuild();
+            //if (this.ClaimForm != default)
+            //    this.ClaimForm.OnRebuild();
             if (this.TransactionHistoryView != default)
                 this.TransactionHistoryView.OnRebuild();
             if (this.PartnersView != default)
@@ -676,44 +623,44 @@ namespace OX.Wallets.Base
             this.Operater.Indexer.RebuildIndex(this.Operater.Wallet);
         }
 
-        private void Claimmenu_Click(object sender, EventArgs e)
-        {
-            this.ClaimForm = this.ShowDialog<ClaimOXC>(form =>
-            {
-                form.ChangeWallet(this.Operater);
-            });
-        }
+        //private void Claimmenu_Click(object sender, EventArgs e)
+        //{
+        //    this.ClaimForm = this.ShowDialog<ClaimOXC>(form =>
+        //    {
+        //        form.ChangeWallet(this.Operater);
+        //    });
+        //}
 
-        private void Transfermenu_Click(object sender, EventArgs e)
-        {
-            Transaction tx;
-            UInt160 change_address;
-            Fixed8 fee;
-            using (TransferDialog dialog = new TransferDialog(this.Operater))
-            {
-                if (dialog.ShowDialog() != DialogResult.OK) return;
-                tx = dialog.GetTransaction();
-                change_address = dialog.ChangeAddress;
-                fee = dialog.Fee;
-            }
-            if (tx != null)
-            {
-                if (tx.Inputs.Count() > 50)
-                {
-                    string msg = $"{UIHelper.LocalString("交易输入项太多,请多次转账", "There are too many transaction input. Please transfer multiple times")}";
-                    Bapp.PushCrossBappMessage(new CrossBappMessage() { Content = msg, From = this.Bapp });
-                    OX.Wallets.UI.Forms.DarkMessageBox.ShowInformation(msg, "");
-                    return;
-                }
-                this.Operater.SignAndSendTx(tx);
-                if (this.Operater != default)
-                {
-                    string msg = $"{UIHelper.LocalString("交易已广播", "Relay transaction completed")}   {tx.Hash}";
-                    Bapp.PushCrossBappMessage(new CrossBappMessage() { Content = msg, From = this.Bapp });
-                    OX.Wallets.UI.Forms.DarkMessageBox.ShowInformation(msg, "");
-                }
-            }
-        }
+        //private void Transfermenu_Click(object sender, EventArgs e)
+        //{
+        //    Transaction tx;
+        //    UInt160 change_address;
+        //    Fixed8 fee;
+        //    using (TransferDialog dialog = new TransferDialog(this.Operater))
+        //    {
+        //        if (dialog.ShowDialog() != DialogResult.OK) return;
+        //        tx = dialog.GetTransaction();
+        //        change_address = dialog.ChangeAddress;
+        //        fee = dialog.Fee;
+        //    }
+        //    if (tx != null)
+        //    {
+        //        if (tx.Inputs.Count() > 50)
+        //        {
+        //            string msg = $"{UIHelper.LocalString("交易输入项太多,请多次转账", "There are too many transaction input. Please transfer multiple times")}";
+        //            Bapp.PushCrossBappMessage(new CrossBappMessage() { Content = msg, From = this.Bapp });
+        //            OX.Wallets.UI.Forms.DarkMessageBox.ShowInformation(msg, "");
+        //            return;
+        //        }
+        //        this.Operater.SignAndSendTx(tx);
+        //        if (this.Operater != default)
+        //        {
+        //            string msg = $"{UIHelper.LocalString("交易已广播", "Relay transaction completed")}   {tx.Hash}";
+        //            Bapp.PushCrossBappMessage(new CrossBappMessage() { Content = msg, From = this.Bapp });
+        //            OX.Wallets.UI.Forms.DarkMessageBox.ShowInformation(msg, "");
+        //        }
+        //    }
+        //}
 
         private void Assetmenu_Click(object sender, EventArgs e)
         {

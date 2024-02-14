@@ -8,54 +8,74 @@ using OX.IO;
 using OX.Network.P2P.Payloads;
 using OX.Cryptography.ECC;
 
-namespace OX.Wallets.Base
+namespace OX.Wallets
 {
-    public class OutputKey : ISerializable
+    public class MyLockAssetMeta : ISerializable
     {
-        public UInt256 TxId;
-        public ushort N;
-        public virtual int Size => TxId.Size + sizeof(ushort);
+        public UInt160 Owner;
+        public LockAssetTransaction Tx;
+        public virtual int Size => Owner.Size + Tx.Size;
+
         public void Serialize(BinaryWriter writer)
         {
-            writer.Write(TxId);
-            writer.Write(N);
+            writer.Write(Owner);
+            writer.Write(Tx);
         }
         public void Deserialize(BinaryReader reader)
         {
-            TxId = reader.ReadSerializable<UInt256>();
-            N = reader.ReadUInt16();
+            Owner = reader.ReadSerializable<UInt160>();
+            Tx = reader.ReadSerializable<LockAssetTransaction>();
         }
-        public override bool Equals(object obj)
+
+    }
+
+    public class MyLockAssetMerge : ISerializable
+    {
+        public UInt160 Owner;
+        public LockAssetTransaction Tx;
+        public TransactionOutput Output;
+        public bool IsNativeLock;
+        public uint SpentIndex;
+        public virtual int Size => Owner.Size + Tx.Size + Output.Size + sizeof(bool) + sizeof(uint);
+        public MyLockAssetMerge()
         {
-            if (obj is OutputKey k)
-            {
-                return this.TxId.Equals(k.TxId) && this.N == k.N;
-            }
-            return base.Equals(obj);
+            SpentIndex = 0;
         }
-        public override int GetHashCode()
+        public void Serialize(BinaryWriter writer)
         {
-            return TxId.GetHashCode() + N;
+            writer.Write(Owner);
+            writer.Write(Tx);
+            writer.Write(Output);
+            writer.Write(IsNativeLock);
+            writer.Write(SpentIndex);
         }
-        public override string ToString()
+        public void Deserialize(BinaryReader reader)
         {
-            return $"{TxId.ToString()}-{N}";
+            Owner = reader.ReadSerializable<UInt160>();
+            Tx = reader.ReadSerializable<LockAssetTransaction>();
+            Output = reader.ReadSerializable<TransactionOutput>();
+            IsNativeLock = reader.ReadBoolean();
+            SpentIndex = reader.ReadUInt32();
         }
+
     }
     public class LockAssetMerge : ISerializable
     {
         public LockAssetTransaction Tx;
         public TransactionOutput Output;
-        public virtual int Size => Tx.Size + Output.Size;
+        public bool IsNativeLock;
+        public virtual int Size => Tx.Size + Output.Size + sizeof(bool);
         public void Serialize(BinaryWriter writer)
         {
             writer.Write(Tx);
             writer.Write(Output);
+            writer.Write(IsNativeLock);
         }
         public void Deserialize(BinaryReader reader)
         {
             Tx = reader.ReadSerializable<LockAssetTransaction>();
             Output = reader.ReadSerializable<TransactionOutput>();
+            IsNativeLock = reader.ReadBoolean();
         }
 
     }
@@ -70,15 +90,17 @@ namespace OX.Wallets.Base
         public UInt160 Holder;
         public TransactionOutput Output;
         public LockAssetTransaction Tx;
+        public bool IsNativeLock;
         public LockOXSFlag Flag;
         public uint Index;
         public uint SpendIndex;
-        public virtual int Size => Holder.Size + Output.Size + Tx.Size + sizeof(LockOXSFlag) + sizeof(uint) + sizeof(uint);
+        public virtual int Size => Holder.Size + Output.Size + Tx.Size + sizeof(bool) + sizeof(LockOXSFlag) + sizeof(uint) + sizeof(uint);
         public void Serialize(BinaryWriter writer)
         {
             writer.Write(Holder);
             writer.Write(Output);
             writer.Write(Tx);
+            writer.Write(IsNativeLock);
             writer.Write((byte)Flag);
             writer.Write(Index);
             writer.Write(SpendIndex);
@@ -88,6 +110,7 @@ namespace OX.Wallets.Base
             Holder = reader.ReadSerializable<UInt160>();
             Output = reader.ReadSerializable<TransactionOutput>();
             Tx = reader.ReadSerializable<LockAssetTransaction>();
+            IsNativeLock = reader.ReadBoolean();
             Flag = (LockOXSFlag)reader.ReadByte();
             Index = reader.ReadUInt32();
             SpendIndex = reader.ReadUInt32();

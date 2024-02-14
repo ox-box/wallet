@@ -48,23 +48,23 @@ namespace OX.Wallets
     public class AssetTrustOutput : ISerializable
     {
         public TransactionOutput OutPut;
-        public uint SpendIndex;
+        public uint SpentIndex;
         public virtual int Size => OutPut.Size + sizeof(uint);
         public AssetTrustOutput() { }
         public AssetTrustOutput(TransactionOutput output)
         {
             this.OutPut = output;
-            this.SpendIndex = 0;
+            this.SpentIndex = 0;
         }
         public void Serialize(BinaryWriter writer)
         {
             writer.Write(OutPut);
-            writer.Write(SpendIndex);
+            writer.Write(SpentIndex);
         }
         public void Deserialize(BinaryReader reader)
         {
             OutPut = reader.ReadSerializable<TransactionOutput>();
-            SpendIndex = reader.ReadUInt32();
+            SpentIndex = reader.ReadUInt32();
         }
 
     }

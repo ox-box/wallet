@@ -31,8 +31,9 @@ namespace OX.Wallets.Base
         public Fixed8 TotalIssuedOXC { get; private set; }
         public Dictionary<UInt256, AccountPack> HashAccounts = new Dictionary<UInt256, AccountPack>();
         internal Dictionary<WalletSettingKey, WalletSettingValue> WalletSettings { get; set; } = new Dictionary<WalletSettingKey, WalletSettingValue>();
-        internal Dictionary<OutputKey, LockAssetMerge> MyLockAssets { get; set; } = new Dictionary<OutputKey, LockAssetMerge>();
-        public Dictionary<OutputKey, LockAssetMerge> AllLockAssets { get; set; } = new Dictionary<OutputKey, LockAssetMerge>();
+        internal Dictionary<UInt160, MyLockAssetMeta> LockAssetMetas { get; set; } = new Dictionary<UInt160, MyLockAssetMeta>();
+        internal Dictionary<CoinReference, MyLockAssetMerge> MyLockAssets { get; set; } = new Dictionary<CoinReference, MyLockAssetMerge>();
+        public Dictionary<CoinReference, LockAssetMerge> AllLockAssets { get; set; } = new Dictionary<CoinReference, LockAssetMerge>();
         internal Dictionary<UInt160, AssetTrustContract> AssetTrustContacts { get; set; } = new Dictionary<UInt160, AssetTrustContract>();
         internal Dictionary<AssetTrustOutputKey, AssetTrustOutput> AssetTrustUTXO { get; set; } = new Dictionary<AssetTrustOutputKey, AssetTrustOutput>();
         internal Dictionary<EthMapOutputKey, TransactionOutput> EthMapUTXO { get; set; } = new Dictionary<EthMapOutputKey, TransactionOutput>();
@@ -43,8 +44,9 @@ namespace OX.Wallets.Base
             Db = DB.Open(Path.GetFullPath($"{WalletIndexDirectory}\\wlt_{Message.Magic.ToString("X8")}"), new Options { CreateIfMissing = true });
             Instance = this;
             this.WalletSettings = new Dictionary<WalletSettingKey, WalletSettingValue>(this.GetAll<WalletSettingKey, WalletSettingValue>(WalletBizPersistencePrefixes.Wallet_Setting));
-            this.MyLockAssets = new Dictionary<OutputKey, LockAssetMerge>(this.GetMyAllLockAssets());
-            this.AllLockAssets = new Dictionary<OutputKey, LockAssetMerge>(this.GetAllLockAssets());
+            this.LockAssetMetas = new Dictionary<UInt160, MyLockAssetMeta>(this.GetMyAllLockAssetMetas());
+            this.MyLockAssets = new Dictionary<CoinReference, MyLockAssetMerge>(this.GetMyAllLockAssets());
+            this.AllLockAssets = new Dictionary<CoinReference, LockAssetMerge>(this.GetAllLockAssets());
             this.AssetTrustContacts = new Dictionary<UInt160, AssetTrustContract>(this.GetAllAssetTrustContracts());
             this.AssetTrustUTXO = new Dictionary<AssetTrustOutputKey, AssetTrustOutput>(this.GetAllAssetTrustUTXOs());
             this.EthMapUTXO = new Dictionary<EthMapOutputKey, TransactionOutput>(this.GetAllEthMapUTXOs());
@@ -62,6 +64,8 @@ namespace OX.Wallets.Base
             {
                 if (_wallet is OpenWallet openWallet)
                 {
+                    openWallet.GetAllLockAssetRecord = () => this.AllLockAssets;
+                    openWallet.GetMyLockAssetUTXO = () => this.MyLockAssets;
                     openWallet.GetAssetTrustContacts = () => this.AssetTrustContacts;
                     openWallet.GetAssetTrustUTXO = () => this.AssetTrustUTXO;
                     openWallet.GetEthMapUTXO = () => this.EthMapUTXO;
@@ -173,38 +177,38 @@ namespace OX.Wallets.Base
                 {
                     foreach (var kp in clmTx.Claims)
                     {
-                        OutputKey outputkey = new OutputKey { TxId = kp.PrevHash, N = kp.PrevIndex };
-                        batch.Delete(SliceBuilder.Begin(WalletBizPersistencePrefixes.TX_Once_MyLockOXS).Add(outputkey));
+                        batch.Delete(SliceBuilder.Begin(WalletBizPersistencePrefixes.TX_Once_MyLockOXS).Add(kp));
                     }
                     TransactionResult result = clmTx.GetTransactionResults().FirstOrDefault(p => p.AssetId == Blockchain.OXC);
                     this.TotalIssuedOXC -= result.Amount;
                     batch.Put(SliceBuilder.Begin(WalletBizPersistencePrefixes.OXC_ALL_Issued).Add(Blockchain.OXC), SliceBuilder.Begin().Add(this.TotalIssuedOXC));
                 }
 
+                batch.TrySave_ExcludeLockAssetTransaction(this, block, tx, m);
                 //txo
                 foreach (KeyValuePair<CoinReference, TransactionOutput> kp in tx.References)
                 {
                     //watch lock asset
-                    OutputKey outputkey = new OutputKey { TxId = kp.Key.PrevHash, N = kp.Key.PrevIndex };
-                    if (this.MyLockAssets.ContainsKey(outputkey))
+
+                    if (this.MyLockAssets.ContainsKey(kp.Key))
                     {
                         if (kp.Value.AssetId.Equals(Blockchain.OXS))
                         {
-                            var lockOXS = this.Get<LockOXS>(WalletBizPersistencePrefixes.TX_Once_MyLockOXS, outputkey);
+                            var lockOXS = this.Get<LockOXS>(WalletBizPersistencePrefixes.TX_Once_MyLockOXS, kp.Key);
                             if (lockOXS.IsNotNull())
                             {
                                 lockOXS.Flag = LockOXSFlag.Spend;
                                 lockOXS.SpendIndex = block.Index;
-                                batch.Put(SliceBuilder.Begin(WalletBizPersistencePrefixes.TX_Once_MyLockOXS).Add(outputkey), SliceBuilder.Begin().Add(lockOXS));
+                                batch.Put(SliceBuilder.Begin(WalletBizPersistencePrefixes.TX_Once_MyLockOXS).Add(kp.Key), SliceBuilder.Begin().Add(lockOXS));
                             }
                         }
-                        this.MyLockAssets.Remove(outputkey);
-                        batch.Delete(SliceBuilder.Begin(WalletBizPersistencePrefixes.TX_MyLockAsset).Add(outputkey));
+                        this.MyLockAssets.Remove(kp.Key);
+                        batch.Delete(SliceBuilder.Begin(WalletBizPersistencePrefixes.TX_MyLockAsset).Add(kp.Key));
                     }
-                    if (this.AllLockAssets.ContainsKey(outputkey))
+                    if (this.AllLockAssets.ContainsKey(kp.Key))
                     {
-                        this.AllLockAssets.Remove(outputkey);
-                        batch.Delete(SliceBuilder.Begin(WalletBizPersistencePrefixes.TX_LockAsset_Record).Add(outputkey));
+                        this.AllLockAssets.Remove(kp.Key);
+                        batch.Delete(SliceBuilder.Begin(WalletBizPersistencePrefixes.TX_LockAsset_Record).Add(kp.Key));
                     }
                     var assetTrustOutputKey = new AssetTrustOutputKey { TxId = kp.Key.PrevHash, N = kp.Key.PrevIndex };
                     if (this.AssetTrustUTXO.Remove(assetTrustOutputKey))
@@ -256,9 +260,19 @@ namespace OX.Wallets.Base
             {
                 foreach (var u in this.AssetTrustUTXO.Values)
                 {
-                    if (u.SpendIndex < block.Index - 100)
+                    if (u.SpentIndex < block.Index - 100)
                     {
-                        u.SpendIndex = 0;
+                        u.SpentIndex = 0;
+                    }
+                }
+            }
+            if (this.MyLockAssets.IsNotNullAndEmpty())
+            {
+                foreach (var u in this.MyLockAssets.Values)
+                {
+                    if (u.SpentIndex < block.Index - 100)
+                    {
+                        u.SpentIndex = 0;
                     }
                 }
             }
@@ -398,7 +412,18 @@ namespace OX.Wallets.Base
                 return new KeyValuePair<EngraveHolder, Engrave>(ks.AsSerializable<EngraveHolder>(), data.AsSerializable<Engrave>());
             });
         }
-        public IEnumerable<KeyValuePair<OutputKey, LockAssetMerge>> GetMyAllLockAssets()
+        public IEnumerable<KeyValuePair<UInt160, MyLockAssetMeta>> GetMyAllLockAssetMetas()
+        {
+            return this.Db.Find(ReadOptions.Default, SliceBuilder.Begin(WalletBizPersistencePrefixes.TX_LockAssetMeta), (k, v) =>
+            {
+                var ks = k.ToArray();
+                var length = ks.Length - sizeof(byte);
+                ks = ks.TakeLast(length).ToArray();
+                byte[] data = v.ToArray();
+                return new KeyValuePair<UInt160, MyLockAssetMeta>(ks.AsSerializable<UInt160>(), data.AsSerializable<MyLockAssetMeta>());
+            });
+        }
+        public IEnumerable<KeyValuePair<CoinReference, MyLockAssetMerge>> GetMyAllLockAssets()
         {
             return this.Db.Find(ReadOptions.Default, SliceBuilder.Begin(WalletBizPersistencePrefixes.TX_MyLockAsset), (k, v) =>
             {
@@ -406,10 +431,10 @@ namespace OX.Wallets.Base
                 var length = ks.Length - sizeof(byte);
                 ks = ks.TakeLast(length).ToArray();
                 byte[] data = v.ToArray();
-                return new KeyValuePair<OutputKey, LockAssetMerge>(ks.AsSerializable<OutputKey>(), data.AsSerializable<LockAssetMerge>());
+                return new KeyValuePair<CoinReference, MyLockAssetMerge>(ks.AsSerializable<CoinReference>(), data.AsSerializable<MyLockAssetMerge>());
             });
         }
-        public IEnumerable<KeyValuePair<OutputKey, LockAssetMerge>> GetAllLockAssets()
+        public IEnumerable<KeyValuePair<CoinReference, LockAssetMerge>> GetAllLockAssets()
         {
             return this.Db.Find(ReadOptions.Default, SliceBuilder.Begin(WalletBizPersistencePrefixes.TX_LockAsset_Record), (k, v) =>
             {
@@ -417,7 +442,7 @@ namespace OX.Wallets.Base
                 var length = ks.Length - sizeof(byte);
                 ks = ks.TakeLast(length).ToArray();
                 byte[] data = v.ToArray();
-                return new KeyValuePair<OutputKey, LockAssetMerge>(ks.AsSerializable<OutputKey>(), data.AsSerializable<LockAssetMerge>());
+                return new KeyValuePair<CoinReference, LockAssetMerge>(ks.AsSerializable<CoinReference>(), data.AsSerializable<LockAssetMerge>());
             });
         }
         public IEnumerable<KeyValuePair<UInt160, AssetTrustContract>> GetAllAssetTrustContracts()
@@ -446,9 +471,9 @@ namespace OX.Wallets.Base
         public IEnumerable<KeyValuePair<AssetTrustOutputKey, AssetTrustOutput>> GetUnspentAssetTrustUTXOs(UInt160 contractScriptHash, UInt256 assetId = default)
         {
             if (assetId.IsNotNull())
-                return this.AssetTrustUTXO.Where(m => m.Value.SpendIndex == 0 && m.Value.OutPut.ScriptHash.Equals(contractScriptHash) && m.Value.OutPut.AssetId.Equals(assetId));
+                return this.AssetTrustUTXO.Where(m => m.Value.SpentIndex == 0 && m.Value.OutPut.ScriptHash.Equals(contractScriptHash) && m.Value.OutPut.AssetId.Equals(assetId));
             else
-                return this.AssetTrustUTXO.Where(m => m.Value.SpendIndex == 0 && m.Value.OutPut.ScriptHash.Equals(contractScriptHash));
+                return this.AssetTrustUTXO.Where(m => m.Value.SpentIndex == 0 && m.Value.OutPut.ScriptHash.Equals(contractScriptHash));
         }
         public IEnumerable<KeyValuePair<EthMapOutputKey, TransactionOutput>> GetAllEthMapUTXOs()
         {

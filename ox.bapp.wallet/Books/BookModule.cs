@@ -13,6 +13,7 @@ using System.Security.Claims;
 using OX.Ledger;
 using OX.IO;
 using OX.IO.Json;
+using Org.BouncyCastle.Asn1.Ocsp;
 
 namespace OX.Wallets.Base.Books
 {
@@ -105,17 +106,15 @@ namespace OX.Wallets.Base.Books
                 if (result == DialogResult.OK)
                 {
                     var tx = dialog.GetTransaction(out UInt160 from);
-                    if (tx.IsNotNull())
+                    if (tx.IsNotNull() && this.Operater.Wallet.IsNotNull())
                     {
-                        tx = Operater.Wallet.MakeTransaction(tx, from, from);
-                        if (tx.IsNotNull())
+                        this.Operater.Wallet.MixBuildAndRelaySingleOutputTransaction(tx, from, tx =>
                         {
-                            Operater.SignAndSendTx(tx);
                             string msg = $"{UIHelper.LocalString("注册书籍交易已广播", "Relay register book transaction completed")}   {tx.Hash}";
-                            Bapp.PushCrossBappMessage(new CrossBappMessage() { Content = msg, From = Bapp });
+                            Bapp.PushCrossBappMessage(new CrossBappMessage() { Content = msg, From = this.Bapp });
                             DarkMessageBox.ShowInformation(msg, "");
-                        }
-                    }
+                        });
+                    } 
                 }
             }
         }

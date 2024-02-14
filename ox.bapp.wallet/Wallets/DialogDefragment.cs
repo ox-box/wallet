@@ -71,17 +71,39 @@ namespace OX.Wallets.Base
             if (fg2 == 120) fg2 = 0;
             if (fg2 == 1)
             {
-                var coingroupss = this.Operater.Wallet.FindUnspentCoins(this.From).GroupBy(m => m.Output.AssetId);
+                var coingroupss = this.Operater.Wallet.FindMixUnspentUtxos(this.Account.ScriptHash).GroupBy(m => m.AssetId);
+                //var coingroupss = this.Operater.Wallet.FindUnspentCoins(this.From).GroupBy(m => m.Output.AssetId);
                 bool ok = false;
                 foreach (var group in coingroupss)
                 {
-                    if (group.Count() > 20)
+                    if (group.Count() > OpenWallet.MAXTRANSACTIONCOUNT || this.Operater.Wallet.GetMyAvailableLockAssetUTXONumber(this.Account.ScriptHash) > 0)
                     {
-                        var rangs = SplitRange(group.ToList(), 20).Take(20);
+                        var rangs = SplitRange(group.ToList(), OpenWallet.MAXTRANSACTIONCOUNT).Take(OpenWallet.MAXTRANSACTIONCOUNT);
                         foreach (var rang in rangs)
                         {
-                            ContractTransaction ct = new ContractTransaction { Inputs = rang.Select(m => m.Reference).ToArray(), Outputs = new TransactionOutput[] { new TransactionOutput { AssetId = group.Key, ScriptHash = this.From, Value = rang.Sum(m => m.Output.Value) } }, Attributes = new TransactionAttribute[0], Witnesses = new Witness[0] };
-                            this.Operater.SignAndSendTx(ct);
+                            List<CoinReference> crfs = new List<CoinReference>();
+                            List<AvatarAccount> avatars = new List<AvatarAccount>();
+                            ContractTransaction ct = new ContractTransaction { Outputs = new TransactionOutput[] { new TransactionOutput { AssetId = group.Key, ScriptHash = this.Account.ScriptHash, Value = rang.Sum(m => m.Amount) } }, Attributes = new TransactionAttribute[0], Witnesses = new Witness[0] };
+                            foreach (var utxo in rang)
+                            {
+                                if (utxo.IsLockCoin)
+                                {
+                                    avatars.Add(LockAssetHelper.CreateAccount(this.Operater.Wallet, utxo.LockCoin.Value.Tx.GetContract(), this.Account.GetKey()));
+                                    crfs.Add(utxo.LockCoin.Key);
+                                }
+                                else
+                                {
+                                    avatars.Add(LockAssetHelper.CreateAccount(this.Operater.Wallet, this.Account.Contract, this.Account.GetKey()));
+                                    crfs.Add(utxo.UnlockCoin.Reference);
+                                }
+                            }
+                            ct.Inputs = crfs.ToArray();
+                            var tx = LockAssetHelper.Build(ct, avatars.ToArray());
+                            if (tx.IsNotNull())
+                            {
+                                this.Operater.Wallet.ApplyTransaction(tx);
+                                this.Operater.Relay(tx);
+                            }
                         }
                         ok = true;
                     }
@@ -94,11 +116,11 @@ namespace OX.Wallets.Base
             }
         }
 
-        public UInt160 From;
-        public DialogDefragment(INotecase operater, UInt160 from = null) : this()
+        public WalletAccount Account;
+        public DialogDefragment(INotecase operater, WalletAccount account) : this()
         {
             this.Operater = operater;
-            this.From = from;
+            this.Account = account;
         }
 
         private void btnOk_Click(object sender, EventArgs e)

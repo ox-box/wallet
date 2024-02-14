@@ -46,11 +46,31 @@ namespace OX.Wallets.Base
                     sm.Tag = node.Tag;
                     sm.Click += Sm_Click;
                     menu.Items.Add(sm);
+                    //复制比特币地址
+                    sm = new ToolStripMenuItem(UIHelper.LocalString("复制比特币地址", "Copy BTC Address"));
+                    sm.Tag = node.Tag;
+                    sm.Click += Sm_Click1;
+                    menu.Items.Add(sm);
                 }
                 if (menu.Items.Count > 0)
                     menu.Show(this.treeAsset, e.Location);
 
             }
+        }
+
+        private void Sm_Click1(object sender, EventArgs e)
+        {
+            ToolStripMenuItem ToolStripMenuItem = sender as ToolStripMenuItem;
+            OpenAccount openaccount = ToolStripMenuItem.Tag as OpenAccount;
+            try
+            {
+                var addr = openaccount.Address;
+                Clipboard.SetText(addr);
+                string msg = addr + UIHelper.LocalString("  已复制", "  copied");
+                Bapp.PushCrossBappMessage(new CrossBappMessage() { Content = msg, From = this.Module.Bapp });
+                DarkMessageBox.ShowInformation(msg, "");
+            }
+            catch (Exception) { }
         }
 
         private void Sm_Click(object sender, EventArgs e)

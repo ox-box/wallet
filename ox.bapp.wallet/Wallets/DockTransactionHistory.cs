@@ -146,21 +146,24 @@ namespace OX.Wallets.Base
         public void ChangeWallet(INotecase operater)
         {
             this.Operater = operater;
-            this.DoInvoke(() =>
-            {
-                this.lstHistory.Items.Clear();
-                using (Snapshot snapshot = Blockchain.Singleton.GetSnapshot())
-                    foreach (var i in this.Operater.Wallet.GetTransactions().Select(p => snapshot.Transactions.TryGet(p)).Where(p => p != null && p.Transaction != null).Select(p => new
-                    {
-                        p.Transaction,
-                        p.BlockIndex,
-                        Time = snapshot.GetHeader(p.BlockIndex).Timestamp
-                    }).OrderByDescending(p => p.Time).Take(TXCount).OrderBy(p => p.Time))
-                    {
-                        AddTransaction(i.Transaction, i.BlockIndex, i.Time);
-                    }
-                this.Operater.Wallet.WalletTransaction += Wallet_WalletTransaction;
-            });
+            //System.Threading.Tasks.Task.Run(() =>
+            //{
+                this.DoInvoke(() =>
+                {
+                    this.lstHistory.Items.Clear();
+                    using (Snapshot snapshot = Blockchain.Singleton.GetSnapshot())
+                        foreach (var i in this.Operater.Wallet.GetTransactions().Select(p => snapshot.Transactions.TryGet(p)).Where(p => p != null && p.Transaction != null).Select(p => new
+                        {
+                            p.Transaction,
+                            p.BlockIndex,
+                            Time = snapshot.GetHeader(p.BlockIndex).Timestamp
+                        }).OrderByDescending(p => p.Time).Take(TXCount).OrderBy(p => p.Time))
+                        {
+                            AddTransaction(i.Transaction, i.BlockIndex, i.Time);
+                        }
+                    this.Operater.Wallet.WalletTransaction += Wallet_WalletTransaction;
+                });
+            //});
         }
         public void OnRebuild()
         {

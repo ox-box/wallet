@@ -28,66 +28,66 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ClaimOXC));
-            label1 = new UI.Controls.DarkLabel();
-            label2 = new UI.Controls.DarkLabel();
-            button1 = new UI.Controls.DarkButton();
-            textBox1 = new UI.Controls.DarkTextBox();
-            textBox2 = new UI.Controls.DarkTextBox();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SingleClaimOXC));
+            lb_Available = new UI.Controls.DarkLabel();
+            lb_Unavailable = new UI.Controls.DarkLabel();
+            bt_claim = new UI.Controls.DarkButton();
+            tb_Available = new UI.Controls.DarkTextBox();
+            tb_Unavailable = new UI.Controls.DarkTextBox();
             SuspendLayout();
             // 
-            // label1
+            // lb_Available
             // 
-            resources.ApplyResources(label1, "label1");
-            label1.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
-            label1.Name = "label1";
+            resources.ApplyResources(lb_Available, "lb_Available");
+            lb_Available.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
+            lb_Available.Name = "lb_Available";
             // 
-            // label2
+            // lb_Unavailable
             // 
-            resources.ApplyResources(label2, "label2");
-            label2.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
-            label2.Name = "label2";
+            resources.ApplyResources(lb_Unavailable, "lb_Unavailable");
+            lb_Unavailable.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
+            lb_Unavailable.Name = "lb_Unavailable";
             // 
-            // button1
+            // bt_claim
             // 
-            resources.ApplyResources(button1, "button1");
-            button1.Name = "button1";
-            button1.SpecialBorderColor = null;
-            button1.SpecialFillColor = null;
-            button1.SpecialTextColor = null;
-            button1.Click += button1_Click;
+            resources.ApplyResources(bt_claim, "bt_claim");
+            bt_claim.Name = "bt_claim";
+            bt_claim.SpecialBorderColor = null;
+            bt_claim.SpecialFillColor = null;
+            bt_claim.SpecialTextColor = null;
+            bt_claim.Click += button1_Click;
             // 
-            // textBox1
+            // tb_Available
             // 
-            textBox1.BackColor = System.Drawing.Color.FromArgb(69, 73, 74);
-            textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            textBox1.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
-            resources.ApplyResources(textBox1, "textBox1");
-            textBox1.Name = "textBox1";
-            textBox1.ReadOnly = true;
+            tb_Available.BackColor = System.Drawing.Color.FromArgb(69, 73, 74);
+            tb_Available.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            tb_Available.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
+            resources.ApplyResources(tb_Available, "tb_Available");
+            tb_Available.Name = "tb_Available";
+            tb_Available.ReadOnly = true;
             // 
-            // textBox2
+            // tb_Unavailable
             // 
-            textBox2.BackColor = System.Drawing.Color.FromArgb(69, 73, 74);
-            textBox2.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            textBox2.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
-            resources.ApplyResources(textBox2, "textBox2");
-            textBox2.Name = "textBox2";
-            textBox2.ReadOnly = true;
+            tb_Unavailable.BackColor = System.Drawing.Color.FromArgb(69, 73, 74);
+            tb_Unavailable.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            tb_Unavailable.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
+            resources.ApplyResources(tb_Unavailable, "tb_Unavailable");
+            tb_Unavailable.Name = "tb_Unavailable";
+            tb_Unavailable.ReadOnly = true;
             // 
-            // ClaimOXC
+            // SingleClaimOXC
             // 
             resources.ApplyResources(this, "$this");
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            Controls.Add(textBox2);
-            Controls.Add(textBox1);
-            Controls.Add(button1);
-            Controls.Add(label2);
-            Controls.Add(label1);
+            Controls.Add(tb_Unavailable);
+            Controls.Add(tb_Available);
+            Controls.Add(bt_claim);
+            Controls.Add(lb_Unavailable);
+            Controls.Add(lb_Available);
             FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             MaximizeBox = false;
             MinimizeBox = false;
-            Name = "ClaimOXC";
+            Name = "SingleClaimOXC";
             FormClosing += ClaimForm_FormClosing;
             Load += ClaimForm_Load;
             ResumeLayout(false);
@@ -98,10 +98,10 @@
 
         #endregion
 
-        private OX.Wallets.UI.Controls.DarkLabel label1;
-        private OX.Wallets.UI.Controls.DarkLabel label2;
-        private OX.Wallets.UI.Controls.DarkButton button1;
-        private OX.Wallets.UI.Controls.DarkTextBox textBox1;
-        private OX.Wallets.UI.Controls.DarkTextBox textBox2;
+        private OX.Wallets.UI.Controls.DarkLabel lb_Available;
+        private OX.Wallets.UI.Controls.DarkLabel lb_Unavailable;
+        private OX.Wallets.UI.Controls.DarkButton bt_claim;
+        private OX.Wallets.UI.Controls.DarkTextBox tb_Available;
+        private OX.Wallets.UI.Controls.DarkTextBox tb_Unavailable;
     }
 }

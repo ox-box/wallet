@@ -13,6 +13,7 @@ using System.Security.Claims;
 using OX.Ledger;
 using OX.IO;
 using OX.IO.Json;
+using static NBitcoin.Scripting.OutputDescriptor;
 
 namespace OX.Wallets.Base.NFT
 {
@@ -146,38 +147,18 @@ namespace OX.Wallets.Base.NFT
             {
                 if (NftCoinOutChain.ShowDialog() != DialogResult.OK) return;
                 var tx = NftCoinOutChain.GetTransaction(out UInt160 from);
-                if (tx.IsNotNull())
+                if (tx.IsNotNull() && this.Operater.Wallet.IsNotNull())
                 {
-                    tx = Operater.Wallet.MakeTransaction(tx, from, from);
-                    if (tx.IsNotNull())
+                    this.Operater.Wallet.MixBuildAndRelaySingleOutputTransaction(tx, from, tx2 =>
                     {
-                        Operater.SignAndSendTx(tx);
-                        string msg = $"{UIHelper.LocalString("铸造NFT交易已广播", "Relay coin NFT transaction completed")}   {tx.Hash}";
-                        Bapp.PushCrossBappMessage(new CrossBappMessage() { Content = msg, From = Bapp });
+                        string msg = $"{UIHelper.LocalString("铸造NFT交易已广播", "Relay coin NFT transaction completed")}   {tx2.Hash}";
                         DarkMessageBox.ShowInformation(msg, "");
-                    }
+                    });
                 }
+                
             }
         }
-        private void coinNFTMenu_Click(object sender, EventArgs e)
-        {
-            //using (NftCoinOnChain = new NewOnChainNFTCoin(Operater))
-            //{
-            //    if (NftCoinOnChain.ShowDialog() != DialogResult.OK) return;
-            //    var tx = NftCoinOnChain.GetTransaction(out UInt160 from);
-            //    if (tx.IsNotNull())
-            //    {
-            //        tx = Operater.Wallet.MakeTransaction(tx, from, from);
-            //        if (tx.IsNotNull())
-            //        {
-            //            Operater.SignAndSendTx(tx);
-            //            string msg = $"{UIHelper.LocalString("铸造数字藏品交易已广播", "Relay coin NFT transaction completed")}   {tx.Hash}";
-            //            Bapp.PushCrossBappMessage(new CrossBappMessage() { Content = msg, From = Bapp });
-            //            DarkMessageBox.ShowInformation(msg, "");
-            //        }
-            //    }
-            //}
-        }
+       
 
         private void Mynftmenu_Click(object sender, EventArgs e)
         {

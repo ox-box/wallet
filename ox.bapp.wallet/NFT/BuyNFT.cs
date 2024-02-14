@@ -201,16 +201,15 @@ namespace OX.Wallets.Base
                         sh = oldHolder.AsEthAddress().BuildMapAddress();
                     }
                     tx.Outputs = new TransactionOutput[] { new TransactionOutput { ScriptHash = sh, AssetId = Blockchain.OXC, Value = ndv.Validator.Target.Amount } };
-                    if (tx.IsNotNull())
+                    if (tx.IsNotNull() && this.Operater.Wallet.IsNotNull())
                     {
-                        tx = this.Operater.Wallet.MakeTransaction(tx, ad.Account.ScriptHash, ad.Account.ScriptHash);
-                        if (tx.IsNotNull())
+                        this.Operater.Wallet.MixBuildAndRelaySingleOutputTransaction(tx, ad.Account.ScriptHash, tx2 =>
                         {
-                            this.Operater.SignAndSendTx(tx);
-                            string msg = $"{UIHelper.LocalString("购买NFT交易已广播", "Relay buy NFT transaction completed")}   {tx.Hash}";
+                            string msg = $"{UIHelper.LocalString("购买NFT交易已广播", "Relay buy NFT transaction completed")}   {tx2.Hash}";
                             DarkMessageBox.ShowInformation(msg, "");
-                        }
+                        });
                     }
+                    
                 }
             }
             catch

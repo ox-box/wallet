@@ -21,12 +21,15 @@ using OX.Cryptography.ECC;
 using OX.Wallets.Base.Wallets;
 using Nethereum.Model;
 using System.Security.Principal;
+using Akka.Actor.Dsl;
+using OX.IO;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace OX.Wallets.Base
 {
     public partial class AccountAsset : DarkToolWindow, INotecaseTrigger, IModuleComponent
     {
-        public static List<OutputKey> lockAssetKeys = new List<OutputKey>();
+        public static List<CoinReference> lockAssetKeys = new List<CoinReference>();
         public Module Module { get; set; }
         private INotecase Operater;
         uint stateChangedIndex = 0;
@@ -37,6 +40,7 @@ namespace OX.Wallets.Base
             InitializeComponent();
             this.DockArea = DarkDockArea.Left;
             this.treeAsset.MouseDown += TreeAsset_MouseDown;
+            this.DockText = UIHelper.LocalString("账户资产", "Account Assets");
         }
         #region context menus
         private void TreeAsset_MouseDown(object sender, MouseEventArgs e)
@@ -67,50 +71,21 @@ namespace OX.Wallets.Base
                         }
                         else
                         {
-                            //查看私钥
-                            sm = new ToolStripMenuItem(UIHelper.LocalString("查看私钥", "Show Private Key"));
-                            sm.Tag = account;
-                            sm.Click += SmShowKey_Click;
-                            menu.Items.Add(sm);
-                            //商业频道租赁
-                            sm = new ToolStripMenuItem(UIHelper.LocalString("商业频道租赁", "Business Channel Lease"));
-                            sm.Tag = account;
-                            sm.Click += SmDetain_Click;
-                            menu.Items.Add(sm);
+
                             //转账
-                            sm = new ToolStripMenuItem(UIHelper.LocalString("从该账户转账", "Transfer from this account"));
+                            sm = new ToolStripMenuItem(UIHelper.LocalString("转账", "Transfer"));
                             sm.Tag = account;
                             sm.Click += SmTransfer_Click;
-                            menu.Items.Add(sm);
-                            //转账到以太坊映射地址
-                            sm = new ToolStripMenuItem(UIHelper.LocalString("转账到以太坊映射地址", "Transfer to Ethereum map address"));
-                            sm.Tag = account;
-                            sm.Click += TransferToEthMap_Click5;
-                            menu.Items.Add(sm);
-                            //锁仓转帐
-                            sm = new ToolStripMenuItem(UIHelper.LocalString("转账到锁仓账户", "Transfer from this account for lock"));
-                            sm.Tag = account;
-                            sm.Click += TransferLock_Click2;
-                            menu.Items.Add(sm);
-                            //整理余额碎片
-                            sm = new ToolStripMenuItem(UIHelper.LocalString("整理该账户余额碎片", "Defragment this account balance"));
-                            sm.Tag = account;
-                            sm.Click += Organizefragments_Click1;
-                            menu.Items.Add(sm);
-                            //复制到粘贴板
-                            sm = new ToolStripMenuItem(UIHelper.LocalString("复制账户主地址", "Copy account private address"));
-                            sm.Tag = account;
-                            sm.Click += SmCopy_Click;
                             menu.Items.Add(sm);
                             //提取主账号OXC
                             sm = new ToolStripMenuItem(UIHelper.LocalString("提取 OXC", "Claim OXC"));
                             sm.Tag = account;
                             sm.Click += ClaimOXC_Click;
                             menu.Items.Add(sm);
-                            //提取锁仓账号OXC
-                            sm = new ToolStripMenuItem(UIHelper.LocalString("提取锁仓资产的OXC", "Claim locked asset OXC"));
+                            //选举
+                            sm = new ToolStripMenuItem(UIHelper.LocalString("选举", "Election"));
                             sm.Tag = account;
-                            sm.Click += ClaimLockOXC_Click2;
+                            sm.Click += Election_Click;
                             menu.Items.Add(sm);
                             //投票
                             sm = new ToolStripMenuItem(UIHelper.LocalString("投票", "Vote"));
@@ -118,9 +93,34 @@ namespace OX.Wallets.Base
                             sm.Click += Vote_Click;
                             menu.Items.Add(sm);
                             //全网捐赠
-                            sm = new ToolStripMenuItem(UIHelper.LocalString("从该账户捐献", "Contribute from this account"));
+                            sm = new ToolStripMenuItem(UIHelper.LocalString("捐献", "Contribute"));
                             sm.Tag = account;
                             sm.Click += Contribute_Click;
+                            menu.Items.Add(sm);
+                            //查看私钥
+                            sm = new ToolStripMenuItem(UIHelper.LocalString("查看私钥", "Show Private Key"));
+                            sm.Tag = account;
+                            sm.Click += SmShowKey_Click;
+                            menu.Items.Add(sm);
+                            //复制到粘贴板
+                            sm = new ToolStripMenuItem(UIHelper.LocalString("复制账户主地址", "Copy account private address"));
+                            sm.Tag = account;
+                            sm.Click += SmCopy_Click;
+                            menu.Items.Add(sm);
+                            //复制到粘贴板
+                            sm = new ToolStripMenuItem(UIHelper.LocalString("复制账户公钥", "Copy account public key"));
+                            sm.Tag = account;
+                            sm.Click += Sm_Click;
+                            menu.Items.Add(sm);
+                            //商业频道租赁
+                            sm = new ToolStripMenuItem(UIHelper.LocalString("商业频道租赁", "Business Channel Lease"));
+                            sm.Tag = account;
+                            sm.Click += SmDetain_Click;
+                            menu.Items.Add(sm);
+                            //整理余额碎片
+                            sm = new ToolStripMenuItem(UIHelper.LocalString("整理余额碎片", "Defragment  balance"));
+                            sm.Tag = account;
+                            sm.Click += Organizefragments_Click1;
                             menu.Items.Add(sm);
                             //重置简易访问码
                             sm = new ToolStripMenuItem(UIHelper.LocalString("重置简易码", "Reset Easy Code"));
@@ -133,148 +133,60 @@ namespace OX.Wallets.Base
                         sm.Tag = account;
                         sm.Click += SmNoteAccount_Click;
                         menu.Items.Add(sm);
-                        if (node is BalanceNode bn)
-                        {
-                            menu.Items.Add(new ToolStripSeparator());
-                            sm = new ToolStripMenuItem(UIHelper.LocalString("解锁所有到期资产", "Unlock all matured assets"));
-                            sm.Tag = new Tuple<WalletAccount, UInt256>(bn.Account, bn.AssetID);
-                            sm.Click += UnlockAsset_Click;
-                            menu.Items.Add(sm);
-                        }
-                        else if (node is LockRootTreeNode lrtb)
-                        {
-                            menu.Items.Add(new ToolStripSeparator());
-                            sm = new ToolStripMenuItem(UIHelper.LocalString("解锁所有到期资产", "Unlock all matured assets"));
-                            sm.Tag = new Tuple<WalletAccount, UInt256>(lrtb.Account, lrtb.AssetID);
-                            sm.Click += UnlockAsset_Click;
-                            menu.Items.Add(sm);
-                        }
-                        else
-                      if (node is LockAccountTreeNode lat)
-                        {
-                            bool ok = false;
-                            if (lat.LockAssetMerge.Tx.IsTimeLock)
-                            {
-                                ok = DateTime.Now.ToTimestamp() > lat.LockAssetMerge.Tx.LockExpiration;
-                            }
-                            else
-                            {
-                                ok = Blockchain.Singleton.Height > lat.LockAssetMerge.Tx.LockExpiration;
-                            }
-                            if (ok)
-                            {
-                                menu.Items.Add(new ToolStripSeparator());
-                                //单条解锁
-                                sm = new ToolStripMenuItem(UIHelper.LocalString("解锁资产", "Unlock Asset"));
-                                sm.Tag = new Tuple<OutputKey, LockAssetMerge>(lat.OutputKey, lat.LockAssetMerge);
-                                sm.Click += SingleUnlock_Click;
-                                menu.Items.Add(sm);
-                            }
-                        }
                     }
                 }
                 if (menu.Items.Count > 0)
                     menu.Show(this.treeAsset, e.Location);
             }
         }
-        private void UnlockAsset_Click(object sender, EventArgs e)
+
+        private void Election_Click(object sender, EventArgs e)
         {
             ToolStripMenuItem ToolStripMenuItem = sender as ToolStripMenuItem;
-            Tuple<WalletAccount, UInt256> tag = ToolStripMenuItem.Tag as Tuple<WalletAccount, UInt256>;
-            var bizPlugin = WalletBappProvider.Instance;
-            if (bizPlugin.IsNotNull() && this.Operater.Wallet is OpenWallet openWallet)
+            WalletAccount account = ToolStripMenuItem.Tag as WalletAccount;
+            using (var dialog = new ElectionDialog(account))
             {
-                this.DoInvoke(() =>
+                if (dialog.ShowDialog() == DialogResult.OK)
                 {
-                    Dictionary<UInt160, AvatarAccount> acts = new Dictionary<UInt160, AvatarAccount>();
-                    List<CoinReference> crs = new List<CoinReference>();
-
-                    var rs = bizPlugin.MyLockAssets?.Where(m => m.Value.Tx.Recipient.Equals(tag.Item1.GetKey().PublicKey) && m.Value.Output.AssetId.Equals(tag.Item2));
-                    int c = 0;
-                    Fixed8 amount = Fixed8.Zero;
-                    foreach (var r in rs)
+                    var tx = dialog.GetTransaction();
+                    if (tx.IsNotNull() && this.Operater.Wallet.IsNotNull())
                     {
-                        if ((r.Value.Tx.IsTimeLock && DateTime.Now.ToTimestamp() > r.Value.Tx.LockExpiration) || (!r.Value.Tx.IsTimeLock && Blockchain.Singleton.Height > r.Value.Tx.LockExpiration))
+                        this.Operater.Wallet.MixBuildAndRelaySingleOutputTransaction(tx, account.ScriptHash, tx2 =>
                         {
-                            c++;
-                            amount += r.Value.Output.Value;
-                            var lockAccount = LockAssetHelper.CreateAccount(openWallet, r.Value.Tx.GetContract(), tag.Item1.GetKey());//lock asset account have a some private key with master account
-                            acts[lockAccount.ScriptHash] = lockAccount;
-                            crs.Add(new CoinReference { PrevHash = r.Key.TxId, PrevIndex = r.Key.N });
-                        }
-                    }
-
-                    
-                    if (acts.IsNotNullAndEmpty() && crs.IsNotNullAndEmpty())
-                    {
-                        ContractTransaction tx = new ContractTransaction
-                        {
-                            Attributes = new TransactionAttribute[0],
-                            Outputs = new TransactionOutput[] { new TransactionOutput { AssetId = tag.Item2, ScriptHash = tag.Item1.ScriptHash, Value = amount } },
-                            Inputs = crs.ToArray(),
-                            Witnesses = new Witness[0]
-                        };
-                        tx = LockAssetHelper.Build(tx, acts.Values.ToArray());
-                        if (tx.IsNotNull())
-                        {
-                            this.Operater.Wallet.ApplyTransaction(tx);
-                            this.Operater.Relay(tx);
-                            if (this.Operater != default)
-                            {
-                                string msg = $"{UIHelper.LocalString("批量解锁资产交易已广播", "Relay batch unlock asset transaction completed")}   {tx.Hash}";
-                                Bapp.PushCrossBappMessage(new CrossBappMessage() { Content = msg, From = this.Module.Bapp });
-                                DarkMessageBox.ShowInformation(msg, "");
-                            }
-                        }
-                    }
-                });
-            }
-
-        }
-        private void SingleUnlock_Click(object sender, EventArgs e)
-        {
-            ToolStripMenuItem ToolStripMenuItem = sender as ToolStripMenuItem;
-            Tuple<OutputKey, LockAssetMerge> p = ToolStripMenuItem.Tag as Tuple<OutputKey, LockAssetMerge>;
-            var sh = Contract.CreateSignatureRedeemScript(p.Item2.Tx.Recipient).ToScriptHash();
-            WalletAccount act = this.Operater.Wallet.GetAccount(sh);
-            if (this.Operater.Wallet is OpenWallet openWallet)
-            {
-                var account = LockAssetHelper.CreateAccount(openWallet, p.Item2.Tx.GetContract(), act.GetKey());//lock asset account have a some private key with master account
-                if (account != null)
-                {
-                    //KeyPair kp = account.GetKey();
-                    TransactionOutput output = new TransactionOutput { AssetId = p.Item2.Output.AssetId, Value = p.Item2.Output.Value, ScriptHash = sh };
-                    ContractTransaction tx = new ContractTransaction
-                    {
-                        Attributes = new TransactionAttribute[0],
-                        Outputs = new TransactionOutput[] { output },
-                        Inputs = new CoinReference[] { new CoinReference { PrevHash = p.Item1.TxId, PrevIndex = p.Item1.N } },
-                        Witnesses = new Witness[0]
-                    };
-                    tx = LockAssetHelper.Build(tx, new AvatarAccount[] { account });
-                    if (tx.IsNotNull())
-                    {
-                        this.Operater.Wallet.ApplyTransaction(tx);
-                        this.Operater.Relay(tx);
-                        if (this.Operater != default)
-                        {
-                            string msg = $"{UIHelper.LocalString("解锁资产交易已广播", "Relay unlock asset transaction completed")}   {tx.Hash}";
+                            string msg = $"{UIHelper.LocalString("选举交易已广播", "Relay election transaction completed")}   {tx2.Hash}";
                             Bapp.PushCrossBappMessage(new CrossBappMessage() { Content = msg, From = this.Module.Bapp });
                             DarkMessageBox.ShowInformation(msg, "");
-                        }
+                        });
                     }
                 }
             }
         }
-        private void ClaimLockOXC_Click2(object sender, EventArgs e)
+
+        private void Sm_Click(object sender, EventArgs e)
         {
             ToolStripMenuItem ToolStripMenuItem = sender as ToolStripMenuItem;
             WalletAccount account = ToolStripMenuItem.Tag as WalletAccount;
-            if (this.Operater.Wallet is OpenWallet openWallet)
+            try
             {
-                new ClaimLockAsset(this.Operater, account.ScriptHash).ShowDialog();
+                var pubkey = account.GetKey().PublicKey.ToString();
+                Clipboard.SetText(pubkey);
+                string msg = pubkey + UIHelper.LocalString("  已复制", "  copied");
+                Bapp.PushCrossBappMessage(new CrossBappMessage() { Content = msg, From = this.Module.Bapp });
+                DarkMessageBox.ShowInformation(msg, "");
             }
+            catch (Exception) { }
         }
+
+
+        //private void ClaimLockOXC_Click2(object sender, EventArgs e)
+        //{
+        //    ToolStripMenuItem ToolStripMenuItem = sender as ToolStripMenuItem;
+        //    WalletAccount account = ToolStripMenuItem.Tag as WalletAccount;
+        //    if (this.Operater.Wallet is OpenWallet openWallet)
+        //    {
+        //        new ClaimLockAsset(this.Operater, account.ScriptHash).ShowDialog();
+        //    }
+        //}
         private void ClaimOXC_Click(object sender, EventArgs e)
         {
             ToolStripMenuItem ToolStripMenuItem = sender as ToolStripMenuItem;
@@ -282,64 +194,7 @@ namespace OX.Wallets.Base
             new SingleClaimOXC(this.Operater, account).ShowDialog();
         }
 
-        private void TransferLock_Click2(object sender, EventArgs e)
-        {
-            ToolStripMenuItem ToolStripMenuItem = sender as ToolStripMenuItem;
-            WalletAccount account = ToolStripMenuItem.Tag as WalletAccount;
-            using (DialogLockTransfer dialog = new DialogLockTransfer(this.Operater, account))
-            {
-                if (dialog.ShowDialog() != DialogResult.OK) return;
-                var output = dialog.GetOutput(out ECPoint ecp, out bool isTime, out uint expiration);
-                if (isTime)
-                {
-                    if (expiration - DateTime.Now.ToTimestamp() < 3600)
-                    {
-                        string msg = $"{UIHelper.LocalString("锁定的时间太短", "Locking time is too short")}";
-                        Bapp.PushCrossBappMessage(new CrossBappMessage() { Content = msg, From = this.Module.Bapp });
-                        DarkMessageBox.ShowInformation(msg, "");
-                        return;
-                    }
-                }
-                else
-                {
-                    if (expiration - Blockchain.Singleton.Height < 100)
-                    {
-                        string msg = $"{UIHelper.LocalString("锁定的区块高度太低", "Locked block height is too low")}";
-                        Bapp.PushCrossBappMessage(new CrossBappMessage() { Content = msg, From = this.Module.Bapp });
-                        DarkMessageBox.ShowInformation(msg, "");
-                        return;
-                    }
-                }
-                LockAssetTransaction lat = new LockAssetTransaction
-                {
-                    LockContract = Blockchain.LockAssetContractScriptHash,
-                    IsTimeLock = isTime,
-                    LockExpiration = expiration,
-                    Flag = 0,
-                    Recipient = ecp
-                };
-                output.ScriptHash = lat.GetContract().ScriptHash;
-                lat.Outputs = new TransactionOutput[] { output };
-                lat = this.Operater.Wallet.MakeTransaction(lat, account.ScriptHash, account.ScriptHash);
-                if (lat != null)
-                {
-                    if (lat.Inputs.Count() > 20)
-                    {
-                        string msg = $"{UIHelper.LocalString("交易输入项太多,请分为多次转账", "There are too many transaction input. Please transfer multiple times")}";
-                        Bapp.PushCrossBappMessage(new CrossBappMessage() { Content = msg, From = this.Module.Bapp });
-                        DarkMessageBox.ShowInformation(msg, "");
-                        return;
-                    }
-                    this.Operater.SignAndSendTx(lat);
-                    if (this.Operater != default)
-                    {
-                        string msg = $"{UIHelper.LocalString("交易已广播", "Relay transaction completed")}   {lat.Hash}";
-                        Bapp.PushCrossBappMessage(new CrossBappMessage() { Content = msg, From = this.Module.Bapp });
-                        DarkMessageBox.ShowInformation(msg, "");
-                    }
-                }
-            }
-        }
+
         private void Contribute_Click(object sender, EventArgs e)
         {
             ToolStripMenuItem ToolStripMenuItem = sender as ToolStripMenuItem;
@@ -349,25 +204,16 @@ namespace OX.Wallets.Base
                 if (dialog.ShowDialog() != DialogResult.OK) return;
                 var amountKind = dialog.GetAmountKind();
                 RewardTransaction rwTx = new RewardTransaction { RewardAmount = amountKind };
-                var tx = this.Operater.Wallet.MakeTransaction(rwTx, account.ScriptHash, account.ScriptHash);
-
-                if (tx != null)
+                if (rwTx.IsNotNull() && this.Operater.Wallet.IsNotNull())
                 {
-                    if (tx.Inputs.Count() > 20)
+                    this.Operater.Wallet.MixBuildAndRelaySingleOutputTransaction(rwTx, account.ScriptHash, tx2 =>
                     {
-                        string msg = $"{UIHelper.LocalString("交易输入项太多,请分为多次捐献", "There are too many transaction input. Please contribute multiple times")}";
+                        string msg = $"{UIHelper.LocalString("交易已广播", "Relay transaction completed")}   {tx2.Hash}";
                         Bapp.PushCrossBappMessage(new CrossBappMessage() { Content = msg, From = this.Module.Bapp });
                         DarkMessageBox.ShowInformation(msg, "");
-                        return;
-                    }
-                    this.Operater.SignAndSendTx(tx);
-                    if (this.Operater != default)
-                    {
-                        string msg = $"{UIHelper.LocalString("交易已广播", "Relay transaction completed")}   {tx.Hash}";
-                        Bapp.PushCrossBappMessage(new CrossBappMessage() { Content = msg, From = this.Module.Bapp });
-                        DarkMessageBox.ShowInformation(msg, "");
-                    }
+                    });
                 }
+
             }
         }
         private void Vote_Click(object sender, System.EventArgs e)
@@ -411,77 +257,26 @@ namespace OX.Wallets.Base
             ToolStripMenuItem ToolStripMenuItem = sender as ToolStripMenuItem;
             WalletAccount account = ToolStripMenuItem.Tag as WalletAccount;
 
-            new DialogDefragment(this.Operater, account.ScriptHash).ShowDialog();
+            new DialogDefragment(this.Operater, account).ShowDialog();
         }
-        private void TransferToEthMap_Click5(object sender, EventArgs e)
-        {
-            ToolStripMenuItem ToolStripMenuItem = sender as ToolStripMenuItem;
-            WalletAccount account = ToolStripMenuItem.Tag as WalletAccount;
 
-            KeyPair kp = account.GetKey();
-            using (DialogSinglePayToEth dialog = new DialogSinglePayToEth(this.Operater, account.ScriptHash))
-            {
-                if (dialog.ShowDialog() != DialogResult.OK) return;
-                TxOutListBoxItem item = dialog.GetOutput(out string ethAddress, out uint lockIndex);
-                if (item.IsNotNull())
-                {
-                    SingleTransactionWrapper<EthereumMapTransaction> stw = new SingleTransactionWrapper<EthereumMapTransaction>(account.ScriptHash, item.ToTxOutput());
-                    EthereumMapTransaction ct = stw.Get();
-                    ct.EthereumAddress = ethAddress;
-                    ct.LockExpirationIndex = lockIndex;
-                    ct.EthMapContract = Blockchain.EthereumMapContractScriptHash;
-                    var tx = this.Operater.Wallet.MakeTransaction<EthereumMapTransaction>(ct, stw.From, stw.From);
-                    //var tx = this.Operater.Wallet.MakeSingleTransaction(stw);
-                    if (tx != null)
-                    {
-                        if (tx.Inputs.Count() > 20)
-                        {
-                            string msg = $"{UIHelper.LocalString("交易输入项太多,请分为多次转账", "There are too many transaction input. Please transfer multiple times")}";
-                            Bapp.PushCrossBappMessage(new CrossBappMessage() { Content = msg, From = this.Module.Bapp });
-                            DarkMessageBox.ShowInformation(msg, "");
-                            return;
-                        }
-                        this.Operater.SignAndSendTx(tx);
-                        if (this.Operater != default)
-                        {
-                            string msg = $"{UIHelper.LocalString("交易已广播", "Relay transaction completed")}   {tx.Hash}";
-                            Bapp.PushCrossBappMessage(new CrossBappMessage() { Content = msg, From = this.Module.Bapp });
-                            DarkMessageBox.ShowInformation(msg, "");
-                        }
-                    }
-                }
-            }
-        }
         private void SmTransfer_Click(object sender, System.EventArgs e)
         {
             ToolStripMenuItem ToolStripMenuItem = sender as ToolStripMenuItem;
             WalletAccount account = ToolStripMenuItem.Tag as WalletAccount;
             KeyPair kp = account.GetKey();
-            using (DialogSinglePayTo dialog = new DialogSinglePayTo(this.Operater, account.ScriptHash))
+            using (DialogSinglePayTo dialog = new DialogSinglePayTo(this.Operater, account))
             {
                 if (dialog.ShowDialog() != DialogResult.OK) return;
-                TxOutListBoxItem item = dialog.GetOutput();
-                if (item.IsNotNull())
+                var tx = dialog.BuildTransaction();
+                if (tx.IsNotNull() && this.Operater.Wallet.IsNotNull())
                 {
-                    SingleTransactionWrapper<ContractTransaction> stw = new SingleTransactionWrapper<ContractTransaction>(account.ScriptHash, item.ToTxOutput());
-                    var tx = this.Operater.Wallet.MakeSingleTransaction(stw);
-                    if (tx != null)
+                    this.Operater.Wallet.MixBuildAndRelaySingleOutputTransaction(tx, account.ScriptHash, tx =>
                     {
-                        if (tx.Inputs.Count() > 20)
-                        {
-                            string msg = $"{UIHelper.LocalString("交易输入项太多,请分为多次转账", "There are too many transaction input. Please transfer multiple times")}";
-                            Bapp.PushCrossBappMessage(new CrossBappMessage() { Content = msg, From = this.Module.Bapp });
-                            DarkMessageBox.ShowInformation(msg, "");
-                            return;
-                        }
-                        this.Operater.SignAndSendTx(tx);
-                        if (this.Operater != default)
-                        {
-                            string msg = $"{UIHelper.LocalString("交易已广播", "Relay transaction completed")}   {tx.Hash}";
-                            Bapp.PushCrossBappMessage(new CrossBappMessage() { Content = msg, From = this.Module.Bapp });
-                            DarkMessageBox.ShowInformation(msg, "");
-                        }
-                    }
+                        string msg = $"{UIHelper.LocalString("交易已广播", "Relay transaction completed")}   {tx.Hash}";
+                        Bapp.PushCrossBappMessage(new CrossBappMessage() { Content = msg, From = this.Module.Bapp });
+                        DarkMessageBox.ShowInformation(msg, "");
+                    });
                 }
             }
         }
@@ -495,17 +290,14 @@ namespace OX.Wallets.Base
                 if (result == DialogResult.OK)
                 {
                     var tx = dialog.GetTransaction();
-                    if (tx.IsNotNull())
+                    if (tx.IsNotNull() && this.Operater.Wallet.IsNotNull())
                     {
-                        tx = this.Operater.Wallet.MakeTransaction(tx);
-                        if (tx.IsNotNull())
+                        this.Operater.Wallet.MixBuildAndRelaySingleOutputTransaction(tx, account.ScriptHash, tx2 =>
                         {
-                            this.Operater.SignAndSendTx(tx);
                             string msg = $"{UIHelper.LocalString("商业频道租赁交易已广播", "Relay business channel lease transaction completed")}   {tx.Hash}";
                             Bapp.PushCrossBappMessage(new CrossBappMessage() { Content = msg, From = this.Module.Bapp });
-
                             DarkMessageBox.ShowInformation(msg, "");
-                        }
+                        });
                     }
                 }
             }
@@ -670,16 +462,13 @@ namespace OX.Wallets.Base
             this.DoInvoke(() =>
             {
                 this.Clear();
-                var bizPlugin = WalletBappProvider.Instance;
-                if (bizPlugin.IsNotNull() && this.Operater.IsNotNull() && this.Operater.Wallet.IsNotNull())
+                if (this.Operater.IsNotNull() && this.Operater.Wallet.IsNotNull())
                 {
                     var acts = this.Operater.Wallet.GetAccounts();
                     this.bt_Fresh.Text = UIHelper.LocalString($"{acts.Count()}个账户", $"{acts.Count()} accounts");
-                    var assetRecords = bizPlugin.MyLockAssets;
                     foreach (var act in acts)
                     {
-                        var lockAssetRecords = act.WatchOnly ? default : assetRecords.Where(m => m.Value.Tx.Recipient.Equals(act.GetKey().PublicKey));
-                        AccountNode node = new AccountNode(this.Operater.Wallet, act, lockAssetRecords);
+                        AccountNode node = new AccountNode(this.Operater.Wallet, act);
                         this.treeAsset.Nodes.Add(node);
                     }
                 }

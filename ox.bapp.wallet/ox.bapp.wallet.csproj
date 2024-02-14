@@ -89,9 +89,6 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Trust\NewAssetTrustContract.cs" />
-    <Compile Update="Wallets\ClaimLockAsset.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Update="Books\CreateBook.cs">
       <SubType>Form</SubType>
     </Compile>

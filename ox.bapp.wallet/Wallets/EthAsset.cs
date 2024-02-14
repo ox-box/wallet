@@ -66,6 +66,11 @@ namespace OX.Wallets.Base
                     sm.Tag = node.Tag;
                     sm.Click += Sm_Click;
                     menu.Items.Add(sm);
+                    //复制以太坊地址
+                    sm = new ToolStripMenuItem(UIHelper.LocalString("复制以太坊地址", "Copy Ethereum Address"));
+                    sm.Tag = node.Tag;
+                    sm.Click += Sm_Click3;
+                    menu.Items.Add(sm);
                     if (openaccount.Account.HaveMapAccount)
                     {
                         sm = new ToolStripMenuItem(UIHelper.LocalString("复制映射地址", "Copy Map Address"));
@@ -85,6 +90,21 @@ namespace OX.Wallets.Base
                     menu.Show(this.treeAsset, e.Location);
 
             }
+        }
+
+        private void Sm_Click3(object sender, EventArgs e)
+        {
+            ToolStripMenuItem ToolStripMenuItem = sender as ToolStripMenuItem;
+            EthAccountAsset openaccount = ToolStripMenuItem.Tag as EthAccountAsset;
+            try
+            {
+                var addr = openaccount.Account.Address;
+                Clipboard.SetText(addr);
+                string msg = addr + UIHelper.LocalString("  已复制", "  copied");
+                Bapp.PushCrossBappMessage(new CrossBappMessage() { Content = msg, From = this.Module.Bapp });
+                DarkMessageBox.ShowInformation(msg, "");
+            }
+            catch (Exception) { }
         }
 
         private void Sm_Click2(object sender, EventArgs e)

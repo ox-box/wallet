@@ -4,8 +4,9 @@ namespace OX.Wallets
 {
     public interface INotecase
     {
-        Wallet Wallet { get; }
+        OpenWallet Wallet { get; }
         WalletIndexer Indexer { get; }
+        WalletIndexer GetIndexer(string walletpath);
         void Relay(IInventory inventory);
         void Close();
         void Exit();

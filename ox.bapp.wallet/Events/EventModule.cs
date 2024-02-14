@@ -124,17 +124,15 @@ namespace OX.Wallets.Base.Events
                 if (result == DialogResult.OK)
                 {
                     var tx = dialog.GetTransaction(out UInt160 from);
-                    if (tx.IsNotNull())
+                    if (tx.IsNotNull() && this.Operater.Wallet.IsNotNull())
                     {
-                        tx = Operater.Wallet.MakeTransaction(tx, from, from);
-                        if (tx.IsNotNull())
+                        this.Operater.Wallet.MixBuildAndRelaySingleOutputTransaction(tx, from, tx2 =>
                         {
-                            Operater.SignAndSendTx(tx);
-                            string msg = $"{UIHelper.LocalString("创建事件板交易已广播", "Relay event board transaction completed")}   {tx.Hash}";
-                            Bapp.PushCrossBappMessage(new CrossBappMessage() { Content = msg, From = Bapp });
+                            string msg = $"{UIHelper.LocalString("创建事件板交易已广播", "Relay event board transaction completed")}   {tx2.Hash}";
+                            Bapp.PushCrossBappMessage(new CrossBappMessage() { Content = msg, From = this.Bapp });
                             DarkMessageBox.ShowInformation(msg, "");
-                        }
-                    }
+                        });
+                    }                 
                 }
             }
         }
@@ -379,17 +377,16 @@ namespace OX.Wallets.Base.Events
                                 if (result == DialogResult.OK)
                                 {
                                     var etx = dialog.GetTransaction(out UInt160 from);
-                                    if (etx.IsNotNull())
+                                    if (etx.IsNotNull() && this.Operater.Wallet.IsNotNull())
                                     {
-                                        etx = Operater.Wallet.MakeTransaction(etx, from, from);
-                                        if (etx.IsNotNull())
+                                        this.Operater.Wallet.MixBuildAndRelaySingleOutputTransaction(etx, from, tx2 =>
                                         {
-                                            Operater.SignAndSendTx(etx);
-                                            string msg = $"{UIHelper.LocalString("创建事件交易已广播", "Relay event transaction completed")}   {etx.Hash}";
-                                            Bapp.PushCrossBappMessage(new CrossBappMessage() { Content = msg, From = Bapp });
+                                            string msg = $"{UIHelper.LocalString("创建事件交易已广播", "Relay event transaction completed")}   {tx2.Hash}";
+                                            Bapp.PushCrossBappMessage(new CrossBappMessage() { Content = msg, From = this.Bapp });
                                             DarkMessageBox.ShowInformation(msg, "");
-                                        }
+                                        });
                                     }
+                                 
                                 }
                             }
                         }

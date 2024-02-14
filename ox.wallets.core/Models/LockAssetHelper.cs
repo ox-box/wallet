@@ -221,16 +221,21 @@ namespace OX.Wallets
     {
         public static T Build<T>(T tx, AvatarAccount[] accounts) where T : Transaction
         {
+            Dictionary<UInt160, AvatarAccount> acts = new Dictionary<UInt160, AvatarAccount>();
+            foreach (var avatar in accounts)
+            {
+                acts[avatar.ScriptHash] = avatar;
+            }
             LockAssetContractParametersContext context;
             try
             {
-                context = new LockAssetContractParametersContext(tx, accounts.Select(m => m.ScriptHash).OrderBy(p => p).ToArray());
+                context = new LockAssetContractParametersContext(tx, acts.Select(m => m.Key).OrderBy(p => p).ToArray());
             }
             catch (InvalidOperationException)
             {
                 return default(T);
             }
-            if (Sign(context, accounts) && context.Completed)
+            if (Sign(context, acts) && context.Completed)
             {
                 if (context.Verifiable is T transaction)
                 {
@@ -240,12 +245,13 @@ namespace OX.Wallets
             }
             return default(T);
         }
-        public static bool Sign(LockAssetContractParametersContext context, AvatarAccount[] accounts)
+        public static bool Sign(LockAssetContractParametersContext context, Dictionary<UInt160, AvatarAccount> acts)
         {
             bool fSuccess = false;
-            foreach (UInt160 scriptHash in accounts.Select(m => m.ScriptHash).OrderBy(p => p))//order by很重要
+          
+            foreach (UInt160 scriptHash in acts.Select(m => m.Key).OrderBy(p => p))//order by很重要
             {
-                var ca = accounts.FirstOrDefault(m => m.ScriptHash.Equals(scriptHash));
+                var ca = acts[scriptHash];
                 var key = ca.Key;
                 byte[] sg = context.Verifiable.Sign(key);
                 fSuccess |= context.AddSignature(ca.Contract, key.PublicKey, sg);
@@ -266,12 +272,6 @@ namespace OX.Wallets
                     Deployed = false
                 };
             }
-            //NEP6Account account;
-            //if (key == null)
-            //    account = new NEP6Account(wallet, nep6contract.ScriptHash);
-            //else
-            //    account = new NEP6Account(wallet, nep6contract.ScriptHash, key, wallet.WalletPassword);
-            //account.Contract = nep6contract;
             return new AvatarAccount { ScriptHash = nep6contract.ScriptHash, Contract = nep6contract, Key = key };
         }
 

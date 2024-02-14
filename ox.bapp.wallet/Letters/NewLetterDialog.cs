@@ -119,28 +119,23 @@ namespace OX.Wallets.Base
                     var sharekey = key.DiffieHellman(pubkey);
                     var cryptoData = data.Encrypt(sharekey);
 
-                    SecretLetterTransaction slt = new SecretLetterTransaction
+                    SecretLetterTransaction tx = new SecretLetterTransaction
                     {
                         Flag = 1,
                         From = ad.Account.GetKey().PublicKey,
                         ToHash = sh.Hash,
                         Data = cryptoData
                     };
-                    slt = this.Operater.Wallet.MakeTransaction(slt, ad.Account.ScriptHash, ad.Account.ScriptHash);
-                    if (slt.IsNotNull())
+                    if (tx.IsNotNull() && this.Operater.Wallet.IsNotNull())
                     {
-                        this.Operater.SignAndSendTx(slt);
-                        string msg = $"{UIHelper.LocalString("私信交易已广播", "relay private letter transaction completed")}   {slt.Hash}";
-                        DarkMessageBox.ShowInformation(msg, "");
-                    }
+                        this.Operater.Wallet.MixBuildAndRelaySingleOutputTransaction(tx, ad.Account.ScriptHash, tx2 =>
+                        {
+                            string msg = $"{UIHelper.LocalString("创建事件板交易已广播", "Relay event board transaction completed")}   {tx2.Hash}";
+                            DarkMessageBox.ShowInformation(msg, "");
+                        });
+                    } 
                 }
-                //var str = this.tb_output.Text;
-                //if (str.IsNotNullAndEmpty())
-                //{
-                //    Clipboard.SetText(str);
-                //    string msg = str + UIHelper.LocalString("  已复制", "  copied");
-                //    DarkMessageBox.ShowInformation(msg, "");
-                //}
+                
             }
             catch
             {

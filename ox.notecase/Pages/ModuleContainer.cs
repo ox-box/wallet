@@ -284,6 +284,7 @@ namespace OX.Wallets
                 timer.Elapsed += DoWebService;
                 timer.Start();
             }
+            HeartBeatContext.SetWalletOpened();
         }
         private void DoWebService(object sender, System.Timers.ElapsedEventArgs e)
         {

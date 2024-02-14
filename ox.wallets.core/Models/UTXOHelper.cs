@@ -3,9 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using OX.Network.P2P.Payloads;
 
 namespace OX.Wallets
 {
+    public class MixUTXO
+    {
+        public UInt160 Owner;
+        public UInt256 AssetId;
+        public Fixed8 Amount;
+        public bool IsLockCoin;
+        public Coin UnlockCoin;
+        public KeyValuePair<CoinReference, MyLockAssetMerge> LockCoin;
+    }
     public class UTXO
     {
         public long Value { get; set; }
@@ -21,7 +31,7 @@ namespace OX.Wallets
     {
         public AssetTrustOutput AssetTrustOutput;
     }
-    public class EthMapUTXO: UTXO
+    public class EthMapUTXO : UTXO
     {
         public string EthAddress { get; set; }
         public uint LockExpirationIndex { get; set; }

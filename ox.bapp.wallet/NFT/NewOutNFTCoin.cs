@@ -70,6 +70,7 @@ namespace OX.Wallets.Base
                 var key = ad.Account.GetKey();
                 if (key.IsNotNull())
                 {
+                    from = ad.Account.ScriptHash;
                     NftTransaction tx = new NftTransaction(key.PublicKey)
                     {
                         ContentType = 0,

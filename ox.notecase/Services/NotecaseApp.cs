@@ -15,7 +15,7 @@ namespace OX.Notecase
         public event Action<HeartBeatContext> OnHeartBeat;
         private IActorRef WalletsHandler;
         private WebBoxBuilderBase WebBoxBuilder;
-        public Wallets.Wallet Wallet { get; private set; }
+        public OpenWallet Wallet { get; private set; }
         public SyncForm SyncForm;
         public ModuleContainer Container;
         DateTime PreDT = DateTime.MinValue;
@@ -110,7 +110,7 @@ namespace OX.Notecase
             return Indexer;
         }
 
-        public void ChangeWallet(OX.Wallets.Wallet wallet)
+        public void ChangeWallet(OpenWallet wallet)
         {
             this.Wallet = wallet;
             this.WalletsHandler.Tell(new BlockHandler.WalletCommand() { Wallet = wallet });

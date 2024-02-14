@@ -61,7 +61,7 @@ namespace OX.Wallets.Base
             this.lb_trusteePubKey.Text = UIHelper.LocalString("受托公钥:", "Trustee Public Key:");
             this.lb_main_scope.Text = UIHelper.LocalString("主信托范围:", "Main Trust Scope:");
             this.lb_side_scope.Text = UIHelper.LocalString("边际信托范围:", "Side Trust Scope:");
-            this.lb_balance.Text = UIHelper.LocalString("OXC余额:", "OXC Balance:");
+            this.lb_balance.Text = UIHelper.LocalString("可用 OXC 余额:", "Available OXC Balance:");
             this.lb_amount.Text = UIHelper.LocalString("委托金额:", "Trust Amount:");
             this.lb_trustAddr.Text = UIHelper.LocalString("信托地址:", "Trust Address:");
             this.bt_copy.Text = UIHelper.LocalString("复制", "Copy");
@@ -99,8 +99,12 @@ namespace OX.Wallets.Base
             if (item.IsNotNull())
             {
                 ad = item as AccountDescriptor;
-                this.tb_balance.Text = this.Operater.Wallet.GeAccountAvailable(ad.Account.ScriptHash, Blockchain.OXC).ToString();
-                return true;
+
+                if (this.Operater.Wallet.TryGetWalletAccountBalance(ad.Account.ScriptHash, out Dictionary<UInt256, WalletAccountBalance> balances) && balances.TryGetValue(Blockchain.OXC, out WalletAccountBalance balance))
+                {
+                    tb_balance.Text = balance.AvailableBalance.ToString();
+                    return true;
+                }
             }
             return false;
         }
@@ -266,25 +270,17 @@ namespace OX.Wallets.Base
                 };
                 TransactionOutput output = new TransactionOutput { AssetId = Blockchain.OXC, ScriptHash = att.GetContract().ScriptHash, Value = amount };
                 att.Outputs = new TransactionOutput[] { output };
-                att = this.Operater.Wallet.MakeTransaction(att, ad.Account.ScriptHash, ad.Account.ScriptHash);
-                if (att != null)
+
+                if (att.IsNotNull() && this.Operater.Wallet.IsNotNull())
                 {
-                    if (att.Inputs.Count() > 20)
+                    this.Operater.Wallet.MixBuildAndRelaySingleOutputTransaction(att, ad.Account.ScriptHash, tx2 =>
                     {
-                        string msg = $"{UIHelper.LocalString("交易输入项太多,请分为多次转账", "There are too many transaction input. Please transfer multiple times")}";
-                        Bapp.PushCrossBappMessage(new CrossBappMessage() { Content = msg, From = this.Module.Bapp });
-                        DarkMessageBox.ShowInformation(msg, "");
-                        return;
-                    }
-                    this.Operater.SignAndSendTx(att);
-                    if (this.Operater != default)
-                    {
-                        string msg = $"{UIHelper.LocalString("交易已广播", "Relay transaction completed")}   {att.Hash}";
+                        string msg = $"{UIHelper.LocalString("交易已广播", "Relay transaction completed")}   {tx2.Hash}";
                         //Bapp.PushCrossBappMessage(new CrossBappMessage() { Content = msg, From = this.Module.Bapp });
                         DarkMessageBox.ShowInformation(msg, "");
                         this.Close();
-                    }
-                }
+                    });
+                }             
             }
         }
 

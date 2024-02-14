@@ -230,6 +230,32 @@ namespace OX.Wallets.Base
         //        }
         //    }
         //}
+        public static void TrySave_ExcludeLockAssetTransaction(this WriteBatch batch, WalletBappProvider provider, Block block, Transaction tx, ushort blockN)
+        {
+            if (tx is LockAssetTransaction) return;
+            for (ushort n = 0; n < tx.Outputs.Length; n++)
+            {
+                var output = tx.Outputs[n];
+                if (provider.LockAssetMetas.TryGetValue(output.ScriptHash, out MyLockAssetMeta lockAssetMeta))
+                {
+                    var holder = Contract.CreateSignatureRedeemScript(lockAssetMeta.Tx.Recipient).ToScriptHash();
+                    var key = new CoinReference { PrevHash = tx.Hash, PrevIndex = n };
+                    var LockAssetMerge = new LockAssetMerge { Tx = lockAssetMeta.Tx, Output = output, IsNativeLock = false };
+                    var MyLockAssetMerge = new MyLockAssetMerge { Owner = holder, Tx = lockAssetMeta.Tx, Output = output, IsNativeLock = false, SpentIndex = 0 };
+                    if (provider.Wallet.ContainsAndHeld(holder))
+                    {
+                        if (output.AssetId.Equals(Blockchain.OXS))
+                        {
+                            batch.Put(SliceBuilder.Begin(WalletBizPersistencePrefixes.TX_Once_MyLockOXS).Add(key), SliceBuilder.Begin().Add(new LockOXS { Holder = holder, Output = output, Tx = lockAssetMeta.Tx, IsNativeLock = false, Flag = LockOXSFlag.Unspend, Index = block.Index, SpendIndex = 0 }));
+                        }
+                        batch.Put(SliceBuilder.Begin(WalletBizPersistencePrefixes.TX_MyLockAsset).Add(key), SliceBuilder.Begin().Add(MyLockAssetMerge));
+                        provider.MyLockAssets[key] = MyLockAssetMerge;
+                    }
+                    batch.Put(SliceBuilder.Begin(WalletBizPersistencePrefixes.TX_LockAsset_Record).Add(key), SliceBuilder.Begin().Add(LockAssetMerge));
+                    provider.AllLockAssets[key] = LockAssetMerge;
+                }
+            }
+        }
         public static void Save_LockAssetTransaction(this WriteBatch batch, WalletBappProvider provider, Block block, LockAssetTransaction lat, ushort blockN)
         {
             if (lat.IsNotNull() && lat.LockContract.Equals(Blockchain.LockAssetContractScriptHash) && provider.Wallet.IsNotNull())
@@ -243,16 +269,24 @@ namespace OX.Wallets.Base
                     var output = lat.Outputs[n];
                     if (output.ScriptHash.Equals(sh))
                     {
-                        var key = new OutputKey { TxId = lat.Hash, N = n };
-                        var LockAssetMerge = new LockAssetMerge { Tx = lat, Output = output };
+                        var key = new CoinReference { PrevHash = lat.Hash, PrevIndex = n };
+                        var LockAssetMerge = new LockAssetMerge { Tx = lat, Output = output, IsNativeLock = true };
+                   
+                        var MyLockAssetMeta = new MyLockAssetMeta { Owner = holder, Tx = lat };
                         if (provider.Wallet.ContainsAndHeld(holder))
                         {
                             if (output.AssetId.Equals(Blockchain.OXS))
                             {
-                                batch.Put(SliceBuilder.Begin(WalletBizPersistencePrefixes.TX_Once_MyLockOXS).Add(key), SliceBuilder.Begin().Add(new LockOXS { Holder = holder, Output = output, Tx = lat, Flag = LockOXSFlag.Unspend, Index = block.Index, SpendIndex = 0 }));
+                                batch.Put(SliceBuilder.Begin(WalletBizPersistencePrefixes.TX_Once_MyLockOXS).Add(key), SliceBuilder.Begin().Add(new LockOXS { Holder = holder, Output = output, Tx = lat, IsNativeLock = true, Flag = LockOXSFlag.Unspend, Index = block.Index, SpendIndex = 0 }));
                             }
-                            batch.Put(SliceBuilder.Begin(WalletBizPersistencePrefixes.TX_MyLockAsset).Add(key), SliceBuilder.Begin().Add(LockAssetMerge));
-                            provider.MyLockAssets[key] = LockAssetMerge;
+                            var MyLockAssetMerge = new MyLockAssetMerge { Owner = holder, Tx = lat, Output = output, IsNativeLock = true, SpentIndex = 0 };
+                            batch.Put(SliceBuilder.Begin(WalletBizPersistencePrefixes.TX_MyLockAsset).Add(key), SliceBuilder.Begin().Add(MyLockAssetMerge));
+                            provider.MyLockAssets[key] = MyLockAssetMerge;
+                        }
+                        if (!provider.LockAssetMetas.ContainsKey(sh))
+                        {
+                            batch.Put(SliceBuilder.Begin(WalletBizPersistencePrefixes.TX_LockAssetMeta).Add(sh), SliceBuilder.Begin().Add(MyLockAssetMeta));
+                            provider.LockAssetMetas[sh] = MyLockAssetMeta;
                         }
                         batch.Put(SliceBuilder.Begin(WalletBizPersistencePrefixes.TX_LockAsset_Record).Add(key), SliceBuilder.Begin().Add(LockAssetMerge));
                         provider.AllLockAssets[key] = LockAssetMerge;

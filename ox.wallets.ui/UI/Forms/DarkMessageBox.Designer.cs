@@ -30,51 +30,74 @@ namespace OX.Wallets.UI.Forms
         /// </summary>
         private void InitializeComponent()
         {
-            this.picIcon = new System.Windows.Forms.PictureBox();
-            this.lblText = new OX.Wallets.UI.Controls.DarkLabel();
-            ((System.ComponentModel.ISupportInitialize)(this.picIcon)).BeginInit();
-            this.SuspendLayout();
+            picIcon = new System.Windows.Forms.PictureBox();
+            lblText = new DarkLabel();
+            ((System.ComponentModel.ISupportInitialize)picIcon).BeginInit();
+            SuspendLayout();
+            // 
+            // btnCancel
+            // 
+            btnCancel.Location = new System.Drawing.Point(18, 18);
+            // 
+            // btnClose
+            // 
+            btnClose.Location = new System.Drawing.Point(18, 18);
+            // 
+            // btnYes
+            // 
+            btnYes.Location = new System.Drawing.Point(18, 18);
+            // 
+            // btnNo
+            // 
+            btnNo.Location = new System.Drawing.Point(18, 18);
+            // 
+            // btnRetry
+            // 
+            btnRetry.Location = new System.Drawing.Point(708, 18);
+            // 
+            // btnIgnore
+            // 
+            btnIgnore.Location = new System.Drawing.Point(708, 18);
             // 
             // picIcon
             // 
-            this.picIcon.Location = new System.Drawing.Point(10, 10);
-            this.picIcon.Name = "picIcon";
-            this.picIcon.Size = new System.Drawing.Size(32, 32);
-            this.picIcon.TabIndex = 3;
-            this.picIcon.TabStop = false;
+            picIcon.Location = new System.Drawing.Point(10, 10);
+            picIcon.Name = "picIcon";
+            picIcon.Size = new System.Drawing.Size(32, 32);
+            picIcon.TabIndex = 3;
+            picIcon.TabStop = false;
             // 
             // lblText
             // 
-            this.lblText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.lblText.Location = new System.Drawing.Point(71, 9);
-            this.lblText.Name = "lblText";
-            this.lblText.Size = new System.Drawing.Size(185, 34);
-            this.lblText.TabIndex = 4;
-            this.lblText.Text = "Something something something";
+            lblText.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
+            lblText.Location = new System.Drawing.Point(71, 9);
+            lblText.Name = "lblText";
+            lblText.Size = new System.Drawing.Size(185, 34);
+            lblText.TabIndex = 4;
+            lblText.Text = "Something something something";
             // 
             // DarkMessageBox
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(1046, 431);
-            this.Controls.Add(this.picIcon);
-            this.Controls.Add(this.lblText);
-            this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Margin = new System.Windows.Forms.Padding(9, 10, 9, 10);
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
-            this.Name = "DarkMessageBox";
-            this.ShowIcon = false;
-            this.ShowInTaskbar = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Message box";
-            this.Controls.SetChildIndex(this.lblText, 0);
-            this.Controls.SetChildIndex(this.picIcon, 0);
-            ((System.ComponentModel.ISupportInitialize)(this.picIcon)).EndInit();
-            this.ResumeLayout(false);
-
+            AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            AutoSize = true;
+            ClientSize = new System.Drawing.Size(1230, 423);
+            Controls.Add(picIcon);
+            Controls.Add(lblText);
+            Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            Margin = new System.Windows.Forms.Padding(9, 10, 9, 10);
+            MaximizeBox = false;
+            MinimizeBox = false;
+            Name = "DarkMessageBox";
+            ShowIcon = false;
+            ShowInTaskbar = false;
+            StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            Text = "Message box";
+            Controls.SetChildIndex(lblText, 0);
+            Controls.SetChildIndex(picIcon, 0);
+            ((System.ComponentModel.ISupportInitialize)picIcon).EndInit();
+            ResumeLayout(false);
         }
 
         #endregion

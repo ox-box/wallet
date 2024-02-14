@@ -132,16 +132,15 @@ namespace OX.Wallets.Base
         private void btnOk_Click(object sender, EventArgs e)
         {
             var tx = buildTx(out UInt160 sh);
-            if (tx.IsNotNull())
+            if (tx.IsNotNull() && this.Operater.Wallet.IsNotNull())
             {
-                tx = Operater.Wallet.MakeTransaction(tx, sh, sh);
-                if (tx.IsNotNull())
+                this.Operater.Wallet.MixBuildAndRelaySingleOutputTransaction(tx,sh, tx2 =>
                 {
-                    Operater.SignAndSendTx(tx);
-                    string msg = $"{UIHelper.LocalString("发行NFT交易已广播", "Relay issue NFT transaction completed")}   {tx.Hash}";
+                    string msg = $"{UIHelper.LocalString("发行NFT交易已广播", "Relay issue NFT transaction completed")}   {tx2.Hash}";
                     DarkMessageBox.ShowInformation(msg, "");
-                }
+                });
             }
+             
         }
     }
 }

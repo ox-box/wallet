@@ -253,18 +253,16 @@ namespace OX.Wallets.Base
                 var result = dialog.ShowDialog();
                 if (result == DialogResult.OK)
                 {
-                    var etx = dialog.GetTransaction(out UInt160 from);
-                    if (etx.IsNotNull())
+                    var tx = dialog.GetTransaction(out UInt160 from);
+                    if (tx.IsNotNull() && this.Operater.Wallet.IsNotNull())
                     {
-                        etx = this.Operater.Wallet.MakeTransaction(etx, from, from);
-                        if (etx.IsNotNull())
+                        this.Operater.Wallet.MixBuildAndRelaySingleOutputTransaction(tx, from, tx =>
                         {
-                            this.Operater.SignAndSendTx(etx);
-                            string msg = $"{UIHelper.LocalString("创建评论交易已广播", "Relay event transaction completed")}   {etx.Hash}";
+                            string msg = $"{UIHelper.LocalString("创建评论交易已广播", "Relay event transaction completed")}   {tx.Hash}";
                             Bapp.PushCrossBappMessage(new CrossBappMessage() { Content = msg, From = this.Module.Bapp });
                             DarkMessageBox.ShowInformation(msg, "");
-                        }
-                    }
+                        });
+                    }                     
                 }
             }
         }

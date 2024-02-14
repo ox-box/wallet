@@ -129,4 +129,28 @@ namespace OX.Wallets
             return prikey;
         }
     }
+    public class WalletAccountBalance
+    {
+        public UInt160 ScriptHash;
+        public UInt256 AssetId;
+
+        public Fixed8 TotalBalance;
+        public Fixed8 MasterBalance;
+        public Fixed8 AvailableBalance;
+        public Fixed8 TotalLockBalance;
+        public Fixed8 TotalUnlockBalance;
+        public IEnumerable<KeyValuePair<CoinReference, MyLockAssetMerge>> LockAssets;
+        public bool IsNativeAsset { get { return AssetId.Equals(Blockchain.OXS) || AssetId.Equals(Blockchain.OXC); } }
+        public WalletAccountBalance(UInt160 scriptHash, UInt256 assetId)
+        {
+            TotalBalance = Fixed8.Zero;
+            MasterBalance = Fixed8.Zero;
+            AvailableBalance = Fixed8.Zero;
+            TotalUnlockBalance = Fixed8.Zero;
+            TotalLockBalance = Fixed8.Zero;
+            ScriptHash = scriptHash;
+            AssetId = assetId;
+        }
+
+    }
 }

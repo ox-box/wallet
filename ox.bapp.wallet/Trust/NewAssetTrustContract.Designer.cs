@@ -30,6 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(NewAssetTrustContract));
             panel = new System.Windows.Forms.Panel();
+            pl_side_scope = new System.Windows.Forms.FlowLayoutPanel();
             lb_side_scope = new UI.Controls.DarkLabel();
             bt_copy = new UI.Controls.DarkButton();
             tb_trustAddr = new UI.Controls.DarkTextBox();
@@ -49,7 +50,6 @@
             lb_main_scope = new UI.Controls.DarkLabel();
             tb_trusteePubkey = new UI.Controls.DarkTextBox();
             lb_trusteePubKey = new UI.Controls.DarkLabel();
-            pl_side_scope = new System.Windows.Forms.FlowLayoutPanel();
             panel.SuspendLayout();
             SuspendLayout();
             // 
@@ -78,6 +78,11 @@
             resources.ApplyResources(panel, "panel");
             panel.Name = "panel";
             panel.Paint += panel_Paint;
+            // 
+            // pl_side_scope
+            // 
+            resources.ApplyResources(pl_side_scope, "pl_side_scope");
+            pl_side_scope.Name = "pl_side_scope";
             // 
             // lb_side_scope
             // 
@@ -221,11 +226,6 @@
             resources.ApplyResources(lb_trusteePubKey, "lb_trusteePubKey");
             lb_trusteePubKey.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
             lb_trusteePubKey.Name = "lb_trusteePubKey";
-            // 
-            // pl_side_scope
-            // 
-            resources.ApplyResources(pl_side_scope, "pl_side_scope");
-            pl_side_scope.Name = "pl_side_scope";
             // 
             // NewAssetTrustContract
             // 

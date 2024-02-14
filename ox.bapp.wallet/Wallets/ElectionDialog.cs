@@ -6,67 +6,47 @@ using System;
 using System.Linq;
 using System.Windows.Forms;
 using OX.Wallets.UI.Forms;
+using Nethereum.Model;
 
 namespace OX.Wallets.Base
 {
-    public partial class ElectionDialog : DarkForm
+    public partial class ElectionDialog : DarkDialog
     {
-        OX.Wallets.Wallet Wallet;
-        public ElectionDialog(OX.Wallets.Wallet wallet)
+        WalletAccount Account;
+        StateTransaction TX;
+        public ElectionDialog(WalletAccount account)
         {
-            Wallet = wallet;
+            Account = account;
             InitializeComponent();
-            this.Text = UIHelper.LocalString("选举", "Election");
-            this.label1.Text = UIHelper.LocalString("公钥:", "Public Key:");
-            this.label2.Text = UIHelper.LocalString("费用:", "Fee:");
+
         }
 
         public StateTransaction GetTransaction()
         {
-            ECPoint pubkey = (ECPoint)comboBox1.SelectedItem;
-            return Wallet.MakeTransaction(new StateTransaction
-            {
-                Version = 0,
-                Descriptors = new[]
-                {
-                    new StateDescriptor
-                    {
-                        Type = StateType.Validator,
-                        Key = pubkey.ToArray(),
-                        Field = "Registered",
-                        Value = BitConverter.GetBytes(true)
-                    }
-                }
-            });
+            return TX;
         }
 
         private void ElectionDialog_Load(object sender, EventArgs e)
         {
-            comboBox1.Items.AddRange(Wallet.GetHeldAccounts().Where(p => p.Contract.Script.IsStandardContract()).Select(p => p.GetKey().PublicKey).ToArray());
-        }
-
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (comboBox1.SelectedIndex >= 0)
+            this.btnOk.Text = UIHelper.LocalString("确定", "OK");
+            this.btnCancel.Text= UIHelper.LocalString("取消", "Cancel");
+            this.TX = new StateTransaction
             {
-                button1.Enabled = true;
-                ECPoint pubkey = (ECPoint)comboBox1.SelectedItem;
-                StateTransaction tx = new StateTransaction
-                {
-                    Version = 0,
-                    Descriptors = new[]
+                Version = 0,
+                Descriptors = new[]
+                  {
+                    new StateDescriptor
                     {
-                        new StateDescriptor
-                        {
-                            Type = StateType.Validator,
-                            Key = pubkey.ToArray(),
-                            Field = "Registered",
-                            Value = BitConverter.GetBytes(true)
-                        }
+                        Type = StateType.Validator,
+                        Key = this.Account.GetKey().PublicKey.ToArray(),
+                        Field = "Registered",
+                        Value = BitConverter.GetBytes(true)
                     }
-                };
-                label3.Text = $"{tx.SystemFee} OXC";
-            }
+                }
+            };
+            this.Text = UIHelper.LocalString("选举", "Election");
+            this.lb_pubkey.Text = UIHelper.LocalString($"公钥:    {this.Account.GetKey().PublicKey.ToString()}", $"public key:    {this.Account.GetKey().PublicKey.ToString()}");
+            this.label3.Text = UIHelper.LocalString($"费用:    {this.TX.SystemFee} OXC", $"Fee:    {this.TX.SystemFee} OXC");
         }
     }
 }

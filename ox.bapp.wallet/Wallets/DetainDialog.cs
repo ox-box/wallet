@@ -29,6 +29,8 @@ namespace OX.Wallets.Base
         private void ClaimForm_Load(object sender, EventArgs e)
         {
             this.Text = UIHelper.LocalString("商业频道租赁", "Business Channel Lease");
+            this.btnOk.Text = UIHelper.LocalString("确定", "OK");
+            this.btnCancel.Text = UIHelper.LocalString("取消", "Cancel");
             this.lb_address.Text = UIHelper.LocalString("地址:", "Address:");
             this.lb_state.Text = UIHelper.LocalString("状态:", "State:");
             this.lb_expireIndex.Text = UIHelper.LocalString("到期高度:", "Expire Index:");

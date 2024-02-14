@@ -29,78 +29,72 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ElectionDialog));
-            this.label1 = new OX.Wallets.UI.Controls.DarkLabel();
-            this.comboBox1 = new OX.Wallets.UI.Controls.DarkComboBox();
-            this.button1 = new OX.Wallets.UI.Controls.DarkButton();
-            this.label2 = new OX.Wallets.UI.Controls.DarkLabel();
-            this.label3 = new OX.Wallets.UI.Controls.DarkLabel();
-            this.SuspendLayout();
+            lb_pubkey = new UI.Controls.DarkLabel();
+            label3 = new UI.Controls.DarkLabel();
+            SuspendLayout();
             // 
-            // label1
+            // btnOk
             // 
-            resources.ApplyResources(this.label1, "label1");
-            this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.label1.Name = "label1";
+            resources.ApplyResources(btnOk, "btnOk");
             // 
-            // comboBox1
+            // btnCancel
             // 
-            resources.ApplyResources(this.comboBox1, "comboBox1");
-            this.comboBox1.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.SpecialBorderColor = null;
-            this.comboBox1.SpecialFillColor = null;
-            this.comboBox1.SpecialTextColor = null;
-            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            resources.ApplyResources(btnCancel, "btnCancel");
             // 
-            // button1
+            // btnClose
             // 
-            resources.ApplyResources(this.button1, "button1");
-            this.button1.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.button1.Name = "button1";
-            this.button1.SpecialBorderColor = null;
-            this.button1.SpecialFillColor = null;
-            this.button1.SpecialTextColor = null;
+            resources.ApplyResources(btnClose, "btnClose");
             // 
-            // label2
+            // btnYes
             // 
-            resources.ApplyResources(this.label2, "label2");
-            this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.label2.Name = "label2";
+            resources.ApplyResources(btnYes, "btnYes");
+            // 
+            // btnNo
+            // 
+            resources.ApplyResources(btnNo, "btnNo");
+            // 
+            // btnRetry
+            // 
+            resources.ApplyResources(btnRetry, "btnRetry");
+            // 
+            // btnIgnore
+            // 
+            resources.ApplyResources(btnIgnore, "btnIgnore");
+            // 
+            // lb_pubkey
+            // 
+            resources.ApplyResources(lb_pubkey, "lb_pubkey");
+            lb_pubkey.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
+            lb_pubkey.Name = "lb_pubkey";
             // 
             // label3
             // 
-            resources.ApplyResources(this.label3, "label3");
-            this.label3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.label3.Name = "label3";
+            resources.ApplyResources(label3, "label3");
+            label3.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
+            label3.Name = "label3";
             // 
             // ElectionDialog
             // 
-            this.AcceptButton = this.button1;
             resources.ApplyResources(this, "$this");
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.comboBox1);
-            this.Controls.Add(this.label1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
-            this.Name = "ElectionDialog";
-            this.ShowInTaskbar = false;
-            this.Load += new System.EventHandler(this.ElectionDialog_Load);
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            Controls.Add(label3);
+            Controls.Add(lb_pubkey);
+            DialogButtons = UI.Forms.DarkDialogButton.OkCancel;
+            FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            MaximizeBox = false;
+            MinimizeBox = false;
+            Name = "ElectionDialog";
+            ShowInTaskbar = false;
+            Load += ElectionDialog_Load;
+            Controls.SetChildIndex(lb_pubkey, 0);
+            Controls.SetChildIndex(label3, 0);
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
 
-        private OX.Wallets.UI.Controls.DarkLabel label1;
-        private OX.Wallets.UI.Controls.DarkComboBox comboBox1;
-        private OX.Wallets.UI.Controls.DarkButton button1;
-        private OX.Wallets.UI.Controls.DarkLabel label2;
+        private OX.Wallets.UI.Controls.DarkLabel lb_pubkey;
         private OX.Wallets.UI.Controls.DarkLabel label3;
     }
 }

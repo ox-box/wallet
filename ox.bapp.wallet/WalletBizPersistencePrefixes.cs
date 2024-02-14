@@ -38,6 +38,7 @@ namespace OX.Wallets
         public const byte ALL_Eth_Map_UTXO = 0x1E;
         public const byte NFT_Issue_Record = 0x1F;
         public const byte NFT_Transfer_Record_Server = 0x20;
+        public const byte TX_LockAssetMeta = 0x21;
     }
     public enum WalletSettingKind
     {

@@ -120,15 +120,12 @@ namespace OX.Notecase.Pages
             this.btOpenWallet.Text = UIHelper.LocalString("打开中...", "Opening");
             this.btOpenWallet.Enabled = false;
             string path = this.tbWalletPath.Text;
-            OX.Wallets.Wallet wallet = default;
 
-
-            OpenWallet OpenWallet = new OpenWallet(NotecaseApp.Instance.GetIndexer(path), path);
+            OpenWallet OpenWallet = new OpenWallet(NotecaseApp.Instance, path);
             try
             {
                 OpenWallet.Unlock(this.tbPwd.Text);
                 OpenWallet.DecryptMnemonics();
-                wallet = OpenWallet;
             }
             catch (CryptographicException)
             {
@@ -162,7 +159,7 @@ namespace OX.Notecase.Pages
                 NotecaseApp.Instance.Container = mc;
             }
 
-            NotecaseApp.Instance.ChangeWallet(wallet);
+            NotecaseApp.Instance.ChangeWallet(OpenWallet);
             Settings.Default.LastWalletPath = path;
             Settings.Default.Save();
             NotecaseApp.Instance.Indexer.StartIndex();
@@ -215,7 +212,7 @@ namespace OX.Notecase.Pages
                         if (dialog.ShowDialog() != DialogResult.OK) return;
                         var path = dialog.WalletPath;
                         var pwd = dialog.Password;
-                        OpenWallet OpenWallet = new OpenWallet(NotecaseApp.Instance.GetIndexer(path), path);
+                        OpenWallet OpenWallet = new OpenWallet(NotecaseApp.Instance, path);
                         OpenWallet.Unlock(pwd);
 
                         try
@@ -250,7 +247,7 @@ namespace OX.Notecase.Pages
                         var path = dialog.WalletPath;
                         var pwd = dialog.Password;
                         var AccountNumber = dialog.AccountNumber;
-                        OpenWallet wallet = new OpenWallet(NotecaseApp.Instance.GetIndexer(path), path);
+                        OpenWallet wallet = new OpenWallet(NotecaseApp.Instance, path);
                         wallet.Unlock(pwd);
                         for (int i = 0; i < AccountNumber; i++)
                         {
@@ -302,7 +299,7 @@ namespace OX.Notecase.Pages
                     var path = dialog.WalletPath;
                     var pwd = dialog.Password;
                     var AccountNumber = dialog.AccountNumber;
-                    OpenWallet wallet = new OpenWallet(NotecaseApp.Instance.GetIndexer(path), path);
+                    OpenWallet wallet = new OpenWallet(NotecaseApp.Instance, path);
                     wallet.Unlock(pwd);
                     for (int i = 0; i < AccountNumber; i++)
                     {
