@@ -1,0 +1,286 @@
+﻿@page "/_pc/flashstate/statedetail/{statehash}"
+@inherits WalletComponentBase
+<Microsoft.AspNetCore.Components.Web.Extensions.Head.Title Value=@PageTitle />
+<GridRow>
+    <GridCol Span="18">
+        @if (this.FlashStateRecord.IsNotNull())
+        {
+            <FlashStateComponent StateRecord=this.FlashStateRecord />
+            var senderSH = this.FlashStateRecord.FlashState.Author;
+            var sender = senderSH.ToAddress();
+            var alias = sender;
+            if (Blockchain.Singleton.GetDomain(senderSH, out byte[] domain))
+            {
+                alias = System.Text.Encoding.UTF8.GetString(domain);
+            }
+            var time = this.FlashStateRecord.Timestamp.ToDateTime().ToString("yyyy-MM-dd HH:mm:ss");
+            var authorUrl = $"/_pc/flashstate/author/{sender}";
+
+            <Divider Orientation="left" Plain>@time<a Class="senderButton" target="_blank" href="@authorUrl">@alias</a><Button Type="@ButtonType.Text" Size="small" Icon="@IconType.Outline.Comment" OnClick="_=>Reply(null)"></Button></Divider>
+        }
+        @if (this.CMS.IsNotNullAndEmpty())
+        {
+            <div>
+                @{
+                    Dictionary<UInt256, CommentNode>
+                    nodes = new Dictionary<UInt256, CommentNode>();
+                    foreach (var c in this.CMS)
+                    {
+                        if (c.Key.ParentCommentHash == UInt256.Zero)
+                        {
+                            var domainName = c.Value.Sender.ToAddress();
+                            if (Blockchain.Singleton.GetDomain(c.Value.Sender, out byte[] domain))
+                            {
+                                domainName = System.Text.Encoding.UTF8.GetString(domain);
+                            }
+                            nodes[c.Key.CommentHash] = new CommentNode { SenderAddress = c.Value.Sender.ToAddress(), SenderName = domainName, ReplyName = string.Empty, Hash = c.Key.CommentHash, ParentHash = UInt256.Zero, FSCV = c.Value };
+                        }
+                    }
+                    foreach (var c in this.CMS)
+                    {
+                        if (c.Key.ParentCommentHash != UInt256.Zero)
+                        {
+                            var pdomainName = string.Empty;
+                            var pCs = this.CMS.Where(m => m.Key.CommentHash == c.Key.ParentCommentHash);
+                            if (pCs.IsNotNullAndEmpty())
+                            {
+                                var psender = pCs.FirstOrDefault().Value.Sender;
+                                pdomainName = psender.ToAddress();
+                                if (Blockchain.Singleton.GetDomain(psender, out byte[] pdomain))
+                                {
+                                    pdomainName = System.Text.Encoding.UTF8.GetString(pdomain);
+                                }
+                            }
+                            var domainName = c.Value.Sender.ToAddress();
+                            if (Blockchain.Singleton.GetDomain(c.Value.Sender, out byte[] domain))
+                            {
+                                domainName = System.Text.Encoding.UTF8.GetString(domain);
+                            }
+                            if (SearchRoot(this.CMS, c.Key.ParentCommentHash, out UInt256 rootHahs) &&
+                            nodes.TryGetValue(rootHahs, out CommentNode pNode))
+                            {
+                                pNode.Sub.Add(new CommentNode { SenderAddress = c.Value.Sender.ToAddress(), SenderName = domainName, ReplyName = pdomainName, Hash = c.Key.CommentHash, ParentHash = UInt256.Zero, FSCV = c.Value });
+                            }
+                        }
+                    }
+                    foreach (var n in nodes.OrderBy(m => m.Value.FSCV.Timestamp))
+                    {
+                        var commentauthorUrl = $"/_pc/flashstate/author/{n.Value.SenderAddress}";
+                        <div class="ant-comment">
+                            <div class="ant-comment-content">
+                                <div class="ant-comment-content-detail">
+                                    <p>@System.Text.Encoding.UTF8.GetString(n.Value.FSCV.Data)</p>
+                                </div>
+                                <div class="ant-comment-content-author">
+                                    <span class="ant-comment-content-author-name">
+                                        <a href="@commentauthorUrl" target="_blank">@n.Value.SenderName</a> <span> @n.Value.FSCV.Timestamp.ToDateTime().ToString(" yyyy-MM-dd HH:mm:ss")</span><Button Type="@ButtonType.Text" Size="small" Icon="@IconType.Outline.Comment" OnClick="_=>Reply(n.Value.Hash)"></Button>
+                                    </span>
+                                </div>
+                            </div>
+                            @{
+                                var subs = n.Value.Sub.OrderBy(m => m.FSCV.Timestamp);
+                                if (subs.IsNotNullAndEmpty())
+                                {
+                                    <div class="ant-comment-nested">
+                                        @foreach (var sn in subs)
+                                        {
+                                            var replyauthorUrl = $"/_pc/flashstate/author/{sn.SenderAddress}";
+                                            var rps = this.WebLocalString($"   回复 {sn.ReplyName}", $"  reply {sn.ReplyName}");
+                                            <div class="ant-comment">
+                                                <div class="ant-comment-content">
+                                                    <div class="ant-comment-content-detail">
+                                                        <p>@System.Text.Encoding.UTF8.GetString(sn.FSCV.Data)</p>
+                                                    </div>
+                                                    <div class="ant-comment-content-author">
+                                                        <span class="ant-comment-content-author-name">
+                                                            <a href="@replyauthorUrl" target="_blank">@sn.SenderName</a>  <span>@rps</span> <span> @sn.FSCV.Timestamp.ToDateTime().ToString(" yyyy-MM-dd HH:mm:ss")</span><Button Type="@ButtonType.Text" Size="small" Icon="@IconType.Outline.Comment" OnClick="_=>Reply(sn.Hash)"></Button>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                }
+                            }
+                        </div>
+                    }
+                }
+
+
+            </div>
+        }
+    </GridCol>
+    <GridCol Span="6">
+        <Card>
+            @if (this.FlashStateRecord.IsNotNull() && this.FlashStateRecord.FlashState.Tags.IsNotNullAndEmpty())
+                foreach (var tag in this.FlashStateRecord.FlashState.Tags)
+                {
+                    <Button Type="@ButtonType.Dashed" Size="small" OnClick="_=>GoTag(tag)">@tag.ToString()</Button>
+                }
+        </Card>
+    </GridCol>
+</GridRow>
+<div>
+    @if (this.HaveEthID)
+    {
+        <Drawer Closable="true" Width="400" Visible="DrawerVisible" Title='@this.WebLocalString($"评论",$"Comment")' OnClose="_=>CloseDoComment()">
+            <Template style="height:90%">
+                <Form Model="@this.commentText"
+                      Style="margin-top: 8px;"
+                      OnFinish="Comment">
+                    <FormItem Label="@this.WebLocalString("内容","Content")" ShowFeedbackOnError="true">
+                        <TextArea Rows="4" @bind-Value="@context.Text" />
+                    </FormItem>
+                    <Row Gutter="8">
+                        <AntDesign.Col Span="18">
+                        </AntDesign.Col>
+                        <AntDesign.Col Span="6">
+                            <Button Icon="plus" HtmlType="submit" Type="primary" Disabled=false>@this.WebLocalString("提交", "Post")</Button>
+                        </AntDesign.Col>
+                    </Row>
+                </Form>
+            </Template>
+        </Drawer>
+    }
+</div>
+<style type="text/css">
+    .tagsbox {
+        margin-top: 5px;
+        margin-bottom: 0px;
+        padding: 0px;
+    }
+
+    .ant-comment {
+        margin-top: 10px !important;
+    }
+
+    .senderButton {
+        margin-left: 10px;
+    }
+
+    .standardList .ant-card-head {
+        border-bottom: none;
+    }
+
+    .standardList .ant-card-head-title {
+        padding: 24px 0;
+        line-height: 32px;
+    }
+
+    .standardList .ant-card-extra {
+        padding: 24px 0;
+    }
+
+    .standardList .ant-list-pagination {
+        margin-top: 24px;
+        text-align: right;
+    }
+
+    .standardList .ant-avatar-lg {
+        width: 48px;
+        height: 48px;
+        line-height: 48px;
+    }
+
+    .standardList .headerInfo {
+        position: relative;
+        text-align: center;
+    }
+
+        .standardList .headerInfo > span {
+            display: inline-block;
+            margin-bottom: 4px;
+            color: rgba(0, 0, 0, 0.45);
+            font-size: 14px;
+            line-height: 22px;
+        }
+
+        .standardList .headerInfo > p {
+            margin: 0;
+            color: rgba(0, 0, 0, 0.85);
+            font-size: 24px;
+            line-height: 32px;
+        }
+
+        .standardList .headerInfo > em {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 1px;
+            height: 56px;
+            background-color: #f0f0f0;
+        }
+
+    .standardList .listContent {
+        font-size: 0;
+    }
+
+        .standardList .listContent .listContentItem {
+            display: inline-block;
+            margin-left: 20px;
+            color: rgba(0, 0, 0, 0.45);
+            font-size: 14px;
+            vertical-align: middle;
+        }
+
+            .standardList .listContent .listContentItem > span {
+                line-height: 20px;
+            }
+
+            .standardList .listContent .listContentItem > p {
+                margin-top: 4px;
+                margin-bottom: 0;
+                line-height: 22px;
+            }
+
+    .standardList .extraContentSearch {
+        width: 272px;
+        margin-left: 16px;
+    }
+
+    .standardList .ant-list-item-action {
+        margin-left: 0;
+    }
+
+    .standardList .listContent {
+        margin-left: 0;
+    }
+
+        .standardList .listContent > div {
+            margin-left: 0;
+        }
+
+    .standardList .listCard .ant-card-head-title {
+        overflow: visible;
+    }
+
+    }
+
+    .standardList .headerInfo {
+        margin-bottom: 16px;
+    }
+
+        .standardList .headerInfo > em {
+            display: none;
+        }
+
+    }
+
+    .standardListForm .ant-form-item {
+        margin-bottom: 12px;
+    }
+
+        .standardListForm .ant-form-item:last-child {
+            margin-bottom: 32px;
+            padding-top: 4px;
+        }
+
+    .formResult {
+        width: 100%;
+    }
+
+        .formResult [class^='title'] {
+            margin-bottom: 8px;
+        }
+
+</style>

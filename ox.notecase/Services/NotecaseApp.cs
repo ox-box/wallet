@@ -105,6 +105,7 @@ namespace OX.Notecase
                 if (!Directory.Exists(p))
                     Directory.CreateDirectory(p);
                 BaseBappProvider.WalletIndexDirectory = p;
+                BaseFlashMessageProvider.WalletIndexDirectory = p;
                 Indexer = new WalletIndexer(p + "\\" + Settings.Default.Paths.Index, false);
             }
             return Indexer;
@@ -119,6 +120,11 @@ namespace OX.Notecase
             foreach (var provider in providers)
             {
                 provider.Wallet = wallet;
+            }
+            var flashstateProviders = Bapps.Bapp.AllFlashMessageProviders();
+            foreach (var fsprovider in flashstateProviders)
+            {
+                fsprovider.Wallet = wallet;
             }
             if (this.SyncForm != default)
                 this.SyncForm.ChangeWallet(this);

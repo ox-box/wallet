@@ -7,14 +7,18 @@ using OX.Bapps;
 using OX.Wallets.Base;
 using OX.Network.P2P.Payloads;
 using OX.Cryptography.ECC;
+using OX.Wallets.Flash;
 
 namespace OX.Wallets
 {
     public class WalletBapp : Bapp
     {
-        public override string MatchKernelVersion => "1.0.2";
+        public override string MatchKernelVersion => "1.2.0";
         public override ECPoint[] BizPublicKeys => default;
-
+        public override IFlashMessageProvider BuildFlashMessageProvider()
+        {
+            return new FlashMessageProvider(this, null, null, null);
+        }
         public override IBappProvider BuildBappProvider()
         {
             return new WalletBappProvider(this);
@@ -33,5 +37,6 @@ namespace OX.Wallets
             return default;
         }
         protected override void InitBapp() { }
+
     }
 }

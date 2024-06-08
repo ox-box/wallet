@@ -20,6 +20,8 @@ using Nethereum.Util;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using OX.Bapps;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
+using OX.Persistence;
+using static NBitcoin.Scripting.OutputDescriptor;
 using NBitcoin.OpenAsset;
 
 namespace OX.Wallets.Base
@@ -124,7 +126,19 @@ namespace OX.Wallets.Base
                     }
                     catch
                     {
-                        return default;
+                        try
+                        {
+                            var domain = tb_native_targetAddress.Text.Trim();
+                            if (Blockchain.Singleton.GetAddressByDomain(domain, out UInt160 addr))
+                            {
+                                return new TransactionOutput { AssetId = AssetID, Value = amount, ScriptHash = addr };
+                            }
+                            else return default;
+                        }
+                        catch
+                        {
+                            return default;
+                        }
                     }
                 case 1:
                     try
@@ -159,55 +173,57 @@ namespace OX.Wallets.Base
         public Transaction BuildTransaction()
         {
             var output = buildTransactionOutput(out ECPoint recipient, out uint ethLockIndex);
-            switch (TabSelectedIndex)
+            if (output.IsNotNull())
             {
-                case 0:
-                    return new ContractTransaction { Outputs = new[] { output } };
-                case 1:
-                    var isTime = this.rbTime.Checked;
-                    uint expiration = 0;
+                switch (TabSelectedIndex)
+                {
+                    case 0:
+                        return new ContractTransaction { Outputs = new[] { output } };
+                    case 1:
+                        var isTime = this.rbTime.Checked;
+                        uint expiration = 0;
 
-                    if (isTime)
-                    {
-                        expiration = this.dtp_time.Value.ToTimestamp();
-                        if (expiration - DateTime.Now.ToTimestamp() < 150)
+                        if (isTime)
                         {
-                            string msg = $"{UIHelper.LocalString("锁仓的时间太短", "Locking time is too short")}";
-                            //Bapp.PushCrossBappMessage(new CrossBappMessage() { Content = msg, From = this.Bapp });
-                            DarkMessageBox.ShowInformation(msg, "");
-                            return default;
+                            expiration = this.dtp_time.Value.ToTimestamp();
+                            if (expiration - DateTime.Now.ToTimestamp() < 150)
+                            {
+                                string msg = $"{UIHelper.LocalString("锁仓的时间太短", "Locking time is too short")}";
+                                //Bapp.PushCrossBappMessage(new CrossBappMessage() { Content = msg, From = this.Bapp });
+                                DarkMessageBox.ShowInformation(msg, "");
+                                return default;
+                            }
                         }
-                    }
-                    else
-                    {
-                        expiration = uint.Parse(this.tb_block.Text);
-                        if (expiration - Blockchain.Singleton.Height < 10)
+                        else
                         {
-                            string msg = $"{UIHelper.LocalString("锁仓的区块高度太低", "Locked block height is too low")}";
-                            //Bapp.PushCrossBappMessage(new CrossBappMessage() { Content = msg, From = this.Module.Bapp });
-                            DarkMessageBox.ShowInformation(msg, "");
-                            return default;
+                            expiration = uint.Parse(this.tb_block.Text);
+                            if (expiration - Blockchain.Singleton.Height < 10)
+                            {
+                                string msg = $"{UIHelper.LocalString("锁仓的区块高度太低", "Locked block height is too low")}";
+                                //Bapp.PushCrossBappMessage(new CrossBappMessage() { Content = msg, From = this.Module.Bapp });
+                                DarkMessageBox.ShowInformation(msg, "");
+                                return default;
+                            }
                         }
-                    }
-                    LockAssetTransaction lat = new LockAssetTransaction
-                    {
-                        LockContract = Blockchain.LockAssetContractScriptHash,
-                        IsTimeLock = isTime,
-                        LockExpiration = expiration,
-                        Flag = 0,
-                        Recipient = recipient
-                    };
-                    output.ScriptHash = lat.GetContract().ScriptHash;
-                    lat.Outputs = new TransactionOutput[] { output };
-                    return lat;
-                case 2:
-                    return new EthereumMapTransaction
-                    {
-                        EthereumAddress = tb_eth_targetAddress.Text,
-                        LockExpirationIndex = ethLockIndex,
-                        EthMapContract = Blockchain.EthereumMapContractScriptHash,
-                        Outputs = new TransactionOutput[] { output }
-                    };
+                        LockAssetTransaction lat = new LockAssetTransaction
+                        {
+                            LockContract = Blockchain.LockAssetContractScriptHash,
+                            IsTimeLock = isTime,
+                            LockExpiration = expiration,
+                            Recipient = recipient
+                        };
+                        output.ScriptHash = lat.GetContract().ScriptHash;
+                        lat.Outputs = new TransactionOutput[] { output };
+                        return lat;
+                    case 2:
+                        return new EthereumMapTransaction
+                        {
+                            EthereumAddress = tb_eth_targetAddress.Text,
+                            LockExpirationIndex = ethLockIndex,
+                            EthMapContract = Blockchain.EthereumMapContractScriptHash,
+                            Outputs = new TransactionOutput[] { output }
+                        };
+                }
             }
             return default;
         }
@@ -236,6 +252,12 @@ namespace OX.Wallets.Base
                 return;
             }
             btnOk.Enabled = true;
+            this.lb_domainAddr.Text = string.Empty;
+            var domain = tb_native_targetAddress.Text.Trim();
+            if (domain.IsNotNullAndEmpty() && Blockchain.Singleton.GetAddressByDomain(domain, out UInt160 addr))
+            {
+                this.lb_domainAddr.Text = addr.ToAddress();
+            }
         }
 
 
@@ -277,7 +299,7 @@ namespace OX.Wallets.Base
                     }
                 }
             }
-            
+
             RefreshBalance();
         }
 

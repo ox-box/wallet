@@ -21,12 +21,11 @@ using System.Xml;
 using OX.Bapps;
 using OX.Cryptography;
 using System.IO;
-using NBitcoin.OpenAsset;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using OX.Cryptography.ECC;
 using Akka.IO;
-using static NBitcoin.Scripting.OutputDescriptor;
 using OX.Wallets.UI.Controls;
+using OX.IO.Data.LevelDB;
 
 namespace OX.Wallets.Base
 {
@@ -60,7 +59,7 @@ namespace OX.Wallets.Base
             this.bt_Close.Text = UIHelper.LocalString("关闭", "Close");
             this.lb_trusteePubKey.Text = UIHelper.LocalString("受托公钥:", "Trustee Public Key:");
             this.lb_main_scope.Text = UIHelper.LocalString("主信托范围:", "Main Trust Scope:");
-            this.lb_side_scope.Text = UIHelper.LocalString("边际信托范围:", "Side Trust Scope:");
+            this.lb_side_scope.Text = UIHelper.LocalString("插槽信托范围:", "Slot Trust Scope:");
             this.lb_balance.Text = UIHelper.LocalString("可用 OXC 余额:", "Available OXC Balance:");
             this.lb_amount.Text = UIHelper.LocalString("委托金额:", "Trust Amount:");
             this.lb_trustAddr.Text = UIHelper.LocalString("信托地址:", "Trust Address:");
@@ -70,18 +69,25 @@ namespace OX.Wallets.Base
                 this.cbAccounts.Items.Add(new AccountDescriptor { Account = act });
             }
             this.cbAccounts.SelectedIndex = 0;
-
-            foreach (var bapp in Bapp.AllBapps)
+            foreach (var ats in Blockchain.Singleton.GetAllValidSlots())
             {
-                var sps = bapp.GetSideScopes();
-                if (sps.IsNotNullAndEmpty())
+                if (ats.SlotMark.IsNotNullAndEmpty())
                 {
-                    foreach (var ss in sps)
+                    try
                     {
-                        var dcb = new DarkCheckBox { Tag = ss, Text = $"{ss.MasterAddress.ToAddress()}    {ss.Description}", Checked = false, Width = pl_side_scope.Width };
-                        cts.Add(dcb);
-                        this.pl_side_scope.Controls.Add(dcb);
-                        dcb.CheckedChanged += Dcb_CheckedChanged;
+                        var mark = ats.SlotMark.AsSerializable<SlotMark>();
+                        if (mark.IsNotNull())
+                        {
+                            SideScope ss = new SideScope { MasterAddress = ats.ScriptHash, Description = UIHelper.LocalString(System.Text.Encoding.UTF8.GetString(mark.CnTitle), System.Text.Encoding.UTF8.GetString(mark.EnTitle)) };
+                            var dcb = new DarkCheckBox { Tag = ss, Text = UIHelper.LocalString($"{ss.MasterAddress.ToAddress()}      {ss.Description}       {ats.SlotExpire}到期", $"{ss.MasterAddress.ToAddress()}      {ss.Description}       Due {ats.SlotExpire}"), Checked = false, Width = pl_side_scope.Width };
+                            cts.Add(dcb);
+                            this.pl_side_scope.Controls.Add(dcb);
+                            dcb.CheckedChanged += Dcb_CheckedChanged;
+                        }
+                    }
+                    catch
+                    {
+
                     }
                 }
             }
@@ -280,7 +286,7 @@ namespace OX.Wallets.Base
                         DarkMessageBox.ShowInformation(msg, "");
                         this.Close();
                     });
-                }             
+                }
             }
         }
 

@@ -1,4 +1,64 @@
-﻿<root>
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!--
+    Microsoft ResX Schema 
+
+    Version 2.0
+
+    The primary goals of this format is to allow a simple XML format
+    that is mostly human readable. The generation and parsing of the
+    various data types are done through the TypeConverter classes
+    associated with the data types.
+
+    Example:
+
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+
+    There are any number of "resheader" rows that contain simple
+    name/value pairs.
+
+    Each data row contains a name, and value. The row also contains a
+    type or mimetype. Type corresponds to a .NET class that support
+    text/value conversion through the TypeConverter architecture.
+    Classes that don't support this are serialized and stored with the
+    mimetype set.
+
+    The mimetype is used for serialized objects, and tells the
+    ResXResourceReader how to depersist the object. This is currently not
+    extensible. For a given mimetype the value must be set accordingly:
+
+    Note - application/x-microsoft.net.object.binary.base64 is the format
+    that the ResXResourceWriter will generate, however the reader can
+    read any of the formats listed below.
+
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
@@ -172,18 +232,48 @@
   <data name="&gt;&gt;btnIgnore.ZOrder" xml:space="preserve">
     <value>6</value>
   </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="bt_publish.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="bt_publish.Location" type="System.Drawing.Point, System.Drawing">
+    <value>617, 461</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="bt_publish.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>5, 5, 5, 5</value>
+  </data>
+  <data name="bt_publish.Size" type="System.Drawing.Size, System.Drawing">
+    <value>155, 34</value>
+  </data>
   <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="bt_publish.TabIndex" type="System.Int32, mscorlib">
+    <value>43</value>
+  </data>
+  <data name="bt_publish.Text" xml:space="preserve">
+    <value>darkButton1</value>
+  </data>
+  <data name="&gt;&gt;bt_publish.Name" xml:space="preserve">
+    <value>bt_publish</value>
+  </data>
+  <data name="&gt;&gt;bt_publish.Type" xml:space="preserve">
+    <value>OX.Wallets.UI.Controls.DarkButton, ox.wallets.ui, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;bt_publish.Parent" xml:space="preserve">
+    <value>panel</value>
+  </data>
+  <data name="&gt;&gt;bt_publish.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
   <data name="darkLabel3.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="darkLabel3.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
   <data name="darkLabel3.Location" type="System.Drawing.Point, System.Drawing">
     <value>493, 77</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="darkLabel3.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>5, 0, 5, 0</value>
   </data>
@@ -206,7 +296,7 @@
     <value>panel</value>
   </data>
   <data name="&gt;&gt;darkLabel3.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>1</value>
   </data>
   <data name="tb_minIndex.Location" type="System.Drawing.Point, System.Drawing">
     <value>192, 179</value>
@@ -230,7 +320,7 @@
     <value>panel</value>
   </data>
   <data name="&gt;&gt;tb_minIndex.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>2</value>
   </data>
   <data name="lb_minIndex.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -263,7 +353,7 @@
     <value>panel</value>
   </data>
   <data name="&gt;&gt;lb_minIndex.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>3</value>
   </data>
   <data name="tb_maxIndex.Location" type="System.Drawing.Point, System.Drawing">
     <value>192, 127</value>
@@ -287,7 +377,7 @@
     <value>panel</value>
   </data>
   <data name="&gt;&gt;tb_maxIndex.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>4</value>
   </data>
   <data name="lb_maxIndex.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -320,7 +410,7 @@
     <value>panel</value>
   </data>
   <data name="&gt;&gt;lb_maxIndex.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>5</value>
   </data>
   <data name="bt_build.Enabled" type="System.Boolean, mscorlib">
     <value>False</value>
@@ -353,7 +443,7 @@
     <value>panel</value>
   </data>
   <data name="&gt;&gt;bt_build.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>6</value>
   </data>
   <data name="tb_copy.Location" type="System.Drawing.Point, System.Drawing">
     <value>401, 461</value>
@@ -380,7 +470,7 @@
     <value>panel</value>
   </data>
   <data name="&gt;&gt;tb_copy.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>7</value>
   </data>
   <data name="lb_signature.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -413,7 +503,7 @@
     <value>panel</value>
   </data>
   <data name="&gt;&gt;lb_signature.ZOrder" xml:space="preserve">
-    <value>7</value>
+    <value>8</value>
   </data>
   <data name="tb_signature.Location" type="System.Drawing.Point, System.Drawing">
     <value>192, 232</value>
@@ -443,7 +533,7 @@
     <value>panel</value>
   </data>
   <data name="&gt;&gt;tb_signature.ZOrder" xml:space="preserve">
-    <value>8</value>
+    <value>9</value>
   </data>
   <data name="lb_nfthash_v.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -473,7 +563,7 @@
     <value>panel</value>
   </data>
   <data name="&gt;&gt;lb_nfthash_v.ZOrder" xml:space="preserve">
-    <value>9</value>
+    <value>10</value>
   </data>
   <data name="lb_nfthash.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -506,7 +596,7 @@
     <value>panel</value>
   </data>
   <data name="&gt;&gt;lb_nfthash.ZOrder" xml:space="preserve">
-    <value>10</value>
+    <value>11</value>
   </data>
   <data name="tb_amount.Location" type="System.Drawing.Point, System.Drawing">
     <value>192, 75</value>
@@ -530,7 +620,7 @@
     <value>panel</value>
   </data>
   <data name="&gt;&gt;tb_amount.ZOrder" xml:space="preserve">
-    <value>11</value>
+    <value>12</value>
   </data>
   <data name="lb_amount.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -563,7 +653,7 @@
     <value>panel</value>
   </data>
   <data name="&gt;&gt;lb_amount.ZOrder" xml:space="preserve">
-    <value>12</value>
+    <value>13</value>
   </data>
   <data name="panel.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>

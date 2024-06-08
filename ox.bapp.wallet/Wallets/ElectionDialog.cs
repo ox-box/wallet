@@ -44,7 +44,7 @@ namespace OX.Wallets.Base
                     }
                 }
             };
-            this.Text = UIHelper.LocalString("选举", "Election");
+            this.Text = UIHelper.LocalString("参选记账人", "Election Validator");
             this.lb_pubkey.Text = UIHelper.LocalString($"公钥:    {this.Account.GetKey().PublicKey.ToString()}", $"public key:    {this.Account.GetKey().PublicKey.ToString()}");
             this.label3.Text = UIHelper.LocalString($"费用:    {this.TX.SystemFee} OXC", $"Fee:    {this.TX.SystemFee} OXC");
         }

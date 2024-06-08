@@ -1,0 +1,32 @@
+﻿@page "/_pc/blockchain/assetlockvote/{assetid}"
+@inherits WalletComponentBase
+<Microsoft.AspNetCore.Components.Web.Extensions.Head.Title Value=@PageTitle />
+<PageContainer Title=@assetInfo>
+    <ChildContent>
+        <AntList Bordered DataSource="@this.votes">
+            <Header>
+                <Form Model="@Model"
+                      Style="margin-top: 8px;"
+                      OnFinish="HandleSubmit">
+                    <FormItem Label=@this.WebLocalString("投票锁仓高度","Vote Lock Block") LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
+                        <AntDesign.InputNumber Min="@(Blockchain.Singleton.HeaderHeight+1)" TValue="uint" Max=uint.MaxValue Placeholder=@this.WebLocalString("输入投票高度","Enter the blockchain height to vote") @bind-Value="@context.Height" />
+                    </FormItem>
+                    <FormItem Label=@this.WebLocalString("投票金额","Vote Amount") LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
+                        <Input Placeholder=@this.WebLocalString("输入要投票资产金额","Enter the OX asset amount to vote") @bind-Value="@context.Amount" />
+                    </FormItem>
+                    <FormItem Label=" " Style="margin-top:32px" WrapperCol="_submitFormLayout.WrapperCol">
+                        <Button Type="primary" HtmlType="submit" Disabled=!this.Valid>
+                            @this.WebLocalString("提交", "Submit")
+                        </Button>
+                    </FormItem>
+                </Form>
+            </Header>
+            <ChildContent Context="item">
+                <ListItem>
+                    <span><Text Mark>@item.Key</Text></span>@item.Value
+                </ListItem>
+            </ChildContent>
+
+        </AntList>
+    </ChildContent>
+</PageContainer>

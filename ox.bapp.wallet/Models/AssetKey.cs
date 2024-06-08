@@ -9,6 +9,7 @@ using OX.Network.P2P;
 using OX.Network.P2P.Payloads;
 using System.Windows.Forms.VisualStyles;
 using OX.Cryptography.ECC;
+using OX.Wallets.Letters;
 
 namespace OX.Wallets.Base
 {
@@ -31,29 +32,66 @@ namespace OX.Wallets.Base
             Amount = reader.ReadSerializable<Fixed8>();
         }
     }
-    public class SecretLetterKey : ISerializable
+    public enum SecretLetterKind : byte
     {
-        public UInt160 Recipient;
-        public uint LetterIndex;
-        public UInt256 TxId;
-        public ECPoint From;
-        public byte[] Msg;
-        public virtual int Size => Recipient.Size + sizeof(uint) + TxId.Size + From.Size + Msg.GetVarSize();
+        Inbox = 0x01,
+        OutBox = 0x02
+    }
+    public class LetterPair : ISerializable
+    {
+        public UInt160 Local;
+        public ECPoint Remote;
+
+        public virtual int Size => Local.Size + Remote.Size;
         public void Serialize(BinaryWriter writer)
         {
-            writer.Write(Recipient);
-            writer.Write(LetterIndex);
-            writer.Write(TxId);
-            writer.Write(From);
-            writer.WriteVarBytes(Msg);
+            writer.Write(Local);
+            writer.Write(Remote);
         }
         public void Deserialize(BinaryReader reader)
         {
-            Recipient = reader.ReadSerializable<UInt160>();
-            LetterIndex = reader.ReadUInt32();
-            TxId = reader.ReadSerializable<UInt256>();
-            From = reader.ReadSerializable<ECPoint>();
-            Msg = reader.ReadVarBytes();
+            Local = reader.ReadSerializable<UInt160>();
+            Remote = reader.ReadSerializable<ECPoint>();
+        }
+    }
+    public class SecretLetterKey : ISerializable
+    {
+        public UInt256 LetterLine;
+        public UInt256 LetterId;
+
+        public virtual int Size => LetterLine.Size + LetterId.Size;
+        public void Serialize(BinaryWriter writer)
+        {
+            writer.Write(LetterLine);
+            writer.Write(LetterId);
+        }
+        public void Deserialize(BinaryReader reader)
+        {
+            LetterLine = reader.ReadSerializable<UInt256>();
+            LetterId = reader.ReadSerializable<UInt256>();
+        }
+    }
+    public class SecretLetterState : ISerializable
+    {
+        public SecretLetterTransaction SecretLetterTransaction;
+        public SecretLetterKind LetterKind;
+        public uint Index;
+        public uint Timestamp;
+
+        public virtual int Size => SecretLetterTransaction.Size + sizeof(SecretLetterKind) + sizeof(uint) + sizeof(uint);
+        public void Serialize(BinaryWriter writer)
+        {
+            writer.Write(SecretLetterTransaction);
+            writer.Write((byte)LetterKind);
+            writer.Write(Index);
+            writer.Write(Timestamp);
+        }
+        public void Deserialize(BinaryReader reader)
+        {
+            SecretLetterTransaction = reader.ReadSerializable<SecretLetterTransaction>();
+            LetterKind = (SecretLetterKind)reader.ReadByte();
+            Index = reader.ReadUInt32();
+            Timestamp = reader.ReadUInt32();
         }
     }
 }

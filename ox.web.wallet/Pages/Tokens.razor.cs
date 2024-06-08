@@ -15,7 +15,7 @@ using OX.IO;
 using OX.Cryptography.ECC;
 using OX.Ledger;
 using OX.SmartContract;
-using OX.Cryptography.AES;
+using OX.Cryptography;
 using OX.Web.Models;
 using OX.Wallets.Hubs;
 using Microsoft.AspNetCore.SignalR.Client;
@@ -26,18 +26,23 @@ using OX.Bapps;
 using OX.Wallets.Eths;
 using OX.MetaMask;
 using OX.Persistence;
+using NBitcoin.OpenAsset;
 
 namespace OX.Web.Pages
 {
     public partial class Tokens
     {
         public override string PageTitle => this.WebLocalString("资产详情", "Asset Details");
-        
+
         protected override void OnBlockchainInit()
         {
-            
+
         }
-        
+        void GoVote(UInt256 assetId)
+        {
+            var url = $"/_pc/blockchain/assetlockvote/{assetId.ToString()}";
+            this.NavigationManager.NavigateTo(url, true);
+        }
         protected override void StateDispatcher_ServerStateNotice(IServerStateMessage message)
         {
 

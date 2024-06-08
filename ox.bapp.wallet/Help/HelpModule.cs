@@ -51,7 +51,7 @@ namespace OX.Wallets.Base.Help
             signMenu.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
             //isingMenu.Image = global::Example.Icons.NewFile_6276;
             signMenu.Name = "isingMenu";
-            signMenu.ShortcutKeys = Keys.Control | Keys.S;
+            signMenu.ShortcutKeys = Keys.Control |Keys.Alt| Keys.S;
             signMenu.Size = new System.Drawing.Size(170, 22);
             signMenu.Text = UIHelper.LocalString("&数据签名", "&Data Signature");
             signMenu.Click += IsingMenu_Click;
@@ -61,7 +61,7 @@ namespace OX.Wallets.Base.Help
             pubkeyViewMenu.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
             //isingMenu.Image = global::Example.Icons.NewFile_6276;
             pubkeyViewMenu.Name = "pubkeyViewMenu";
-            pubkeyViewMenu.ShortcutKeys = Keys.Control | Keys.P;
+            pubkeyViewMenu.ShortcutKeys = Keys.Control |Keys.Alt| Keys.P;
             pubkeyViewMenu.Size = new System.Drawing.Size(170, 22);
             pubkeyViewMenu.Text = UIHelper.LocalString("&公钥查验", "&Public Key Check");
             pubkeyViewMenu.Click += PubkeyViewMenu_Click;
@@ -71,30 +71,35 @@ namespace OX.Wallets.Base.Help
             introducemenu.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
             //exitmenu.Image = global::Example.Icons.NewFile_6276;
             introducemenu.Name = "introducemenu";
-            introducemenu.ShortcutKeys = Keys.Control | Keys.G;
+            introducemenu.ShortcutKeys = Keys.Control |Keys.Alt| Keys.G;
             introducemenu.Size = new System.Drawing.Size(170, 22);
-            introducemenu.Text = UIHelper.LocalString("&钱包社区", "&Notecase Community");
+            introducemenu.Text = UIHelper.LocalString("&钱包社区", "&OX-BOX Community");
             introducemenu.Click += IntroduceMenu_Click;
-           
+
             //about
             ToolStripMenuItem aboutmenu = new ToolStripMenuItem();
             aboutmenu.BackColor = System.Drawing.Color.FromArgb(60, 63, 65);
             aboutmenu.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
             //exitmenu.Image = global::Example.Icons.NewFile_6276;
             aboutmenu.Name = "aboutmenu";
-            aboutmenu.ShortcutKeys = Keys.Control | Keys.C;
+            aboutmenu.ShortcutKeys = Keys.Control |Keys.Alt| Keys.C;
             aboutmenu.Size = new System.Drawing.Size(170, 22);
             aboutmenu.Text = UIHelper.LocalString("&关于", "&About");
             aboutmenu.Click += Aboutmenu_Click;
+
+          
 
             walletMenu.DropDownItems.AddRange(new ToolStripItem[] {
                 signMenu,
                 pubkeyViewMenu,
                 introducemenu,
-                aboutmenu});
+                aboutmenu
+            });
             Container.TopMenus.Items.AddRange(new ToolStripItem[] {
             walletMenu});
         }
+
+       
 
         private void PubkeyViewMenu_Click(object sender, EventArgs e)
         {
@@ -131,6 +136,10 @@ namespace OX.Wallets.Base.Help
 
         }
         public override void OnRebuild()
+        {
+
+        }
+        public override void OnFlashMessage(FlashMessage flashMessage)
         {
 
         }
@@ -190,7 +199,7 @@ namespace OX.Wallets.Base.Help
 
         private void IntroduceMenu_Click(object sender, EventArgs e)
         {
-            Bapp.PushCrossBappMessage(new CrossBappMessage() { MessageType = 1, Attachment = "105720-1" });
+            Bapp.PushCrossBappMessage(new CrossBappMessage() { MessageType = 1, Attachment = "160454-1" });
         }
     }
 }

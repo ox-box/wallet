@@ -9,6 +9,7 @@ using System;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
+using OX.Ledger;
 
 namespace OX.Wallets.Base
 {
@@ -20,7 +21,7 @@ namespace OX.Wallets.Base
             this.Operater = notecase;
             InitializeComponent();
             this.Text = UIHelper.LocalString("注册私营资产", "Register Private Asset");
-            this.btnOk.Text=UIHelper.LocalString("注册", "Register");
+            this.btnOk.Text = UIHelper.LocalString("注册", "Register");
             this.label1.Text = UIHelper.LocalString("资产类型:", "Asset Type:");
             this.label2.Text = UIHelper.LocalString("资产名称:", "Asset Name:");
             this.label3.Text = UIHelper.LocalString("总量限制:", "Capped:");
@@ -34,6 +35,7 @@ namespace OX.Wallets.Base
         {
             AssetType asset_type = (AssetType)comboBox1.SelectedItem;
             string name = string.IsNullOrWhiteSpace(textBox1.Text) ? string.Empty : $"[{{\"lang\":\"{CultureInfo.CurrentCulture.Name}\",\"name\":\"{textBox1.Text}\"}}]";
+            if (Blockchain.Singleton.CurrentSnapshot.Assets.Find().Select(m => m.Value).FirstOrDefault(m => m.Name.ToLower() == name.ToLower()).IsNotNull()) return default;
             Fixed8 amount = checkBox1.Checked ? Fixed8.Parse(textBox2.Text) : -Fixed8.Satoshi;
             byte precision = (byte)numericUpDown1.Value;
             ECPoint owner = (ECPoint)comboBox2.SelectedItem;
@@ -82,7 +84,7 @@ namespace OX.Wallets.Base
         private void CheckForm(object sender, EventArgs e)
         {
             bool enabled = comboBox1.SelectedIndex >= 0 &&
-                              textBox1.TextLength > 0&&textBox1.Text.ToLower()!="oxc"&&textBox1.Text.ToLower()!="oxs" &&
+                              textBox1.TextLength > 0 && textBox1.Text.ToLower() != "oxc" && textBox1.Text.ToLower() != "oxs" &&
                               (!checkBox1.Checked || textBox2.TextLength > 0) &&
                               comboBox2.SelectedIndex >= 0 &&
                               !string.IsNullOrWhiteSpace(comboBox3.Text) &&

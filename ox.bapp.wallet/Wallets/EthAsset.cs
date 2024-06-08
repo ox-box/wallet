@@ -282,6 +282,10 @@ namespace OX.Wallets.Base
         public void OnRebuild()
         {
         }
+        public void OnFlashMessage(FlashMessage flashMessage)
+        {
+
+        }
         void reload()
         {
             this.DoInvoke(() =>

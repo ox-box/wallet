@@ -22,6 +22,9 @@ using OX.Bapps;
 using OX.Cryptography;
 using System.IO;
 using OX.Wallets.Base.NFT;
+using OX.Cryptography.ECC;
+using Nethereum.Hex.HexConvertors.Extensions;
+using OX.Wallets.Flash;
 
 namespace OX.Wallets.Base
 {
@@ -54,6 +57,7 @@ namespace OX.Wallets.Base
             this.lb_signature.Text = UIHelper.LocalString("签名:", "Signature:");
             this.tb_copy.Text = UIHelper.LocalString("复制签名", "copy signature");
             this.bt_build.Text = UIHelper.LocalString("生成签名", "build signature");
+            this.bt_publish.Text = UIHelper.LocalString("发布", "Publish");
             this.btnOk.Text = UIHelper.LocalString("关闭", "Close");
             this.lb_nfthash_v.Text = this.NftTransfer.NFSStateKey.NFCID.CID;
         }
@@ -81,7 +85,7 @@ namespace OX.Wallets.Base
                         IssueBlockIndex = this.NftTransfer.NFSStateKey.IssueBlockIndex == 0 ? this.Key.Index : this.NftTransfer.NFSStateKey.IssueBlockIndex,
                         IssueN = this.NftTransfer.NFSStateKey.IssueN == 0 ? this.Key.N : this.NftTransfer.NFSStateKey.IssueN
                     };
-                    NFTTranferData ndv = new NFTTranferData { Key = nFSStateKey, Validator = validator };
+                    NFTPending ndv = new NFTPending { Key = nFSStateKey, Validator = validator };
                     return ndv.ToArray().ToHexString();
                 }
                 catch
@@ -181,6 +185,46 @@ namespace OX.Wallets.Base
                 return;
             }
             this.bt_build.Enabled = true;
+        }
+
+        private void panel_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void bt_publish_Click(object sender, EventArgs e)
+        {
+            if (this.NftTransfer.NFSHolder.MixAccountType == MixAccountType.OX)
+            {
+                try
+                {
+                    var ndv = this.tb_signature.Text.HexToBytes().AsSerializable<NFTPending>();
+                    if (ndv.IsNull()) return;
+                    if (ndv.IsNull() || ndv.Validator.IsNull() || ndv.Key.IsNull() || !ndv.Validator.Verify()) return;
+                    if (ndv.Validator.Target.Amount <= Fixed8.Zero || ndv.Validator.Target.MaxIndex < ndv.Validator.Target.MinIndex || (ndv.Validator.Target.MaxIndex >0&&ndv.Validator.Target.MaxIndex <= Blockchain.Singleton.Height)) return;
+                    var lastNftDonate = Blockchain.Singleton.CurrentSnapshot.GetNftTransfer(ndv.Key);
+                    if (lastNftDonate.IsNull()) return;
+                    var nfc = Blockchain.Singleton.CurrentSnapshot.GetNftState(ndv.Key.NFCID);
+                    if (nfc.IsNull()) return;
+                    if (!ndv.Validator.Target.PreHash.Equals(lastNftDonate.LastNFS.Hash)) return;
+                    var auth = Contract.CreateSignatureRedeemScript(ECPoint.DecodePoint(ndv.Validator.Target.Target.Target, ECCurve.Secp256r1)).ToScriptHash();
+                    var account = this.Operater.Wallet.GetAccount(auth);
+                    if (account.IsNotNull() && !account.WatchOnly)
+                    {
+                        var accountState = Blockchain.Singleton.CurrentSnapshot.Accounts.TryGet(auth);
+                        if (accountState.IsNotNull() && Blockchain.Singleton.AllowFlashMessage(accountState, out uint _))
+                        {
+                            var fs = new FlashNFTPending(auth, Blockchain.Singleton.HeaderHeight, new NFTPending[] { ndv });
+                            if (this.Operater.SignAndSendFlashMessage(fs))
+                                FlashMessageProvider.Instance.AppendNFTPending(ndv);
+                        }
+                    }
+                }
+                catch
+                {
+
+                }
+            }
         }
     }
 }

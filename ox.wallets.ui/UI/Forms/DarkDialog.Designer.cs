@@ -79,7 +79,7 @@ namespace OX.Wallets.UI.Forms
             this.btnOk.Padding = new System.Windows.Forms.Padding(5);
             this.btnOk.Size = new System.Drawing.Size(75, 26);
             this.btnOk.TabIndex = 3;
-            this.btnOk.Text = "Ok";
+            this.btnOk.Text =UIHelper.LocalString("确定", "Ok");
             // 
             // btnCancel
             // 
@@ -90,7 +90,7 @@ namespace OX.Wallets.UI.Forms
             this.btnCancel.Padding = new System.Windows.Forms.Padding(5);
             this.btnCancel.Size = new System.Drawing.Size(75, 26);
             this.btnCancel.TabIndex = 4;
-            this.btnCancel.Text = "Cancel";
+            this.btnCancel.Text = UIHelper.LocalString("取消", "Cancel");  
             // 
             // btnClose
             // 
@@ -101,7 +101,7 @@ namespace OX.Wallets.UI.Forms
             this.btnClose.Padding = new System.Windows.Forms.Padding(5);
             this.btnClose.Size = new System.Drawing.Size(75, 26);
             this.btnClose.TabIndex = 5;
-            this.btnClose.Text = "Close";
+            this.btnClose.Text = UIHelper.LocalString("关闭", "Close");
             // 
             // btnYes
             // 
@@ -112,7 +112,7 @@ namespace OX.Wallets.UI.Forms
             this.btnYes.Padding = new System.Windows.Forms.Padding(5);
             this.btnYes.Size = new System.Drawing.Size(75, 26);
             this.btnYes.TabIndex = 6;
-            this.btnYes.Text = "Yes";
+            this.btnYes.Text = UIHelper.LocalString("是", "Yes");  
             // 
             // btnNo
             // 
@@ -123,7 +123,7 @@ namespace OX.Wallets.UI.Forms
             this.btnNo.Padding = new System.Windows.Forms.Padding(5);
             this.btnNo.Size = new System.Drawing.Size(75, 26);
             this.btnNo.TabIndex = 7;
-            this.btnNo.Text = "No";
+            this.btnNo.Text = UIHelper.LocalString("否", "No");  
             // 
             // btnAbort
             // 
@@ -134,7 +134,7 @@ namespace OX.Wallets.UI.Forms
             this.btnAbort.Padding = new System.Windows.Forms.Padding(5);
             this.btnAbort.Size = new System.Drawing.Size(75, 26);
             this.btnAbort.TabIndex = 8;
-            this.btnAbort.Text = "Abort";
+            this.btnAbort.Text = UIHelper.LocalString("中止", "Abort"); 
             // 
             // btnRetry
             // 
@@ -145,7 +145,7 @@ namespace OX.Wallets.UI.Forms
             this.btnRetry.Padding = new System.Windows.Forms.Padding(5);
             this.btnRetry.Size = new System.Drawing.Size(75, 26);
             this.btnRetry.TabIndex = 9;
-            this.btnRetry.Text = "Retry";
+            this.btnRetry.Text = UIHelper.LocalString("重试", "Retry");  
             // 
             // btnIgnore
             // 
@@ -156,7 +156,7 @@ namespace OX.Wallets.UI.Forms
             this.btnIgnore.Padding = new System.Windows.Forms.Padding(5);
             this.btnIgnore.Size = new System.Drawing.Size(75, 26);
             this.btnIgnore.TabIndex = 10;
-            this.btnIgnore.Text = "Ignore";
+            this.btnIgnore.Text = UIHelper.LocalString("忽略", "Ignore"); 
             // 
             // DarkDialog
             // 

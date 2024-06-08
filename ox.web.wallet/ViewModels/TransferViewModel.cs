@@ -1,4 +1,5 @@
-﻿namespace OX.Web
+﻿using OX.Network.P2P.Payloads;
+namespace OX.Web
 {
     public class TransferViewModel
     {
@@ -15,5 +16,6 @@
         public string ToEthAddress;
         public uint LockExprationIndex  = 0;
         public decimal Amount;
+        public DaoVote DaoVote = default;
     }
 }

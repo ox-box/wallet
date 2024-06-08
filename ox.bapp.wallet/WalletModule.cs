@@ -55,7 +55,7 @@ namespace OX.Wallets.Base
             accountAssetMenu.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             //exitmenu.Image = global::Example.Icons.NewFile_6276;
             accountAssetMenu.Name = "accountAssetMenu";
-            accountAssetMenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.A)));
+            accountAssetMenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.A)));
             accountAssetMenu.Size = new System.Drawing.Size(170, 22);
             accountAssetMenu.Text = UIHelper.LocalString("&账户资产", "&Account Asset");
             accountAssetMenu.Click += AccountAssetMenu_Click;
@@ -66,7 +66,7 @@ namespace OX.Wallets.Base
             nativeAssetDetailsListmenu.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             //nativeAssetDetailsListmenu.Image = global::Example.Icons.NewFile_6276;
             nativeAssetDetailsListmenu.Name = "nativeAssetDetailsListmenu";
-            nativeAssetDetailsListmenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
+            nativeAssetDetailsListmenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.N)));
             nativeAssetDetailsListmenu.Size = new System.Drawing.Size(170, 22);
             nativeAssetDetailsListmenu.Text = UIHelper.LocalString("&原生资产详情", "&Native Asset Details");
             nativeAssetDetailsListmenu.Click += NativeAssetDetailsListmenu_Click;
@@ -76,7 +76,7 @@ namespace OX.Wallets.Base
             regAssetmenu.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             //regAssetmenu.Image = global::Example.Icons.NewFile_6276;
             regAssetmenu.Name = "regAssetmenu";
-            regAssetmenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
+            regAssetmenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.R)));
             regAssetmenu.Size = new System.Drawing.Size(170, 22);
             regAssetmenu.Text = UIHelper.LocalString("&注册私营资产", "&Register Private Asset");
             regAssetmenu.Click += RegAssetmenu_Click;
@@ -86,7 +86,7 @@ namespace OX.Wallets.Base
             issueAssetmenu.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             //issueAssetmenu.Image = global::Example.Icons.NewFile_6276;
             issueAssetmenu.Name = "issueAssetmenu";
-            issueAssetmenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D)));
+            issueAssetmenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.D)));
             issueAssetmenu.Size = new System.Drawing.Size(170, 22);
             issueAssetmenu.Text = UIHelper.LocalString("&分发私营资产", "&Distribution Private Asset");
             issueAssetmenu.Click += IssueAssetmenu_Click;
@@ -96,17 +96,26 @@ namespace OX.Wallets.Base
             tokenListmenu.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             //tokenListmenu.Image = global::Example.Icons.NewFile_6276;
             tokenListmenu.Name = "tokenListmenu";
-            tokenListmenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.W)));
+            tokenListmenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.W)));
             tokenListmenu.Size = new System.Drawing.Size(170, 22);
             tokenListmenu.Text = UIHelper.LocalString("&私营资产详情", "&Private Asset Details");
             tokenListmenu.Click += TokenListmenu_Click;
+
+            ToolStripMenuItem slotListmenu = new ToolStripMenuItem();
+            slotListmenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            slotListmenu.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            slotListmenu.Name = "slotListmenu";
+            slotListmenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.S)));
+            slotListmenu.Size = new System.Drawing.Size(170, 22);
+            slotListmenu.Text = UIHelper.LocalString("&插槽详情", "&Slot Details");
+            slotListmenu.Click += TokenListmenu_Click1;
 
             //ToolStripMenuItem transfermenu = new ToolStripMenuItem();
             //transfermenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             //transfermenu.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             ////exitmenu.Image = global::Example.Icons.NewFile_6276;
             //transfermenu.Name = "transfermenu";
-            //transfermenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.T)));
+            //transfermenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control| System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.T)));
             //transfermenu.Size = new System.Drawing.Size(170, 22);
             //transfermenu.Text = UIHelper.LocalString("&合并转账", "&Merge Transfer");
             //transfermenu.Click += Transfermenu_Click;
@@ -116,7 +125,7 @@ namespace OX.Wallets.Base
             //claimmenu.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             ////exitmenu.Image = global::Example.Icons.NewFile_6276;
             //claimmenu.Name = "claimmenu";
-            //claimmenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
+            //claimmenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control| System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.C)));
             //claimmenu.Size = new System.Drawing.Size(170, 22);
             //claimmenu.Text = UIHelper.LocalString("&合并提取 OXC", "&Merge Claim OXC");
             //claimmenu.Click += Claimmenu_Click;
@@ -126,7 +135,7 @@ namespace OX.Wallets.Base
             exportMnemonicsMenu.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             //exportMnemonicsMenu.Image = global::Example.Icons.NewFile_6276;
             exportMnemonicsMenu.Name = "exportMnemonicsMenu";
-            exportMnemonicsMenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.K)));
+            exportMnemonicsMenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.K)));
             exportMnemonicsMenu.Size = new System.Drawing.Size(170, 22);
             exportMnemonicsMenu.Text = UIHelper.LocalString("&导出助记词", "&Export Mnemonicis");
             exportMnemonicsMenu.Click += ExportMnemonicsMenu_Click;
@@ -134,7 +143,7 @@ namespace OX.Wallets.Base
             blockRecordsmenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             blockRecordsmenu.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             blockRecordsmenu.Name = "blockRecordsmenu";
-            blockRecordsmenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.J)));
+            blockRecordsmenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.J)));
             blockRecordsmenu.Size = new System.Drawing.Size(170, 22);
             blockRecordsmenu.Text = UIHelper.LocalString("&查看区块", "&View Block");
             blockRecordsmenu.Click += BlockRecordsmenu_Click;
@@ -142,7 +151,7 @@ namespace OX.Wallets.Base
             recordmenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             recordmenu.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             recordmenu.Name = "recordmenu";
-            recordmenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.H)));
+            recordmenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.H)));
             recordmenu.Size = new System.Drawing.Size(170, 22);
             recordmenu.Text = UIHelper.LocalString("&交易记录", "&Transaction History");
             recordmenu.Click += Recordmenu_Click;
@@ -150,7 +159,7 @@ namespace OX.Wallets.Base
             partnermenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             partnermenu.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             partnermenu.Name = "partnermenu";
-            partnermenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
+            partnermenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.P)));
             partnermenu.Size = new System.Drawing.Size(170, 22);
             partnermenu.Text = UIHelper.LocalString("&交易伙伴", "&Transfer Partners");
             partnermenu.Click += Partnermenu_Click;
@@ -159,17 +168,17 @@ namespace OX.Wallets.Base
             reindexmenu.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             //exitmenu.Image = global::Example.Icons.NewFile_6276;
             reindexmenu.Name = "reindexmenu";
-            reindexmenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.I)));
+            reindexmenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.I)));
             reindexmenu.Size = new System.Drawing.Size(170, 22);
             reindexmenu.Text = UIHelper.LocalString("&重建索引", "&Rebuild Index");
             reindexmenu.Click += Reindexmenu_Click;
-            
+
             ToolStripMenuItem btcmenu = new ToolStripMenuItem();
             btcmenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             btcmenu.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             //btcmenu.Image = global::Example.Icons.NewFile_6276;
             btcmenu.Name = "btcmenu";
-            btcmenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.B)));
+            btcmenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.B)));
             btcmenu.Size = new System.Drawing.Size(170, 22);
             btcmenu.Text = UIHelper.LocalString("&比特币账户", "&BTC Accounts");
             btcmenu.Click += Btcmenu_Click;
@@ -178,7 +187,7 @@ namespace OX.Wallets.Base
             ethnmenu.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             //ethnmenu.Image = global::Example.Icons.NewFile_6276;
             ethnmenu.Name = "ethnmenu";
-            ethnmenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
+            ethnmenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Q)));
             ethnmenu.Size = new System.Drawing.Size(170, 22);
             ethnmenu.Text = UIHelper.LocalString("&以太坊账户", "&Eth Accounts");
             ethnmenu.Click += Ethnmenu_Click;
@@ -187,7 +196,7 @@ namespace OX.Wallets.Base
             copyWalletmenu.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             //copyWalletmenu.Image = global::Example.Icons.NewFile_6276;
             copyWalletmenu.Name = "copyWalletmenu";
-            copyWalletmenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F5)));
+            copyWalletmenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F5)));
             copyWalletmenu.Size = new System.Drawing.Size(170, 22);
             copyWalletmenu.Text = UIHelper.LocalString("&复制钱包文件", "&Copy Wallet File");
             copyWalletmenu.Click += CopyWalletmenu_Click;
@@ -196,7 +205,7 @@ namespace OX.Wallets.Base
             lockWalletmenu.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             //lockWalletmenu.Image = global::Example.Icons.NewFile_6276;
             lockWalletmenu.Name = "lockWalletmenu";
-            lockWalletmenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F6)));
+            lockWalletmenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F6)));
             lockWalletmenu.Size = new System.Drawing.Size(170, 22);
             lockWalletmenu.Text = UIHelper.LocalString("&锁定钱包", "&Lock Wallet");
             lockWalletmenu.Click += LockWalletmenu_Click;
@@ -205,7 +214,7 @@ namespace OX.Wallets.Base
             //closewalletmenu.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             ////exitmenu.Image = global::Example.Icons.NewFile_6276;
             //closewalletmenu.Name = "closewalletmenu";
-            //closewalletmenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F4)));
+            //closewalletmenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control| System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
             //closewalletmenu.Size = new System.Drawing.Size(170, 22);
             //closewalletmenu.Text = UIHelper.LocalString("&关闭钱包", "&Close Wallet");
             //closewalletmenu.Click += Closewalletmenu_Click;
@@ -214,7 +223,7 @@ namespace OX.Wallets.Base
             exitmenu.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             //exitmenu.Image = global::Example.Icons.NewFile_6276;
             exitmenu.Name = "exitmenu";
-            exitmenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.E)));
+            exitmenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.E)));
             exitmenu.Size = new System.Drawing.Size(170, 22);
             exitmenu.Text = UIHelper.LocalString("&退出", "&Exit");
             exitmenu.Click += Exitmenu_Click;
@@ -224,6 +233,7 @@ namespace OX.Wallets.Base
                 regAssetmenu,
                 issueAssetmenu,
                 tokenListmenu,
+                slotListmenu,
                 //transfermenu,
                 //claimmenu,
                 exportMnemonicsMenu,
@@ -239,6 +249,11 @@ namespace OX.Wallets.Base
                 exitmenu});
             this.Container.TopMenus.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             walletMenu});
+        }
+
+        private void TokenListmenu_Click1(object sender, EventArgs e)
+        {
+            new DialogSlotDetails(this.Operater).ShowDialog();
         }
 
         private void AccountAssetMenu_Click(object sender, EventArgs e)
@@ -258,7 +273,7 @@ namespace OX.Wallets.Base
 
         private void NativeAssetDetailsListmenu_Click(object sender, EventArgs e)
         {
-            new DialogNativeAsset().ShowDialog();
+            new DialogNativeAsset(this.Operater).ShowDialog();
         }
 
         private void BlockRecordsmenu_Click(object sender, EventArgs e)
@@ -345,18 +360,19 @@ namespace OX.Wallets.Base
             {
                 if (dialog.ShowDialog() != DialogResult.OK) return;
                 tx = dialog.GetTransaction();
-            }
-
-            tx = GetTransaction(tx, Fixed8.Zero);
-
-            if (tx.IsNotNull())
-            {
-                this.Operater.SignAndSendTx(tx);
-                var txid = tx.Hash.ToString();
-                Clipboard.SetText(txid);
-                string msg = UIHelper.LocalString($"交易Id {txid}  已复制", $"tx id {txid}  copied");
-                Bapp.PushCrossBappMessage(new CrossBappMessage() { Content = msg, From = this.Bapp });
-                DarkMessageBox.ShowInformation(msg, "");
+                if (tx.IsNotNull())
+                {
+                    tx = GetTransaction(tx, Fixed8.Zero);
+                    if (tx.IsNotNull())
+                    {
+                        this.Operater.SignAndSendTx(tx);
+                        var txid = tx.Hash.ToString();
+                        Clipboard.SetText(txid);
+                        string msg = UIHelper.LocalString($"交易Id {txid}  已复制", $"tx id {txid}  copied");
+                        Bapp.PushCrossBappMessage(new CrossBappMessage() { Content = msg, From = this.Bapp });
+                        DarkMessageBox.ShowInformation(msg, "");
+                    }
+                }
             }
         }
 
@@ -423,7 +439,7 @@ namespace OX.Wallets.Base
 
             this.Container.DockPanel.AddContent(this.EthAsset);
         }
- 
+
 
         private void Partnermenu_Click(object sender, EventArgs e)
         {
@@ -601,6 +617,21 @@ namespace OX.Wallets.Base
                 this.PartnersView.OnRebuild();
             if (this.OXTokens != default)
                 this.OXTokens.OnRebuild();
+        }
+        public override void OnFlashMessage(FlashMessage flashMessage)
+        {
+            if (this.AccountAsset != default)
+                this.AccountAsset.OnFlashMessage(flashMessage);
+            if (this.EthAsset != default)
+                this.EthAsset.OnFlashMessage(flashMessage);
+            if (this.BTCAsset != default)
+                this.BTCAsset.OnFlashMessage(flashMessage);
+            if (this.TransactionHistoryView != default)
+                this.TransactionHistoryView.OnFlashMessage(flashMessage);
+            if (this.PartnersView != default)
+                this.PartnersView.OnFlashMessage(flashMessage);
+            if (this.OXTokens != default)
+                this.OXTokens.OnFlashMessage(flashMessage);
         }
         public override void OnLoadBappModuleWalletSection(JObject bappSectionObject)
         {

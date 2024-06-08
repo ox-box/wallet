@@ -210,6 +210,10 @@ namespace OX.Wallets.Base
         public void AfterOnBlock(Block block)
         {
         }
+        public void OnFlashMessage(FlashMessage flashMessage)
+        {
+
+        }
         public virtual void ChangeWallet(INotecase operater)
         {
             this.Operater = operater;

@@ -29,177 +29,188 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SellNFT));
-            this.panel = new System.Windows.Forms.Panel();
-            this.darkLabel3 = new OX.Wallets.UI.Controls.DarkLabel();
-            this.tb_minIndex = new OX.Wallets.UI.Controls.DarkTextBox();
-            this.lb_minIndex = new OX.Wallets.UI.Controls.DarkLabel();
-            this.tb_maxIndex = new OX.Wallets.UI.Controls.DarkTextBox();
-            this.lb_maxIndex = new OX.Wallets.UI.Controls.DarkLabel();
-            this.bt_build = new OX.Wallets.UI.Controls.DarkButton();
-            this.tb_copy = new OX.Wallets.UI.Controls.DarkButton();
-            this.lb_signature = new OX.Wallets.UI.Controls.DarkLabel();
-            this.tb_signature = new OX.Wallets.UI.Controls.DarkTextBox();
-            this.lb_nfthash_v = new OX.Wallets.UI.Controls.DarkLabel();
-            this.lb_nfthash = new OX.Wallets.UI.Controls.DarkLabel();
-            this.tb_amount = new OX.Wallets.UI.Controls.DarkTextBox();
-            this.lb_amount = new OX.Wallets.UI.Controls.DarkLabel();
-            this.panel.SuspendLayout();
-            this.SuspendLayout();
+            panel = new System.Windows.Forms.Panel();
+            darkLabel3 = new UI.Controls.DarkLabel();
+            tb_minIndex = new UI.Controls.DarkTextBox();
+            lb_minIndex = new UI.Controls.DarkLabel();
+            tb_maxIndex = new UI.Controls.DarkTextBox();
+            lb_maxIndex = new UI.Controls.DarkLabel();
+            bt_build = new UI.Controls.DarkButton();
+            tb_copy = new UI.Controls.DarkButton();
+            lb_signature = new UI.Controls.DarkLabel();
+            tb_signature = new UI.Controls.DarkTextBox();
+            lb_nfthash_v = new UI.Controls.DarkLabel();
+            lb_nfthash = new UI.Controls.DarkLabel();
+            tb_amount = new UI.Controls.DarkTextBox();
+            lb_amount = new UI.Controls.DarkLabel();
+            bt_publish = new UI.Controls.DarkButton();
+            panel.SuspendLayout();
+            SuspendLayout();
             // 
             // btnCancel
             // 
-            resources.ApplyResources(this.btnCancel, "btnCancel");
+            resources.ApplyResources(btnCancel, "btnCancel");
             // 
             // btnClose
             // 
-            resources.ApplyResources(this.btnClose, "btnClose");
+            resources.ApplyResources(btnClose, "btnClose");
             // 
             // btnYes
             // 
-            resources.ApplyResources(this.btnYes, "btnYes");
+            resources.ApplyResources(btnYes, "btnYes");
             // 
             // btnNo
             // 
-            resources.ApplyResources(this.btnNo, "btnNo");
+            resources.ApplyResources(btnNo, "btnNo");
             // 
             // btnRetry
             // 
-            resources.ApplyResources(this.btnRetry, "btnRetry");
+            resources.ApplyResources(btnRetry, "btnRetry");
             // 
             // btnIgnore
             // 
-            resources.ApplyResources(this.btnIgnore, "btnIgnore");
+            resources.ApplyResources(btnIgnore, "btnIgnore");
             // 
             // panel
             // 
-            this.panel.Controls.Add(this.darkLabel3);
-            this.panel.Controls.Add(this.tb_minIndex);
-            this.panel.Controls.Add(this.lb_minIndex);
-            this.panel.Controls.Add(this.tb_maxIndex);
-            this.panel.Controls.Add(this.lb_maxIndex);
-            this.panel.Controls.Add(this.bt_build);
-            this.panel.Controls.Add(this.tb_copy);
-            this.panel.Controls.Add(this.lb_signature);
-            this.panel.Controls.Add(this.tb_signature);
-            this.panel.Controls.Add(this.lb_nfthash_v);
-            this.panel.Controls.Add(this.lb_nfthash);
-            this.panel.Controls.Add(this.tb_amount);
-            this.panel.Controls.Add(this.lb_amount);
-            resources.ApplyResources(this.panel, "panel");
-            this.panel.Name = "panel";
+            panel.Controls.Add(bt_publish);
+            panel.Controls.Add(darkLabel3);
+            panel.Controls.Add(tb_minIndex);
+            panel.Controls.Add(lb_minIndex);
+            panel.Controls.Add(tb_maxIndex);
+            panel.Controls.Add(lb_maxIndex);
+            panel.Controls.Add(bt_build);
+            panel.Controls.Add(tb_copy);
+            panel.Controls.Add(lb_signature);
+            panel.Controls.Add(tb_signature);
+            panel.Controls.Add(lb_nfthash_v);
+            panel.Controls.Add(lb_nfthash);
+            panel.Controls.Add(tb_amount);
+            panel.Controls.Add(lb_amount);
+            resources.ApplyResources(panel, "panel");
+            panel.Name = "panel";
+            panel.Paint += panel_Paint;
             // 
             // darkLabel3
             // 
-            resources.ApplyResources(this.darkLabel3, "darkLabel3");
-            this.darkLabel3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.darkLabel3.Name = "darkLabel3";
+            resources.ApplyResources(darkLabel3, "darkLabel3");
+            darkLabel3.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
+            darkLabel3.Name = "darkLabel3";
             // 
             // tb_minIndex
             // 
-            this.tb_minIndex.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.tb_minIndex.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.tb_minIndex.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            resources.ApplyResources(this.tb_minIndex, "tb_minIndex");
-            this.tb_minIndex.Name = "tb_minIndex";
-            this.tb_minIndex.TextChanged += new System.EventHandler(this.tb_amount_TextChanged);
+            tb_minIndex.BackColor = System.Drawing.Color.FromArgb(69, 73, 74);
+            tb_minIndex.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            tb_minIndex.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
+            resources.ApplyResources(tb_minIndex, "tb_minIndex");
+            tb_minIndex.Name = "tb_minIndex";
+            tb_minIndex.TextChanged += tb_amount_TextChanged;
             // 
             // lb_minIndex
             // 
-            resources.ApplyResources(this.lb_minIndex, "lb_minIndex");
-            this.lb_minIndex.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.lb_minIndex.Name = "lb_minIndex";
+            resources.ApplyResources(lb_minIndex, "lb_minIndex");
+            lb_minIndex.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
+            lb_minIndex.Name = "lb_minIndex";
             // 
             // tb_maxIndex
             // 
-            this.tb_maxIndex.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.tb_maxIndex.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.tb_maxIndex.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            resources.ApplyResources(this.tb_maxIndex, "tb_maxIndex");
-            this.tb_maxIndex.Name = "tb_maxIndex";
-            this.tb_maxIndex.TextChanged += new System.EventHandler(this.tb_amount_TextChanged);
+            tb_maxIndex.BackColor = System.Drawing.Color.FromArgb(69, 73, 74);
+            tb_maxIndex.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            tb_maxIndex.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
+            resources.ApplyResources(tb_maxIndex, "tb_maxIndex");
+            tb_maxIndex.Name = "tb_maxIndex";
+            tb_maxIndex.TextChanged += tb_amount_TextChanged;
             // 
             // lb_maxIndex
             // 
-            resources.ApplyResources(this.lb_maxIndex, "lb_maxIndex");
-            this.lb_maxIndex.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.lb_maxIndex.Name = "lb_maxIndex";
+            resources.ApplyResources(lb_maxIndex, "lb_maxIndex");
+            lb_maxIndex.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
+            lb_maxIndex.Name = "lb_maxIndex";
             // 
             // bt_build
             // 
-            resources.ApplyResources(this.bt_build, "bt_build");
-            this.bt_build.Name = "bt_build";
-            this.bt_build.SpecialBorderColor = null;
-            this.bt_build.SpecialFillColor = null;
-            this.bt_build.SpecialTextColor = null;
-            this.bt_build.Click += new System.EventHandler(this.bt_build_Click);
+            resources.ApplyResources(bt_build, "bt_build");
+            bt_build.Name = "bt_build";
+            bt_build.SpecialBorderColor = null;
+            bt_build.SpecialFillColor = null;
+            bt_build.SpecialTextColor = null;
+            bt_build.Click += bt_build_Click;
             // 
             // tb_copy
             // 
-            resources.ApplyResources(this.tb_copy, "tb_copy");
-            this.tb_copy.Name = "tb_copy";
-            this.tb_copy.SpecialBorderColor = null;
-            this.tb_copy.SpecialFillColor = null;
-            this.tb_copy.SpecialTextColor = null;
-            this.tb_copy.Click += new System.EventHandler(this.tb_copy_Click);
+            resources.ApplyResources(tb_copy, "tb_copy");
+            tb_copy.Name = "tb_copy";
+            tb_copy.SpecialBorderColor = null;
+            tb_copy.SpecialFillColor = null;
+            tb_copy.SpecialTextColor = null;
+            tb_copy.Click += tb_copy_Click;
             // 
             // lb_signature
             // 
-            resources.ApplyResources(this.lb_signature, "lb_signature");
-            this.lb_signature.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.lb_signature.Name = "lb_signature";
+            resources.ApplyResources(lb_signature, "lb_signature");
+            lb_signature.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
+            lb_signature.Name = "lb_signature";
             // 
             // tb_signature
             // 
-            this.tb_signature.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.tb_signature.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.tb_signature.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            resources.ApplyResources(this.tb_signature, "tb_signature");
-            this.tb_signature.Name = "tb_signature";
-            this.tb_signature.ReadOnly = true;
+            tb_signature.BackColor = System.Drawing.Color.FromArgb(69, 73, 74);
+            tb_signature.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            tb_signature.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
+            resources.ApplyResources(tb_signature, "tb_signature");
+            tb_signature.Name = "tb_signature";
+            tb_signature.ReadOnly = true;
             // 
             // lb_nfthash_v
             // 
-            resources.ApplyResources(this.lb_nfthash_v, "lb_nfthash_v");
-            this.lb_nfthash_v.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.lb_nfthash_v.Name = "lb_nfthash_v";
+            resources.ApplyResources(lb_nfthash_v, "lb_nfthash_v");
+            lb_nfthash_v.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
+            lb_nfthash_v.Name = "lb_nfthash_v";
             // 
             // lb_nfthash
             // 
-            resources.ApplyResources(this.lb_nfthash, "lb_nfthash");
-            this.lb_nfthash.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.lb_nfthash.Name = "lb_nfthash";
+            resources.ApplyResources(lb_nfthash, "lb_nfthash");
+            lb_nfthash.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
+            lb_nfthash.Name = "lb_nfthash";
             // 
             // tb_amount
             // 
-            this.tb_amount.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.tb_amount.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.tb_amount.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            resources.ApplyResources(this.tb_amount, "tb_amount");
-            this.tb_amount.Name = "tb_amount";
-            this.tb_amount.TextChanged += new System.EventHandler(this.tb_amount_TextChanged);
+            tb_amount.BackColor = System.Drawing.Color.FromArgb(69, 73, 74);
+            tb_amount.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            tb_amount.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
+            resources.ApplyResources(tb_amount, "tb_amount");
+            tb_amount.Name = "tb_amount";
+            tb_amount.TextChanged += tb_amount_TextChanged;
             // 
             // lb_amount
             // 
-            resources.ApplyResources(this.lb_amount, "lb_amount");
-            this.lb_amount.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.lb_amount.Name = "lb_amount";
+            resources.ApplyResources(lb_amount, "lb_amount");
+            lb_amount.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
+            lb_amount.Name = "lb_amount";
+            // 
+            // bt_publish
+            // 
+            resources.ApplyResources(bt_publish, "bt_publish");
+            bt_publish.Name = "bt_publish";
+            bt_publish.SpecialBorderColor = null;
+            bt_publish.SpecialFillColor = null;
+            bt_publish.SpecialTextColor = null;
+            bt_publish.Click += bt_publish_Click;
             // 
             // SellNFT
             // 
             resources.ApplyResources(this, "$this");
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.panel);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
-            this.Name = "SellNFT";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ClaimForm_FormClosing);
-            this.Load += new System.EventHandler(this.NewEvent_Load);
-            this.Controls.SetChildIndex(this.panel, 0);
-            this.panel.ResumeLayout(false);
-            this.panel.PerformLayout();
-            this.ResumeLayout(false);
-
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            Controls.Add(panel);
+            FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            MaximizeBox = false;
+            MinimizeBox = false;
+            Name = "SellNFT";
+            FormClosing += ClaimForm_FormClosing;
+            Load += NewEvent_Load;
+            Controls.SetChildIndex(panel, 0);
+            panel.ResumeLayout(false);
+            panel.PerformLayout();
+            ResumeLayout(false);
         }
 
         #endregion
@@ -218,5 +229,6 @@
         private UI.Controls.DarkTextBox tb_maxIndex;
         private UI.Controls.DarkLabel lb_maxIndex;
         private UI.Controls.DarkLabel darkLabel3;
+        private UI.Controls.DarkButton bt_publish;
     }
 }

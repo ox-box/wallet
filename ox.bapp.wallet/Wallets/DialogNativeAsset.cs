@@ -13,8 +13,10 @@ namespace OX.Wallets.Base
     {
         #region Constructor Region
         public Module Module { get; set; }
-        public DialogNativeAsset()
+        public INotecase operater;
+        public DialogNativeAsset(INotecase notecase)
         {
+            this.operater = notecase;
             InitializeComponent();
             this.Text = UIHelper.LocalString("原生资产详情", "Native Asset Details");
 
@@ -65,6 +67,8 @@ namespace OX.Wallets.Base
 
         private void DialogNativeAsset_Load(object sender, System.EventArgs e)
         {
+            this.bt_oxsVote.Text = UIHelper.LocalString("锁仓投票", "Lock Vote");
+            this.bt_oxcVote.Text = UIHelper.LocalString("锁仓投票", "Lock Vote");
             var block = Blockchain.Singleton.CurrentSnapshot.Blocks.TryGet(Blockchain.Singleton.CurrentBlockHash);
             this.lb_total_gas.Text = UIHelper.LocalString($"GAS总量： {block.SystemFeeAmount}", $"Total GAS: {block.SystemFeeAmount}");
             this.lb_OXS_Name.Text = $"OXS ({Blockchain.OXS.ToString()})";
@@ -192,7 +196,24 @@ namespace OX.Wallets.Base
             this.lb_c_4.Text = UIHelper.LocalString($"剩余锁仓区块>1000000： {c4}", $"Remaining total lock blocks than 1000000: {c4}");
             this.lb_c_5.Text = UIHelper.LocalString($"剩余锁仓区块>2000000： {c5}", $"Remaining total lock blocks than 2000000: {c5}");
             this.lb_c_6.Text = UIHelper.LocalString($"剩余锁仓区块>3000000： {c6}", $"Remaining total lock blocks than 3000000: {c6}");
+            Fixed8 OXSDestroy = Fixed8.Zero;
+            Fixed8 OXCDestroy = Fixed8.Zero;
+            WalletBappProvider.Instance.TokenBlackHoleDestroySummary.TryGetValue(Blockchain.OXS, out OXSDestroy);
+            WalletBappProvider.Instance.TokenBlackHoleDestroySummary.TryGetValue(Blockchain.OXC, out OXCDestroy);
+            this.lb_s_destroy.Text = UIHelper.LocalString($"累计黑洞销毁： {OXSDestroy}", $"Total Black Hole Destruction: {OXSDestroy}");
+            this.lb_c_destroy.Text = UIHelper.LocalString($"累计黑洞销毁： {OXCDestroy}", $"Total Black Hole Destruction: {OXCDestroy}");
+        }
 
+        private void bt_oxsVOte_Click(object sender, EventArgs e)
+        {
+            var assetState = Blockchain.Singleton.CurrentSnapshot.Assets.TryGet(Blockchain.OXS);
+            new DialogAssetLockVote(this.operater, assetState).ShowDialog();
+        }
+
+        private void bt_oxcVote_Click(object sender, EventArgs e)
+        {
+            var assetState = Blockchain.Singleton.CurrentSnapshot.Assets.TryGet(Blockchain.OXC);
+            new DialogAssetLockVote(this.operater, assetState).ShowDialog();
         }
     }
 }

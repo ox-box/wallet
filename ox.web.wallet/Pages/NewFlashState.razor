@@ -1,0 +1,233 @@
+﻿@page "/_pc/flashstate/new"
+@inherits WalletComponentBase
+<Microsoft.AspNetCore.Components.Web.Extensions.Head.Title Value=@this.PageTitle />
+<GridRow>
+    <GridCol Span="18">
+        <Spin Spinning=loading>
+            <Form Model="@this.StateText"
+                  Style="margin-top: 8px;">
+                <FormItem Label="@this.WebLocalString("闪文","Flash Text")" ShowFeedbackOnError="true">
+                    <TextArea Rows="4" @bind-Value="@context.Text" />
+                </FormItem>
+                <InputFile id="fileInput" OnChange="UploadFiles" hidden multiple />
+                <div class="uploadbox">
+                    <Upload Multiple=false Name="files" FileList="fileList">
+                        <label class="ant-btn" for="fileInput">
+                            <Icon Type="upload" />
+                            @this.WebLocalString("点击上传", "Click to Upload")
+                        </label>
+                    </Upload>
+                </div>
+                <div class="uploadbox">
+
+                    <div style="margin-bottom: 16px;">
+                        @foreach (var item in lstTags)
+                        {
+                            if (!_eachTagAnimationClass.ContainsKey(item))
+                            {
+                                _eachTagAnimationClass.Add(item, "");
+                            }
+                            <Tag @key="item" Closable OnClose="()=>OnClose(item)" OnClosing="@((e) => OnClosing(e, item))" Class="@_eachTagAnimationClass[item]">@item</Tag>
+                        }
+                    </div>
+                    <div>
+                        @if (inputVisible)
+                        {
+                            <Input @ref="_inputRef" Style="width: 78px" Size="small" @bind-Value="_inputValue" OnBlur="HandleInputConfirm" OnPressEnter="HandleInputConfirm" AutoFocus />
+                        }
+                        else
+                        {
+                            <Tag Class="site-tag-plus" OnClick="@(() => inputVisible = !inputVisible)">
+                                <Icon Type="plus" />@this.WebLocalString("新增标签", "New Tag")
+                            </Tag>
+                        }
+                    </div>
+                </div>
+                <div class="uploadbox">
+                </div>
+
+                <Row Gutter="8">
+                    <AntDesign.Col Span="18">
+                    </AntDesign.Col>
+                    <AntDesign.Col Span="6">
+                        <Button Icon="plus" Type="primary" OnClick="Commit">@this.WebLocalString("提交", "Post")</Button>
+                    </AntDesign.Col>
+                </Row>
+            </Form>
+            @if (success)
+            {
+                <Result Status="success"
+                        Title=@this.WebLocalString("成功","Success")
+                        SubTitle=@this.WebLocalString("闪态提交成功","Successfully post flash state")>
+                </Result>
+            }
+        </Spin>
+    </GridCol>
+    <GridCol Span="6">
+
+    </GridCol>
+</GridRow>
+
+<style type="text/css">
+    .site-tag-plus {
+        background: #fff;
+        border-style: dashed;
+    }
+
+    .animate-shrink {
+        transition: 0.3s;
+        transform: scale(0.000001,0.000001);
+        transform-origin: 1% 100%;
+    }
+
+    .animate-grow {
+        transform: scale(0,0);
+        transform-origin: 1% 100%;
+        animation: grow cubic-bezier(0.785, 0.135, 0.15, 0.86) 0.5s forwards;
+        animation-delay: 0.3s;
+    }
+
+    @@keyframes grow {
+        from {
+            transform: scale(0,0);
+        }
+
+        to {
+            transform: scale(1,1);
+        }
+    }
+
+    .uploadbox {
+        margin-left: 30px;
+    }
+
+    .senderButton {
+        margin-left: 10px;
+    }
+
+    .standardList .ant-card-head {
+        border-bottom: none;
+    }
+
+    .standardList .ant-card-head-title {
+        padding: 24px 0;
+        line-height: 32px;
+    }
+
+    .standardList .ant-card-extra {
+        padding: 24px 0;
+    }
+
+    .standardList .ant-list-pagination {
+        margin-top: 24px;
+        text-align: right;
+    }
+
+    .standardList .ant-avatar-lg {
+        width: 48px;
+        height: 48px;
+        line-height: 48px;
+    }
+
+    .standardList .headerInfo {
+        position: relative;
+        text-align: center;
+    }
+
+        .standardList .headerInfo > span {
+            display: inline-block;
+            margin-bottom: 4px;
+            color: rgba(0, 0, 0, 0.45);
+            font-size: 14px;
+            line-height: 22px;
+        }
+
+        .standardList .headerInfo > p {
+            margin: 0;
+            color: rgba(0, 0, 0, 0.85);
+            font-size: 24px;
+            line-height: 32px;
+        }
+
+        .standardList .headerInfo > em {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 1px;
+            height: 56px;
+            background-color: #f0f0f0;
+        }
+
+    .standardList .listContent {
+        font-size: 0;
+    }
+
+        .standardList .listContent .listContentItem {
+            display: inline-block;
+            margin-left: 20px;
+            color: rgba(0, 0, 0, 0.45);
+            font-size: 14px;
+            vertical-align: middle;
+        }
+
+            .standardList .listContent .listContentItem > span {
+                line-height: 20px;
+            }
+
+            .standardList .listContent .listContentItem > p {
+                margin-top: 4px;
+                margin-bottom: 0;
+                line-height: 22px;
+            }
+
+    .standardList .extraContentSearch {
+        width: 272px;
+        margin-left: 16px;
+    }
+
+    .standardList .ant-list-item-action {
+        margin-left: 0;
+    }
+
+    .standardList .listContent {
+        margin-left: 0;
+    }
+
+        .standardList .listContent > div {
+            margin-left: 0;
+        }
+
+    .standardList .listCard .ant-card-head-title {
+        overflow: visible;
+    }
+
+    }
+
+    .standardList .headerInfo {
+        margin-bottom: 16px;
+    }
+
+        .standardList .headerInfo > em {
+            display: none;
+        }
+
+    }
+
+    .standardListForm .ant-form-item {
+        margin-bottom: 12px;
+    }
+
+        .standardListForm .ant-form-item:last-child {
+            margin-bottom: 32px;
+            padding-top: 4px;
+        }
+
+    .formResult {
+        width: 100%;
+    }
+
+        .formResult [class^='title'] {
+            margin-bottom: 8px;
+        }
+
+</style>

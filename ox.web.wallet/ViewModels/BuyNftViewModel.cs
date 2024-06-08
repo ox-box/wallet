@@ -1,4 +1,4 @@
-﻿using OX.Wallets.Base.NFT;
+﻿using OX.Network.P2P.Payloads;
 namespace OX.Web
 {
     public class BuyNftViewModel
@@ -12,7 +12,7 @@ namespace OX.Web
         public string HolderName;
         public string SN;
         public bool Checked = false;
-        public NFTTranferData NFTTranferData;
+        public NFTPending NFTTranferData;
     }
 
 }

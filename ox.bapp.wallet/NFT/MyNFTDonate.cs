@@ -125,6 +125,10 @@ namespace OX.Wallets.Base
         public void OnRebuild()
         {
         }
+        public void OnFlashMessage(FlashMessage flashMessage)
+        {
+
+        }
         #endregion
         void LoadNftDonates()
         {
@@ -139,7 +143,7 @@ namespace OX.Wallets.Base
                         var ps = bizPlugin.GetAll<MyNFTTransferKey, NftTransferTransaction>(WalletBizPersistencePrefixes.NFT_Transfer_My, act.ScriptHash);
                         foreach (var p in ps)
                         {
-                            var nftConrol = new NFTTransferAvatarControl(this.Operater,p.Key, p.Value);
+                            var nftConrol = new NFTTransferAvatarControl(this.Operater, p.Key, p.Value);
                             //var nftConrol = new NFTDonateControl(this.Operater, p.Key, p.Value);
                             this.RoundPanel.Controls.Add(nftConrol);
                         }

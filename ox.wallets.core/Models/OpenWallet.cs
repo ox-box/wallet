@@ -296,12 +296,13 @@ namespace OX.Wallets
             var fee = tx.SystemFee;
             if (fee > Fixed8.Zero && !assetId.Equals(Blockchain.OXC))
             {
+                if (tx.NeedOutputFee && tx.OutputFee == Fixed8.Zero) fee += Fixed8.One;
                 var mixUTXOs = queryMixUtxos(from, assetId, myLockAssets);
                 if (sortSearch(MAXTRANSACTIONCOUNT - 5, mixUTXOs, amount.GetInternalValue(), out MixUTXO[] selectedUtxos, out long remainder))
                 {
                     var feeMaxTxCount = MAXTRANSACTIONCOUNT - selectedUtxos.Count();
                     var feeUTXOs = queryMixUtxos(from, Blockchain.OXC, myLockAssets);
-                    if (sortSearch(feeMaxTxCount, mixUTXOs, amount.GetInternalValue(), out MixUTXO[] selectedFeeUtxos, out long feeRemainder))
+                    if (sortSearch(feeMaxTxCount, feeUTXOs, fee.GetInternalValue(), out MixUTXO[] selectedFeeUtxos, out long feeRemainder))
                     {
                         var outputList = new List<TransactionOutput>(tx.Outputs);
                         if (remainder > 0)

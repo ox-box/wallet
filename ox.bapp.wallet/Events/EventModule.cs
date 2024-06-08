@@ -48,7 +48,7 @@ namespace OX.Wallets.Base.Events
             boardmenu.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
             //exitmenu.Image = global::Example.Icons.NewFile_6276;
             boardmenu.Name = "boardmenu";
-            boardmenu.ShortcutKeys = Keys.Control | Keys.B;
+            boardmenu.ShortcutKeys = Keys.Control |Keys.Alt| Keys.B;
             boardmenu.Size = new System.Drawing.Size(170, 22);
             boardmenu.Text = UIHelper.LocalString("&寻找事件板", "&Find Event Board");
             boardmenu.Click += boardMenu_Click;
@@ -58,7 +58,7 @@ namespace OX.Wallets.Base.Events
             newboardmenu.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
             //exitmenu.Image = global::Example.Icons.NewFile_6276;
             newboardmenu.Name = "newboardmenu";
-            newboardmenu.ShortcutKeys = Keys.Control | Keys.C;
+            newboardmenu.ShortcutKeys = Keys.Control |Keys.Alt| Keys.C;
             newboardmenu.Size = new System.Drawing.Size(170, 22);
             newboardmenu.Text = UIHelper.LocalString("&创建事件板", "&New Event Board");
             newboardmenu.Click += Newboardmenu_Click;
@@ -68,7 +68,7 @@ namespace OX.Wallets.Base.Events
             focusboardmenu.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
             //exitmenu.Image = global::Example.Icons.NewFile_6276;
             focusboardmenu.Name = "focusboardmenu";
-            focusboardmenu.ShortcutKeys = Keys.Control | Keys.F;
+            focusboardmenu.ShortcutKeys = Keys.Control |Keys.Alt| Keys.F;
             focusboardmenu.Size = new System.Drawing.Size(170, 22);
             focusboardmenu.Text = UIHelper.LocalString("&事件板收藏夹", "&Board Favorites");
             focusboardmenu.Click += Focusboardmenu_Click;
@@ -78,7 +78,7 @@ namespace OX.Wallets.Base.Events
             myboardmenu.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
             //myboardmenu.Image = global::Example.Icons.NewFile_6276;
             myboardmenu.Name = "myboardmenu";
-            myboardmenu.ShortcutKeys = Keys.Control | Keys.G;
+            myboardmenu.ShortcutKeys = Keys.Control |Keys.Alt| Keys.G;
             myboardmenu.Size = new System.Drawing.Size(170, 22);
             myboardmenu.Text = UIHelper.LocalString("&我的事件板", "&My Event Boards");
             myboardmenu.Click += Myboardmenu_Click;
@@ -88,7 +88,7 @@ namespace OX.Wallets.Base.Events
             myEngravemenu.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
             //exitmenu.Image = global::Example.Icons.NewFile_6276;
             myEngravemenu.Name = "myEngravemenu";
-            myEngravemenu.ShortcutKeys = Keys.Control | Keys.E;
+            myEngravemenu.ShortcutKeys = Keys.Control |Keys.Alt| Keys.E;
             myEngravemenu.Size = new System.Drawing.Size(170, 22);
             myEngravemenu.Text = UIHelper.LocalString("&我的事件", "&My Events");
             myEngravemenu.Click += myEngraveMenu_Click;
@@ -250,6 +250,21 @@ namespace OX.Wallets.Base.Events
             foreach (var bl in BoardList.Values)
             {
                 bl.AfterOnBlock(block);
+            }
+        }
+        public override void OnFlashMessage(FlashMessage flashmessage)
+        {
+            if (Boards != default)
+                Boards.OnFlashMessage(flashmessage);
+            if (FollowBoards != default)
+                FollowBoards.OnFlashMessage(flashmessage);
+            if (MyBoards != default)
+                MyBoards.OnFlashMessage(flashmessage);
+            if (MyEngraves != default)
+                MyEngraves.OnFlashMessage(flashmessage);
+            foreach (var bl in BoardList.Values)
+            {
+                bl.OnFlashMessage(flashmessage);
             }
         }
         public override void ChangeWallet(INotecase operater)

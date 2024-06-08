@@ -2,6 +2,7 @@
 @page "/_pc/wallet/transferasset/{assetid}/{kind}/{targetaddr}"
 @page "/_pc/wallet/transferasset/{assetid}/{kind}/{targetaddr}/{amount}"
 @page "/_pc/wallet/transferasset/{assetid}/{kind}/{targetaddr}/{amount}/{height}"
+@page "/_pc/wallet/transferasset/{assetid}/{kind}/{targetaddr}/{amount}/{height}/{daovote}"
 @inherits WalletComponentBase
 <PageContainer Title=@PageTitle>
 
@@ -13,9 +14,9 @@
 
         <Card Class="tabsCard">
             <CardTabs>
-                <Tabs  @bind-ActiveKey=@activeKey>
+                <Tabs @bind-ActiveKey=@activeKey>
                     <TabPane Key="1">
-                        <TabTemplate>@this.WebLocalString("转到OX地址","To OX Address")</TabTemplate>
+                        <TabTemplate>@this.WebLocalString("转到OX地址", "To OX Address")</TabTemplate>
                         <ChildContent>
                             <Form Model="@model"
                                   Style="margin-top: 8px;"
@@ -43,14 +44,16 @@
                                     <Input @bind-Value="@this.BalanceState.AvailableBalance" ReadOnly=true />
                                 </FormItem>
                                 <FormItem Label=@this.WebLocalString("OX 收款地址","OX Receipt Address") LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
-                                    <Input Placeholder=@this.WebLocalString("输入接收OX资产的地址","Enter the address to receive OX assets") @bind-Value="@context.OxAddress" />
-                                </FormItem>                              
+                                    <InputGroup Compact>
+                                        <Search OnSearch="search" AllowClear Placeholder=@this.WebLocalString("输入接收OX资产的地址","Enter the address to receive OX assets") @bind-Value="@context.OxAddress" />
+                                    </InputGroup>
+                                </FormItem>
                                 <FormItem Label=@this.WebLocalString("转帐金额","Transfer Amount") LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
                                     <Input Placeholder=@this.WebLocalString("输入要转帐的OX链资产金额","Enter the OX asset amount to transfer") @bind-Value="@context.Amount" />
                                 </FormItem>
                                 <FormItem Label=" " Style="margin-top:32px" WrapperCol="_submitFormLayout.WrapperCol">
                                     <Button Type="primary" HtmlType="submit" Disabled=!this.Valid>
-                                        @this.WebLocalString("提交","Submit")
+                                        @this.WebLocalString("提交", "Submit")
                                     </Button>
                                 </FormItem>
                                 <FormItem Label=" " Style="margin-top:32px" WrapperCol="_submitFormLayout.WrapperCol">
@@ -61,7 +64,7 @@
                         </ChildContent>
                     </TabPane>
                     <TabPane Key="2">
-                        <TabTemplate>@this.WebLocalString("转到以太坊映射地址","To Ethereum Map Address")</TabTemplate>
+                        <TabTemplate>@this.WebLocalString("转到以太坊映射地址", "To Ethereum Map Address")</TabTemplate>
                         <ChildContent>
                             <Form Model="@modelEth"
                                   Style="margin-top: 8px;"
@@ -89,7 +92,7 @@
                                     <Input @bind-Value="@this.BalanceState.AvailableBalance" ReadOnly=true />
                                 </FormItem>
                                 <FormItem Label=@this.WebLocalString("以太坊收款地址","Ethereum Receipt Address") LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
-                                    <Input Placeholder=@this.WebLocalString("输入接收OX资产的以太坊映射地址","Enter the Ethereum amp address to receive OX assets") @bind-Value="@context.ToEthAddress" />
+                                    <Input Placeholder=@this.WebLocalString("输入接收OX资产的以太坊地址","Enter the Ethereum address to receive OX assets") @bind-Value="@context.ToEthAddress" />
                                 </FormItem>
                                 <FormItem Label=@this.WebLocalString("锁仓区块高度","Lock Blockchain Height") LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
                                     <AntDesign.InputNumber Min="0" TValue="uint" Max=uint.MaxValue Placeholder=@this.WebLocalString("输入解锁的区块高度","Enter the blockchain height to unlock") @bind-Value="@context.LockExprationIndex" />
@@ -99,7 +102,7 @@
                                 </FormItem>
                                 <FormItem Label=" " Style="margin-top:32px" WrapperCol="_submitFormLayout.WrapperCol">
                                     <Button Type="primary" HtmlType="submit" Disabled=!this.Valid>
-                                        @this.WebLocalString("提交","Submit")
+                                        @this.WebLocalString("提交", "Submit")
                                     </Button>
                                 </FormItem>
                                 <FormItem Label=" " Style="margin-top:32px" WrapperCol="_submitFormLayout.WrapperCol">

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Akka.Actor.Dsl;
 using OX.Ledger;
 using OX.Network.P2P.Payloads;
+using OX.Persistence;
 using OX.Wallets.UI.Controls;
 using OX.Wallets.UI.Docking;
 
@@ -93,7 +94,12 @@ namespace OX.Wallets.Base.Wallets
             var s = Account.WatchOnly ? "   #   " : string.Empty;
             if (Account.Label.IsNotNullAndEmpty())
                 s += $"[{Account.Label}] ";
-            Text = s + Account.Address;
+            string dm = string.Empty;
+            if (Blockchain.Singleton.GetDomain(Account.ScriptHash, out byte[] domain))
+            {
+                dm = $"  ({System.Text.Encoding.UTF8.GetString(domain)})";
+            }
+            Text = s + Account.Address+dm;
         }
 
 
@@ -135,7 +141,7 @@ namespace OX.Wallets.Base.Wallets
                     subsubnode.Tag = t;
                     subnode.Nodes.Add(subsubnode);
                     var locktype = t.Value.Tx.IsTimeLock ? "时间锁" : "区块锁";
-                    var locktypeen = t.Value.Tx.IsTimeLock ? "Lock Time" : "Lock Block";                   
+                    var locktypeen = t.Value.Tx.IsTimeLock ? "Lock Time" : "Lock Block";
                     var expstr = t.Value.Tx.IsTimeLock ? t.Value.Tx.LockExpiration.ToDateTime().ToString("yyyy-MM-dd HH:mm:ss") : t.Value.Tx.LockExpiration.ToString();
                     subsubnode = new LockAccountTreeNode(account, t.Key, t.Value) { Text = UIHelper.LocalString($"{locktype}到期  :  {expstr}", $"{locktypeen} Expire  :  {expstr}") };
                     subsubnode.NodeType = 2;

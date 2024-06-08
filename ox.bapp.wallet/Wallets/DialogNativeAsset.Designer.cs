@@ -33,6 +33,9 @@ namespace OX.Wallets.Base
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DialogNativeAsset));
             pnlMain = new System.Windows.Forms.Panel();
+            lb_c_destroy = new DarkLabel();
+            lb_s_destroy = new DarkLabel();
+            lb_total_gas = new DarkLabel();
             lb_lq_oxc = new DarkLabel();
             lb_lq_oxs = new DarkLabel();
             lb_c_6 = new DarkLabel();
@@ -53,7 +56,8 @@ namespace OX.Wallets.Base
             lb_OXS_Locked = new DarkLabel();
             lb_OXS_Issued = new DarkLabel();
             lb_OXS_Name = new DarkLabel();
-            lb_total_gas = new DarkLabel();
+            bt_oxsVote = new DarkButton();
+            bt_oxcVote = new DarkButton();
             pnlMain.SuspendLayout();
             SuspendLayout();
             // 
@@ -97,6 +101,10 @@ namespace OX.Wallets.Base
             // 
             // pnlMain
             // 
+            pnlMain.Controls.Add(bt_oxcVote);
+            pnlMain.Controls.Add(bt_oxsVote);
+            pnlMain.Controls.Add(lb_c_destroy);
+            pnlMain.Controls.Add(lb_s_destroy);
             pnlMain.Controls.Add(lb_total_gas);
             pnlMain.Controls.Add(lb_lq_oxc);
             pnlMain.Controls.Add(lb_lq_oxs);
@@ -122,8 +130,38 @@ namespace OX.Wallets.Base
             pnlMain.Location = new System.Drawing.Point(0, 0);
             pnlMain.Name = "pnlMain";
             pnlMain.Padding = new System.Windows.Forms.Padding(15, 15, 15, 5);
-            pnlMain.Size = new System.Drawing.Size(1524, 532);
+            pnlMain.Size = new System.Drawing.Size(1524, 620);
             pnlMain.TabIndex = 2;
+            // 
+            // lb_c_destroy
+            // 
+            lb_c_destroy.AutoSize = true;
+            lb_c_destroy.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
+            lb_c_destroy.Location = new System.Drawing.Point(767, 513);
+            lb_c_destroy.Name = "lb_c_destroy";
+            lb_c_destroy.Size = new System.Drawing.Size(98, 25);
+            lb_c_destroy.TabIndex = 22;
+            lb_c_destroy.Text = "darkLabel3";
+            // 
+            // lb_s_destroy
+            // 
+            lb_s_destroy.AutoSize = true;
+            lb_s_destroy.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
+            lb_s_destroy.Location = new System.Drawing.Point(40, 513);
+            lb_s_destroy.Name = "lb_s_destroy";
+            lb_s_destroy.Size = new System.Drawing.Size(98, 25);
+            lb_s_destroy.TabIndex = 21;
+            lb_s_destroy.Text = "darkLabel3";
+            // 
+            // lb_total_gas
+            // 
+            lb_total_gas.AutoSize = true;
+            lb_total_gas.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
+            lb_total_gas.Location = new System.Drawing.Point(1155, 111);
+            lb_total_gas.Name = "lb_total_gas";
+            lb_total_gas.Size = new System.Drawing.Size(98, 25);
+            lb_total_gas.TabIndex = 20;
+            lb_total_gas.Text = "darkLabel4";
             // 
             // lb_lq_oxc
             // 
@@ -325,21 +363,37 @@ namespace OX.Wallets.Base
             lb_OXS_Name.TabIndex = 0;
             lb_OXS_Name.Text = "darkLabel1";
             // 
-            // lb_total_gas
+            // bt_oxsVOte
             // 
-            lb_total_gas.AutoSize = true;
-            lb_total_gas.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
-            lb_total_gas.Location = new System.Drawing.Point(1155, 111);
-            lb_total_gas.Name = "lb_total_gas";
-            lb_total_gas.Size = new System.Drawing.Size(98, 25);
-            lb_total_gas.TabIndex = 20;
-            lb_total_gas.Text = "darkLabel4";
+            bt_oxsVote.Location = new System.Drawing.Point(40, 568);
+            bt_oxsVote.Name = "bt_oxsVOte";
+            bt_oxsVote.Padding = new System.Windows.Forms.Padding(5);
+            bt_oxsVote.Size = new System.Drawing.Size(112, 34);
+            bt_oxsVote.SpecialBorderColor = null;
+            bt_oxsVote.SpecialFillColor = null;
+            bt_oxsVote.SpecialTextColor = null;
+            bt_oxsVote.TabIndex = 23;
+            bt_oxsVote.Text = "darkButton1";
+            bt_oxsVote.Click += bt_oxsVOte_Click;
+            // 
+            // bt_oxcVote
+            // 
+            bt_oxcVote.Location = new System.Drawing.Point(767, 568);
+            bt_oxcVote.Name = "bt_oxcVote";
+            bt_oxcVote.Padding = new System.Windows.Forms.Padding(5);
+            bt_oxcVote.Size = new System.Drawing.Size(112, 34);
+            bt_oxcVote.SpecialBorderColor = null;
+            bt_oxcVote.SpecialFillColor = null;
+            bt_oxcVote.SpecialTextColor = null;
+            bt_oxcVote.TabIndex = 24;
+            bt_oxcVote.Text = "darkButton1";
+            bt_oxcVote.Click += bt_oxcVote_Click;
             // 
             // DialogNativeAsset
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(1524, 615);
+            ClientSize = new System.Drawing.Size(1524, 703);
             Controls.Add(pnlMain);
             Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
@@ -380,5 +434,9 @@ namespace OX.Wallets.Base
         private DarkLabel lb_lq_oxc;
         private DarkLabel lb_lq_oxs;
         private DarkLabel lb_total_gas;
+        private DarkLabel lb_s_destroy;
+        private DarkLabel lb_c_destroy;
+        private DarkButton bt_oxcVote;
+        private DarkButton bt_oxsVote;
     }
 }

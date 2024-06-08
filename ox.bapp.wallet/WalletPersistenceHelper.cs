@@ -1,20 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+﻿using OX.IO;
 using OX.IO.Data.LevelDB;
-using OX.Network.P2P.Payloads;
-using OX.IO;
-using OX.SmartContract;
 using OX.Ledger;
-using OX.Persistence;
-using OX.Cryptography.AES;
-using Akka.Util.Internal;
+using OX.Network.P2P.Payloads;
+using OX.SmartContract;
 using OX.Wallets.Base.Events;
 using OX.Wallets.Base.Wallets;
-
+using System;
+using OX.Cryptography.ECC;
+using Org.BouncyCastle.Bcpg;
+using OX.Cryptography;
 namespace OX.Wallets.Base
 {
     public static partial class WalletPersistenceHelper
@@ -119,14 +113,14 @@ namespace OX.Wallets.Base
                             if (oldHolder.MixAccountType == Network.P2P.MixAccountType.Ethereum)
                             {
                                 var oldEthAddress = oldHolder.AsEthAddress();
-                                EthNftTransferKey oldEkey = new EthNftTransferKey { NFSStateKey = nftdonate.NFSStateKey, EthAddress = new NFT.StringWrapper(oldEthAddress.ToLower()) };
+                                EthNftTransferKey oldEkey = new EthNftTransferKey { NFSStateKey = nftdonate.NFSStateKey, EthAddress = new StringWrapper(oldEthAddress.ToLower()) };
                                 batch.Delete(SliceBuilder.Begin(WalletBizPersistencePrefixes.NFT_Transfer_Record_Server).Add(oldEkey));
                             }
                         }
                         if (nftdonate.NFSHolder.MixAccountType == Network.P2P.MixAccountType.Ethereum)
                         {
                             var ethAddress = nftdonate.NFSHolder.AsEthAddress();
-                            EthNftTransferKey ekey = new EthNftTransferKey { NFSStateKey = nkey, EthAddress = new NFT.StringWrapper(ethAddress.ToLower()) };
+                            EthNftTransferKey ekey = new EthNftTransferKey { NFSStateKey = nkey, EthAddress = new StringWrapper(ethAddress.ToLower()) };
                             batch.Put(SliceBuilder.Begin(WalletBizPersistencePrefixes.NFT_Transfer_Record_Server).Add(ekey), SliceBuilder.Begin().Add(nftdonate));
                         }
                     }
@@ -271,7 +265,7 @@ namespace OX.Wallets.Base
                     {
                         var key = new CoinReference { PrevHash = lat.Hash, PrevIndex = n };
                         var LockAssetMerge = new LockAssetMerge { Tx = lat, Output = output, IsNativeLock = true };
-                   
+
                         var MyLockAssetMeta = new MyLockAssetMeta { Owner = holder, Tx = lat };
                         if (provider.Wallet.ContainsAndHeld(holder))
                         {
@@ -323,27 +317,20 @@ namespace OX.Wallets.Base
                 }
             }
         }
-        public static void Save_SecretLetterTransaction(this WriteBatch batch, WalletBappProvider provider, Block block, SecretLetterTransaction slt, AccountPack ap)
+        public static void Save_SecretLetterTransaction(this WriteBatch batch, WalletBappProvider provider, Block block, SecretLetterTransaction slt, AccountPack localPack, SecretLetterKind kind)
         {
-            if (slt.IsNotNull() && slt.Flag == 1)
+            if (slt.IsNotNull() && slt.Flag == 1 && slt.TryGetBody(out SecretLetterBody body))
             {
-                try
+                SecretLetterState sls = new SecretLetterState { SecretLetterTransaction = slt, LetterKind = kind, Index = block.Index, Timestamp = block.Timestamp };
+                SecretLetterKey slk = new SecretLetterKey { LetterLine = body.LetterLine, LetterId = slt.Hash };
+                batch.Put(SliceBuilder.Begin(WalletBizPersistencePrefixes.SecrectLetter_box).Add(slk), SliceBuilder.Begin().Add(sls));
+                if (kind == SecretLetterKind.Inbox)
                 {
-                    var sharekey = ap.Key.DiffieHellman(slt.From);
-                    var decryptedData = slt.Data.Decrypt(sharekey);
-                    SecretLetterKey slk = new SecretLetterKey
+                    if (ECDiffieHellmanHelper.ECDHDeriveKeyHash(localPack.Key, slt.From).Equals(body.LetterLine))
                     {
-                        LetterIndex = block.Index,
-                        Recipient = ap.Address,
-                        From = slt.From,
-                        TxId = slt.Hash,
-                        Msg = slt.Data
-                    };
-                    batch.Put(SliceBuilder.Begin(WalletBizPersistencePrefixes.SecrectLetter_Inbox).Add(slk), SliceBuilder.Begin().Add(slt));
-                }
-                catch
-                {
-
+                        LetterPair pair = new LetterPair { Local = localPack.Address, Remote = slt.From };
+                        batch.Put(SliceBuilder.Begin(WalletBizPersistencePrefixes.LetterLine_Pair).Add(body.LetterLine), SliceBuilder.Begin().Add(pair));
+                    }
                 }
             }
         }

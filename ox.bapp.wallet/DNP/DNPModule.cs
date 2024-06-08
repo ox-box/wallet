@@ -45,7 +45,7 @@ namespace OX.Wallets.Base.DNP
             dnpSettingMenu.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
             //isingMenu.Image = global::Example.Icons.NewFile_6276;
             dnpSettingMenu.Name = "newLetterMenu";
-            dnpSettingMenu.ShortcutKeys = Keys.Control | Keys.S;
+            dnpSettingMenu.ShortcutKeys = Keys.Control |Keys.Alt| Keys.S;
             dnpSettingMenu.Size = new System.Drawing.Size(170, 22);
             dnpSettingMenu.Text = UIHelper.LocalString("&节点设置", "&Node Setting");
             dnpSettingMenu.Click += DnpSettingMenu_Click;
@@ -55,7 +55,7 @@ namespace OX.Wallets.Base.DNP
             showPortalUrlMenu.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
             //isingMenu.Image = global::Example.Icons.NewFile_6276;
             showPortalUrlMenu.Name = "showPortalUrlMenu";
-            showPortalUrlMenu.ShortcutKeys = Keys.Control | Keys.W;
+            showPortalUrlMenu.ShortcutKeys = Keys.Control |Keys.Alt| Keys.W;
             showPortalUrlMenu.Size = new System.Drawing.Size(170, 22);
             showPortalUrlMenu.Text = UIHelper.LocalString("&显示门户地址", "&Show Portal Url");
             showPortalUrlMenu.Click += ShowPortalUrlMenu_Click;
@@ -65,7 +65,7 @@ namespace OX.Wallets.Base.DNP
             goPortalMenu.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
             //isingMenu.Image = global::Example.Icons.NewFile_6276;
             goPortalMenu.Name = "goPortalMenu";
-            goPortalMenu.ShortcutKeys = Keys.Control | Keys.O;
+            goPortalMenu.ShortcutKeys = Keys.Control |Keys.Alt| Keys.O;
             goPortalMenu.Size = new System.Drawing.Size(170, 22);
             goPortalMenu.Text = UIHelper.LocalString("&打开门户", "&Open Portal");
             goPortalMenu.Click += GoPortalMenu_Click;
@@ -125,6 +125,10 @@ namespace OX.Wallets.Base.DNP
 
         }
         public override void OnRebuild()
+        {
+
+        }
+        public override void OnFlashMessage(FlashMessage flashMessage)
         {
 
         }

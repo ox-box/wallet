@@ -133,6 +133,10 @@ namespace OX.Wallets.Base
         public void AfterOnBlock(Block block)
         {
         }
+        public void OnFlashMessage(FlashMessage flashMessage)
+        {
+
+        }
         public void ChangeWallet(INotecase operater)
         {
             if (operater.IsNull()) return;

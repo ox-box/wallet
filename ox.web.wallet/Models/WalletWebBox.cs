@@ -25,6 +25,35 @@ namespace OX.Web.Models
             List<MenuDataItem> list = new List<MenuDataItem>();
             if (OXRunTime.RunMode == RunMode.Server)
             {
+                var latestHex= System.Text.Encoding.UTF8.GetBytes("latest").ToHexString();
+                var hotHex = System.Text.Encoding.UTF8.GetBytes("hot").ToHexString();
+                list.Add(new MenuDataItem
+                {
+                    Path = "/_pc/flashstate",
+                    Name = UIHelper.WebLocalString(language, "闪态", "Flash State"),
+                    Key = "flashstate",
+                    //Icon = "smile",
+                    Children = new MenuDataItem[] {
+                    new MenuDataItem
+                    {
+                        Path = $"/_pc/flashstate/stateflow/{latestHex}",
+                        Name = UIHelper.WebLocalString(language, "最新", "Latest"),
+                        Key = "latest"
+                    },
+                     new MenuDataItem
+                    {
+                        Path = $"/_pc/flashstate/stateflow/{hotHex}",
+                        Name = UIHelper.WebLocalString(language, "最热", "Hot"),
+                        Key = "hot"
+                    },
+                      new MenuDataItem
+                    {
+                        Path = "/_pc/flashstate/new",
+                        Name = UIHelper.WebLocalString(language,"更新闪态", "Update Flash State"),
+                        Key = "new"
+                    }
+                }
+                });
                 list.Add(new MenuDataItem
                 {
                     Path = "/_pc/blockchain",
@@ -59,7 +88,6 @@ namespace OX.Web.Models
                     }
                 }
                 });
-
                 list.Add(new MenuDataItem
                 {
                     Path = "/_pc/wallet",

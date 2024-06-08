@@ -120,6 +120,10 @@ namespace OX.Wallets.Base
         public void OnRebuild()
         {
         }
+        public void OnFlashMessage(FlashMessage flashMessage)
+        {
+
+        }
         void initAccounts()
         {
             if (this.Operater.IsNotNull())

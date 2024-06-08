@@ -15,7 +15,6 @@ using Nethereum.Model;
 using Nethereum.Util;
 using Nethereum.Hex.HexConvertors.Extensions;
 using OX.IO;
-using NBitcoin.Secp256k1;
 using Org.BouncyCastle.Asn1.Ocsp;
 using Blazored.LocalStorage;
 using System.Xml.Linq;

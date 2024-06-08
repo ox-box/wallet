@@ -4,7 +4,7 @@
 <Microsoft.AspNetCore.Components.Web.Extensions.Head.Title Value=@PageTitle />
 <PageContainer Title=@PageTitle>
     <Extra>
-        <Button OnClick="OpenPublish" Icon="plus" HtmlType="submit" Type="primary">@this.WebLocalString("发布NFT出售信息","Publish NFT sales information")</Button>
+        <Button OnClick="OpenPublish" Icon="plus" HtmlType="submit" Type="primary">@this.WebLocalString("发布NFT出售信息", "Publish NFT sales information")</Button>
     </Extra>
     <ChildContent>
         <div class="standardList">
@@ -14,18 +14,17 @@
                 <ChildContent>
                     @{
                         List<ResaleNftViewModel> list = new List<ResaleNftViewModel>();
-                        if (NFTBook.Instance.IsNotNull() && NFTBook.Instance.Records.IsNotNullAndEmpty())
+                        if (FlashMessageProvider.Instance.NFTPendings.IsNotNullAndEmpty())
                         {
-                            foreach (var r in NFTBook.Instance.Records)
+                            foreach (var r in FlashMessageProvider.Instance.NFTPendings)
                             {
-                                var nfcState = Blockchain.Singleton.CurrentSnapshot.NFTs.TryGet(r.Value.TranferData.Key.NFCID);
+                                var nfcState = Blockchain.Singleton.CurrentSnapshot.NFTs.TryGet(r.Value.Pending.Key.NFCID);
                                 if (nfcState.IsNotNull())
                                 {
                                     list.Add(new ResaleNftViewModel
                                 {
-                                    IssueId = r.Key,
-                                    Auth = r.Value.Auth,
-                                    NFTTranferData = r.Value.TranferData,
+                                    IssueId = r.Key.Text,
+                                    NFTTranferData = r.Value.Pending,
                                     NFCState = nfcState
                                 });
                                 }
@@ -35,45 +34,45 @@
                         {
                             var ls = list.OrderByDescending(m => m.NFCState.TotalAmountTransfer).ToArray();
                             <AntList TItem="ResaleNftViewModel"
-                             DataSource="ls"
-                             ItemLayout="ListItemLayout.Horizontal">
+                                     DataSource="ls"
+                                     ItemLayout="ListItemLayout.Horizontal">
                                 <ListItem>
 
                                     <div class="listContent">
                                         <div class="listContentItem">
-                                            <span>@this.WebLocalString("NFT CID","NFT CID")</span>
+                                            <span>@this.WebLocalString("NFT CID", "NFT CID")</span>
                                             <p>@context.NFCState.NFC.NftCopyright.NftID.CID</p>
                                         </div>
                                     </div>
                                     <div class="listContent">
                                         <div class="listContentItem">
-                                            <span>@this.WebLocalString("NFT 名称","NFT Name")</span>
+                                            <span>@this.WebLocalString("NFT 名称", "NFT Name")</span>
                                             <p>@context.NFCState.NFC.NftCopyright.NftName </p>
                                         </div>
                                     </div>
                                     <div class="listContent">
                                         <div class="listContentItem">
-                                            <span>@this.WebLocalString("NFT 简介","NFT Description")</span>
+                                            <span>@this.WebLocalString("NFT 简介", "NFT Description")</span>
                                             <p>@context.NFCState.NFC.NftCopyright.Description </p>
                                         </div>
-                                    </div>  
+                                    </div>
                                     <div class="listContent">
                                         <div class="listContentItem">
-                                            <span>@this.WebLocalString("标价","Mark Price")</span>
+                                            <span>@this.WebLocalString("标价", "Mark Price")</span>
                                             <p>@context.NFTTranferData.Validator.Target.Amount  OXC </p>
                                         </div>
                                     </div>
                                     <div class="listContent">
                                         <div class="listContentItem">
-                                            <span>@this.WebLocalString("到期高度","Expiration Height")</span>
+                                            <span>@this.WebLocalString("到期高度", "Expiration Height")</span>
                                             <p>@context.NFTTranferData.Validator.Target.MaxIndex</p>
                                         </div>
                                     </div>
-                                  
 
-                                <div class="listContent">
-                                    <div class="listContentItem">
-                                        @{
+
+                                    <div class="listContent">
+                                        <div class="listContentItem">
+                                            @{
                                                 var url = $"https://ipfs.io/ipfs/{context.NFCState.NFC.NftCopyright.NftID.CID}/{context.NFCState.NFC.NftCopyright.NftName}";
                                                 var url2 = $"ipfs://{context.NFCState.NFC.NftCopyright.NftID.CID}/{context.NFCState.NFC.NftCopyright.NftName}";
                                                 var url3 = $"/_pc/nft/nftline/{context.NFCState.NFC.NftCopyright.NftID.ToArray().ToHexString()}";
@@ -81,16 +80,16 @@
                                             }
                                             <Space>
                                                 <SpaceItem>
-                                                    <a href="@url4" target="_blank">@this.WebLocalString("购买","Buy")</a>
+                                                    <a href="@url4" target="_blank">@this.WebLocalString("购买", "Buy")</a>
                                                 </SpaceItem>
                                                 <SpaceItem>
-                                                    <a href="@url3" target="_blank">@this.WebLocalString("成交走势","Transfer Trend")</a>
+                                                    <a href="@url3" target="_blank">@this.WebLocalString("成交走势", "Transfer Trend")</a>
                                                 </SpaceItem>
                                                 <SpaceItem>
-                                                    <a href="@url" target="_blank">@this.WebLocalString("预览","Preview")</a>
+                                                    <a href="@url" target="_blank">@this.WebLocalString("预览", "Preview")</a>
                                                 </SpaceItem>
                                                 <SpaceItem>
-                                                    <a href="@url2" target="_blank">@this.WebLocalString("节点预览","Node Preview")</a>
+                                                    <a href="@url2" target="_blank">@this.WebLocalString("节点预览", "Node Preview")</a>
                                                 </SpaceItem>
                                             </Space>
                                         </div>

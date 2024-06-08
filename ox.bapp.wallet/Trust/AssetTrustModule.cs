@@ -46,7 +46,7 @@ namespace OX.Wallets.Base.Trust
             newTrustAccountMenu.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
             //isingMenu.Image = global::Example.Icons.NewFile_6276;
             newTrustAccountMenu.Name = "newTrustAccountMenu";
-            newTrustAccountMenu.ShortcutKeys = Keys.Control | Keys.N;
+            newTrustAccountMenu.ShortcutKeys = Keys.Control |Keys.Alt| Keys.N;
             newTrustAccountMenu.Size = new System.Drawing.Size(170, 22);
             newTrustAccountMenu.Text = UIHelper.LocalString("&创建信托合约", "&New Trust Contract");
             newTrustAccountMenu.Click += NewTrustAccountMenu_Click;
@@ -57,7 +57,7 @@ namespace OX.Wallets.Base.Trust
             tursterMenu.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
             //exitmenu.Image = global::Example.Icons.NewFile_6276;
             tursterMenu.Name = "tursterMenu";
-            tursterMenu.ShortcutKeys = Keys.Control | Keys.R;
+            tursterMenu.ShortcutKeys = Keys.Control |Keys.Alt| Keys.R;
             tursterMenu.Size = new System.Drawing.Size(170, 22);
             tursterMenu.Text = UIHelper.LocalString("&我委托的合约", "&My Truster Contracts");
             tursterMenu.Click += TursterMenu_Click;
@@ -67,7 +67,7 @@ namespace OX.Wallets.Base.Trust
             tursteeMenu.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
             //exitmenu.Image = global::Example.Icons.NewFile_6276;
             tursteeMenu.Name = "tursteeMenu";
-            tursteeMenu.ShortcutKeys = Keys.Control | Keys.E;
+            tursteeMenu.ShortcutKeys = Keys.Control |Keys.Alt| Keys.E;
             tursteeMenu.Size = new System.Drawing.Size(170, 22);
             tursteeMenu.Text = UIHelper.LocalString("&我受托的合约", "&My Trustee Contracts");
             tursteeMenu.Click += TursteeMenu_Click;
@@ -202,6 +202,17 @@ namespace OX.Wallets.Base.Trust
             if (MyTrusterContracts.IsNotNull())
             {
                 MyTrusterContracts.OnRebuild();
+            }
+        }
+        public override void OnFlashMessage(FlashMessage flashMessage)
+        {
+            if (MyTrusteeContracts.IsNotNull())
+            {
+                MyTrusteeContracts.OnFlashMessage(flashMessage);
+            }
+            if (MyTrusterContracts.IsNotNull())
+            {
+                MyTrusterContracts.OnFlashMessage(flashMessage);
             }
         }
         public override void OnLoadBappModuleWalletSection(JObject bappSectionObject)

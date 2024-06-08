@@ -15,7 +15,7 @@ using OX.IO;
 using OX.Cryptography.ECC;
 using OX.Ledger;
 using OX.SmartContract;
-using OX.Cryptography.AES;
+using OX.Cryptography;
 using OX.Web.Models;
 using OX.Wallets.Hubs;
 using Microsoft.AspNetCore.SignalR.Client;
@@ -36,6 +36,7 @@ using Akka.Actor.Dsl;
 using System.Text;
 using OX.Wallets.UI.Forms;
 using Nethereum.Hex.HexConvertors.Extensions;
+using OX.Wallets.Flash;
 
 namespace OX.Web.Pages
 {
@@ -89,9 +90,9 @@ namespace OX.Web.Pages
         void reload()
         {
             this.Model = new BuyNftViewModel();
-            if (issueid.IsNotNullAndEmpty() && NFTBook.Instance.IsNotNull() && NFTBook.Instance.Records.TryGetValue(issueid, out NFTBookRecord record))
+            if (issueid.IsNotNullAndEmpty() && FlashMessageProvider.Instance.NFTPendings.TryGetValue(new StringWrapper(issueid), out NFTPendingRecord record))
             {
-                this.Model.Signature = record.Auth;
+                this.Model.Signature = record.Pending.ToArray().ToHexString();
                 OnBuy();
             }
         }
@@ -99,10 +100,10 @@ namespace OX.Web.Pages
         {
             if (this.Model.Signature.IsNotNullAndEmpty())
             {
-                NFTTranferData ndv = default;
+                NFTPending ndv = default;
                 try
                 {
-                    ndv = this.Model.Signature.HexToBytes().AsSerializable<NFTTranferData>();
+                    ndv = this.Model.Signature.HexToBytes().AsSerializable<NFTPending>();
                 }
                 catch
                 {

@@ -32,7 +32,6 @@
             this.btOpenWallet = new OX.Wallets.UI.Controls.DarkButton();
             this.lb2 = new OX.Wallets.UI.Controls.DarkLabel();
             this.tbPwd = new OX.Wallets.UI.Controls.DarkTextBox();
-            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.SuspendLayout();
             // 
             // lblHeader
@@ -85,10 +84,7 @@
             this.tbPwd.Size = new System.Drawing.Size(324, 30);
             this.tbPwd.TabIndex = 10;
             this.tbPwd.PasswordChar = '*';
-            // 
-            // openFileDialog1
-            // 
-            this.openFileDialog1.FileName = "openFileDialog1";
+           
             // 
             // LockWallet
             // 
@@ -115,6 +111,5 @@
         private OX.Wallets.UI.Controls.DarkButton btOpenWallet;
         private OX.Wallets.UI.Controls.DarkLabel lb2;
         private OX.Wallets.UI.Controls.DarkTextBox tbPwd;
-        private System.Windows.Forms.OpenFileDialog openFileDialog1;
     }
 }

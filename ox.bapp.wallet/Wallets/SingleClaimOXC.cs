@@ -95,10 +95,10 @@ namespace OX.Wallets.Base
                     }
                     LockAvailable += OXSHelper.CalculateBonusSpend(los);
                     LockUnavailable += OXSHelper.CalculateBonusUnspend(unspendlos, snapshot.Height + 1);
-                    tb_Available.Text = LockAvailable.ToString();
-                    tb_Unavailable.Text = LockUnavailable.ToString();
-                    if (LockAvailable == Fixed8.Zero) bt_claim.Enabled = false;
                 }
+                tb_Available.Text = LockAvailable.ToString();
+                tb_Unavailable.Text = LockUnavailable.ToString();
+                if (LockAvailable == Fixed8.Zero) bt_claim.Enabled = false;
             }
 
 

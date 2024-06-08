@@ -107,37 +107,49 @@
                 }
                 var x = oxcIssued - totalLockOXC;
                 x -= Fixed8.One * block.SystemFeeAmount;
+                Fixed8 OXSDestroy = Fixed8.Zero;
+                Fixed8 OXCDestroy = Fixed8.Zero;
+                WalletBappProvider.Instance.TokenBlackHoleDestroySummary.TryGetValue(Blockchain.OXS, out OXSDestroy);
+                WalletBappProvider.Instance.TokenBlackHoleDestroySummary.TryGetValue(Blockchain.OXC, out OXCDestroy);
             }
             <Panel Header="@sOXS" Key="@Blockchain.OXS.ToString()">
+
                 <Collapse>
                     <div>
                         <Paragraph><Text Code>@this.WebLocalString($"已发行", $"Issued")</Text> <Text Copyable>@oxsIssued</Text></Paragraph>
                         <Paragraph><Text Code>@this.WebLocalString($"累计锁仓", $"Total Lock")</Text> <Text Copyable>@totalLockOXS</Text></Paragraph>
                         <Paragraph><Text Code>@this.WebLocalString($"流通总量", $"Total Liquid")</Text> <Text Copyable>@(oxsIssued - totalLockOXS)</Text></Paragraph>
-                            <Paragraph><Text Code>@this.WebLocalString($"剩余锁仓时间超过半年", $"Remaining total lock later 0.5 year")</Text> <Text Copyable>@s1</Text></Paragraph>
+                        <Paragraph><Text Code>@this.WebLocalString($"剩余锁仓时间超过半年", $"Remaining total lock later 0.5 year")</Text> <Text Copyable>@s1</Text></Paragraph>
                         <Paragraph><Text Code>@this.WebLocalString($"剩余锁仓时间超过1年", $"Remaining total lock later 1 year")</Text> <Text Copyable>@s2</Text></Paragraph>
                         <Paragraph><Text Code>@this.WebLocalString($"剩余锁仓时间超过1.5年", $"Remaining total lock later 1.5 year")</Text> <Text Copyable>@s3</Text></Paragraph>
                         <Paragraph><Text Code>@this.WebLocalString($"剩余锁仓区块>1000000", $"Remaining total lock blocks than 1000000")</Text> <Text Copyable>@s4</Text></Paragraph>
                         <Paragraph><Text Code>@this.WebLocalString($"剩余锁仓区块>2000000", $"Remaining total lock blocks than 2000000")</Text> <Text Copyable>@s5</Text></Paragraph>
                         <Paragraph><Text Code>@this.WebLocalString($"剩余锁仓区块>3000000", $"Remaining total lock blocks than 3000000")</Text> <Text Copyable>@s6</Text></Paragraph>
+                        <Paragraph><Text Code>@this.WebLocalString($"累计黑洞销毁", $"Total Black Hole Destruction")</Text> <Text Copyable>@OXSDestroy</Text></Paragraph>
                     </div>
                 </Collapse>
             </Panel>
             <Panel Header="@sOXC" Key="@Blockchain.OXC.ToString()">
-                <Collapse>
-                    <div>
-                        <Paragraph><Text Code>@this.WebLocalString($"已发行", $"Issued")</Text> <Text Copyable>@oxcIssued</Text></Paragraph>
-                        <Paragraph><Text Code>@this.WebLocalString($"累计锁仓", $"Total Lock")</Text> <Text Copyable>@totalLockOXC</Text></Paragraph>
-                        <Paragraph><Text Code>@this.WebLocalString($"GAS总量", $"Total GAS")</Text> <Text Copyable>@block.SystemFeeAmount</Text></Paragraph>
-                        <Paragraph><Text Code>@this.WebLocalString($"流通总量", $"Total Liquid")</Text> <Text Copyable>@x</Text></Paragraph>
+                <ExtraTemplate>
+                    <Button Type="@ButtonType.Link" OnClick="_=>GoVote(Blockchain.OXC)"> @this.WebLocalString("锁仓投票", "Lock Vote")</Button>
+                </ExtraTemplate>
+                <ChildContent>
+                    <Collapse>
+                        <div>
+                            <Paragraph><Text Code>@this.WebLocalString($"已发行", $"Issued")</Text> <Text Copyable>@oxcIssued</Text></Paragraph>
+                            <Paragraph><Text Code>@this.WebLocalString($"累计锁仓", $"Total Lock")</Text> <Text Copyable>@totalLockOXC</Text></Paragraph>
+                            <Paragraph><Text Code>@this.WebLocalString($"GAS总量", $"Total GAS")</Text> <Text Copyable>@block.SystemFeeAmount</Text></Paragraph>
+                            <Paragraph><Text Code>@this.WebLocalString($"流通总量", $"Total Liquid")</Text> <Text Copyable>@x</Text></Paragraph>
                             <Paragraph><Text Code>@this.WebLocalString($"剩余锁仓时间超过半年", $"Remaining total lock later 0.5 year")</Text> <Text Copyable>@c1</Text></Paragraph>
-                        <Paragraph><Text Code>@this.WebLocalString($"剩余锁仓时间超过1年", $"Remaining total lock later 1 year")</Text> <Text Copyable>@c2</Text></Paragraph>
-                        <Paragraph><Text Code>@this.WebLocalString($"剩余锁仓时间超过1.5年", $"Remaining total lock later 1.5 year")</Text> <Text Copyable>@c3</Text></Paragraph>
-                        <Paragraph><Text Code>@this.WebLocalString($"剩余锁仓区块>1000000", $"Remaining total lock blocks than 1000000")</Text> <Text Copyable>@c4</Text></Paragraph>
-                        <Paragraph><Text Code>@this.WebLocalString($"剩余锁仓区块>2000000", $"Remaining total lock blocks than 2000000")</Text> <Text Copyable>@c5</Text></Paragraph>
-                        <Paragraph><Text Code>@this.WebLocalString($"剩余锁仓区块>3000000", $"Remaining total lock blocks than 3000000")</Text> <Text Copyable>@c6</Text></Paragraph>
-                    </div>
-                </Collapse>
+                            <Paragraph><Text Code>@this.WebLocalString($"剩余锁仓时间超过1年", $"Remaining total lock later 1 year")</Text> <Text Copyable>@c2</Text></Paragraph>
+                            <Paragraph><Text Code>@this.WebLocalString($"剩余锁仓时间超过1.5年", $"Remaining total lock later 1.5 year")</Text> <Text Copyable>@c3</Text></Paragraph>
+                            <Paragraph><Text Code>@this.WebLocalString($"剩余锁仓区块>1000000", $"Remaining total lock blocks than 1000000")</Text> <Text Copyable>@c4</Text></Paragraph>
+                            <Paragraph><Text Code>@this.WebLocalString($"剩余锁仓区块>2000000", $"Remaining total lock blocks than 2000000")</Text> <Text Copyable>@c5</Text></Paragraph>
+                            <Paragraph><Text Code>@this.WebLocalString($"剩余锁仓区块>3000000", $"Remaining total lock blocks than 3000000")</Text> <Text Copyable>@c6</Text></Paragraph>
+                            <Paragraph><Text Code>@this.WebLocalString($"累计黑洞销毁", $"Total Black Hole Destruction")</Text> <Text Copyable>@OXCDestroy</Text></Paragraph>
+                        </div>
+                    </Collapse>
+                </ChildContent>
             </Panel>
         </Collapse>
         <Divider Orientation="left" Style="font-weight:bold">@this.WebLocalString($"私营资产", $"Private Asset")</Divider>
@@ -195,26 +207,34 @@
                 var owner = Contract.CreateSignatureRedeemScript(asset.Value.Owner).ToScriptHash().ToAddress();
                 var cap = asset.Value.Amount == -Fixed8.Satoshi ? UIHelper.LocalString("无限", "unlimited") : asset.Value.Amount.ToString();
                 var Available = asset.Value.Available.ToString();
+                Fixed8 Destroy = Fixed8.Zero;
+                WalletBappProvider.Instance.TokenBlackHoleDestroySummary.TryGetValue(asset.Key, out Destroy);
                 <Panel Header="@s" Key="@asset.Key.ToString()">
-                    <Collapse>
-                        <div>
-                            <Paragraph><Text Code>@this.WebLocalString($"资产所有者", $"Asset Owner")</Text> <Text Copyable>@owner</Text></Paragraph>
-                         <Paragraph><Text Code>@this.WebLocalString($"资产管理者", $"Asset Admin")</Text> <Text Copyable>@asset.Value.Admin.ToAddress()</Text></Paragraph>
-                         <Paragraph><Text Code>@this.WebLocalString($"资产分发者", $"Asset Issuer")</Text> <Text Copyable>@asset.Value.Issuer.ToAddress()</Text></Paragraph>
-                         <Paragraph><Text Code>@this.WebLocalString($"精度", $"Precision")</Text> <Text Copyable>@asset.Value.Precision</Text></Paragraph>
-                         <Paragraph><Text Code>@this.WebLocalString($"总量", $"Cap")</Text> <Text Copyable>@cap</Text></Paragraph>
-                         <Paragraph><Text Code>@this.WebLocalString($"已发行", $"Issued")</Text> <Text Copyable>@Available</Text></Paragraph>
-                         <Paragraph><Text Code>@this.WebLocalString($"累计锁仓", $"Total Lock")</Text> <Text Copyable>@totalLock</Text></Paragraph>
-                         <Paragraph><Text Code>@this.WebLocalString($"流通总量", $"Total Liquid")</Text> <Text Copyable>@(asset.Value.Available - totalLock)</Text></Paragraph>
+                    <ExtraTemplate>
+                        <Button Type="@ButtonType.Link" OnClick="_=>GoVote(asset.Key)"> @this.WebLocalString("锁仓投票", "Lock Vote")</Button>
+                    </ExtraTemplate>
+                    <ChildContent>
+                        <Collapse>
+                            <div>
+                                <Paragraph><Text Code>@this.WebLocalString($"资产所有者", $"Asset Owner")</Text> <Text Copyable>@owner</Text></Paragraph>
+                                <Paragraph><Text Code>@this.WebLocalString($"资产管理者", $"Asset Admin")</Text> <Text Copyable>@asset.Value.Admin.ToAddress()</Text></Paragraph>
+                                <Paragraph><Text Code>@this.WebLocalString($"资产分发者", $"Asset Issuer")</Text> <Text Copyable>@asset.Value.Issuer.ToAddress()</Text></Paragraph>
+                                <Paragraph><Text Code>@this.WebLocalString($"精度", $"Precision")</Text> <Text Copyable>@asset.Value.Precision</Text></Paragraph>
+                                <Paragraph><Text Code>@this.WebLocalString($"总量", $"Cap")</Text> <Text Copyable>@cap</Text></Paragraph>
+                                <Paragraph><Text Code>@this.WebLocalString($"已发行", $"Issued")</Text> <Text Copyable>@Available</Text></Paragraph>
+                                <Paragraph><Text Code>@this.WebLocalString($"累计锁仓", $"Total Lock")</Text> <Text Copyable>@totalLock</Text></Paragraph>
+                                <Paragraph><Text Code>@this.WebLocalString($"流通总量", $"Total Liquid")</Text> <Text Copyable>@(asset.Value.Available - totalLock)</Text></Paragraph>
                                 <Paragraph><Text Code>@this.WebLocalString($"剩余锁仓时间超过半年", $"Remaining total lock later 0.5 year")</Text> <Text Copyable>@s1</Text></Paragraph>
-                         <Paragraph><Text Code>@this.WebLocalString($"剩余锁仓时间超过1年", $"Remaining total lock later 1 year")</Text> <Text Copyable>@s2</Text></Paragraph>
-                         <Paragraph><Text Code>@this.WebLocalString($"剩余锁仓时间超过1.5年", $"Remaining total lock later 1.5 year")</Text> <Text Copyable>@s3</Text></Paragraph>
-                         <Paragraph><Text Code>@this.WebLocalString($"剩余锁仓区块>1000000", $"Remaining total lock blocks than 1000000")</Text> <Text Copyable>@s4</Text></Paragraph>
-                         <Paragraph><Text Code>@this.WebLocalString($"剩余锁仓区块>2000000", $"Remaining total lock blocks than 2000000")</Text> <Text Copyable>@s5</Text></Paragraph>
-                         <Paragraph><Text Code>@this.WebLocalString($"剩余锁仓区块>3000000", $"Remaining total lock blocks than 3000000")</Text> <Text Copyable>@s6</Text></Paragraph>
-                     </div>
-                 </Collapse>
-             </Panel>
+                                <Paragraph><Text Code>@this.WebLocalString($"剩余锁仓时间超过1年", $"Remaining total lock later 1 year")</Text> <Text Copyable>@s2</Text></Paragraph>
+                                <Paragraph><Text Code>@this.WebLocalString($"剩余锁仓时间超过1.5年", $"Remaining total lock later 1.5 year")</Text> <Text Copyable>@s3</Text></Paragraph>
+                                <Paragraph><Text Code>@this.WebLocalString($"剩余锁仓区块>1000000", $"Remaining total lock blocks than 1000000")</Text> <Text Copyable>@s4</Text></Paragraph>
+                                <Paragraph><Text Code>@this.WebLocalString($"剩余锁仓区块>2000000", $"Remaining total lock blocks than 2000000")</Text> <Text Copyable>@s5</Text></Paragraph>
+                                <Paragraph><Text Code>@this.WebLocalString($"剩余锁仓区块>3000000", $"Remaining total lock blocks than 3000000")</Text> <Text Copyable>@s6</Text></Paragraph>
+                                <Paragraph><Text Code>@this.WebLocalString($"累计黑洞销毁", $"Total Black Hole Destruction")</Text> <Text Copyable>@Destroy</Text></Paragraph>
+                            </div>
+                        </Collapse>
+                    </ChildContent>
+                </Panel>
             }
         </Collapse>
     </ChildContent>

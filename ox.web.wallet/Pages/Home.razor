@@ -2,17 +2,26 @@
 @layout BlockchainLayout
 @inherits BlockchainComponentBase
 <Microsoft.AspNetCore.Components.Web.Extensions.Head.Title Value=@PageTitle />
-<p class="empty-title">
-    <span class="blocktext30">Welcome</span>
-    <span class="blocktext31">to ox ecosystem</span>
-</p>
+@if (!DNPHelper.HaveIntroduce())
+{
+    <p class="empty-title">
+        <span class="blocktext30">Welcome</span>
+        <span class="blocktext31">to ox ecosystem</span>
+    </p>
+}
 <div>
-    <Introduce/>
+    <Introduce />
 </div>
- 
+
 <style>
     .empty-title {
         margin-top: 300px;
+        width: 100%;
+        text-align: center;
+    }
+
+    .introduce-title {
+        margin-top: 30px;
         width: 100%;
         text-align: center;
     }

@@ -13,16 +13,15 @@ using System.Security.Claims;
 using OX.Ledger;
 using OX.IO;
 using OX.IO.Json;
-using static NBitcoin.Scripting.OutputDescriptor;
+using OX.Wallets.Flash;
 
 namespace OX.Wallets.Base.NFT
 {
     public class NFTModule : Module
     {
         public override string ModuleName { get { return "walletnftmodule"; } }
-        public override uint Index { get { return int.MaxValue - 10; } }
+        public override uint Index { get { return int.MaxValue - 15; } }
 
-        public NFTBook Book { get; set; }
         protected INotecase Operater;
         //NewOnChainNFTCoin NftCoinOnChain;
         NewOutNFTCoin NftCoinOutChain;
@@ -49,7 +48,7 @@ namespace OX.Wallets.Base.NFT
             allNFTmenu.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
             //allNFTmenu.Image = global::Example.Icons.NewFile_6276;
             allNFTmenu.Name = "allNFTmenu";
-            allNFTmenu.ShortcutKeys = Keys.Control | Keys.A;
+            allNFTmenu.ShortcutKeys = Keys.Control | Keys.Alt | Keys.A;
             allNFTmenu.Size = new System.Drawing.Size(170, 22);
             allNFTmenu.Text = UIHelper.LocalString("&所有NFT", "&All NFT");
             allNFTmenu.Click += AllNFTmenu_Click;
@@ -59,7 +58,7 @@ namespace OX.Wallets.Base.NFT
             coinnftoutchainmenu.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
             //exitmenu.Image = global::Example.Icons.NewFile_6276;
             coinnftoutchainmenu.Name = "coinnftoutchainmenu";
-            coinnftoutchainmenu.ShortcutKeys = Keys.Control | Keys.T;
+            coinnftoutchainmenu.ShortcutKeys = Keys.Control | Keys.Alt | Keys.T;
             coinnftoutchainmenu.Size = new System.Drawing.Size(170, 22);
             coinnftoutchainmenu.Text = UIHelper.LocalString("&铸造NFT", "&Coin NFT");
             coinnftoutchainmenu.Click += Coinnftoutchainmenu_Click;
@@ -69,7 +68,7 @@ namespace OX.Wallets.Base.NFT
             mynftmenu.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
             //exitmenu.Image = global::Example.Icons.NewFile_6276;
             mynftmenu.Name = "mynftmenu";
-            mynftmenu.ShortcutKeys = Keys.Control | Keys.M;
+            mynftmenu.ShortcutKeys = Keys.Control | Keys.Alt | Keys.M;
             mynftmenu.Size = new System.Drawing.Size(170, 22);
             mynftmenu.Text = UIHelper.LocalString("&我铸造的NFT", "&My coin NFTs");
             mynftmenu.Click += Mynftmenu_Click;
@@ -79,7 +78,7 @@ namespace OX.Wallets.Base.NFT
             mydonatenftmenu.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
             //exitmenu.Image = global::Example.Icons.NewFile_6276;
             mydonatenftmenu.Name = "mydonatenftmenu";
-            mydonatenftmenu.ShortcutKeys = Keys.Control | Keys.D;
+            mydonatenftmenu.ShortcutKeys = Keys.Control | Keys.Alt | Keys.D;
             mydonatenftmenu.Size = new System.Drawing.Size(170, 22);
             mydonatenftmenu.Text = UIHelper.LocalString("&我持有的NFT", "&My hold NFTs");
             mydonatenftmenu.Click += Mydonatenftmenu_Click;
@@ -91,7 +90,7 @@ namespace OX.Wallets.Base.NFT
             buyNftmenu.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
             //buyNftmenu.Image = global::Example.Icons.NewFile_6276;
             buyNftmenu.Name = "buyNftmenu";
-            buyNftmenu.ShortcutKeys = Keys.Control | Keys.B;
+            buyNftmenu.ShortcutKeys = Keys.Control | Keys.Alt | Keys.B;
             buyNftmenu.Size = new System.Drawing.Size(170, 22);
             buyNftmenu.Text = UIHelper.LocalString("&购买NFT", "&Buy NFT");
             buyNftmenu.Click += BuyNftmenu_Click;
@@ -155,10 +154,10 @@ namespace OX.Wallets.Base.NFT
                         DarkMessageBox.ShowInformation(msg, "");
                     });
                 }
-                
+
             }
         }
-       
+
 
         private void Mynftmenu_Click(object sender, EventArgs e)
         {
@@ -258,8 +257,8 @@ namespace OX.Wallets.Base.NFT
                 myNFTDonate.AfterOnBlock(block);
             if (NFTView != default)
                 NFTView.AfterOnBlock(block);
-            if (block.Index % 10 == 0 && this.Book.Check())
-                this.Book.SaveWallet();
+            if (block.Index % 10 == 0)
+                FlashMessageProvider.Instance.CheckNFTPending();
         }
         public override void ChangeWallet(INotecase operater)
         {
@@ -291,18 +290,20 @@ namespace OX.Wallets.Base.NFT
                 NFTView.OnRebuild();
 
         }
+        public override void OnFlashMessage(FlashMessage flashMessage)
+        {
+            if (myNFTCoin != default)
+                myNFTCoin.OnFlashMessage(flashMessage);
+            if (NftCoinOutChain != default)
+                NftCoinOutChain.OnFlashMessage(flashMessage);
+            if (myNFTDonate != default)
+                myNFTDonate.OnFlashMessage(flashMessage);
+            if (NFTView != default)
+                NFTView.OnFlashMessage(flashMessage);
+        }
         public override void OnLoadBappModuleWalletSection(JObject bappSectionObject)
         {
-            var bookjson = bappSectionObject["book"];
-            this.Book = NFTBook.BuildNFTBook((JArray)bookjson,SaveData);
         }
-        public void SaveData()
-        {
-            if (this.Operater.Wallet is OpenWallet openWallet)
-            {
-                this.moduleWalletSection["book"] = this.Book.ToJson();
-                openWallet.Save();
-            }
-        }
+       
     }
 }

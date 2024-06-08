@@ -1,0 +1,194 @@
+﻿@page "/_pc/flashstate/stateflow/{taghex}"
+@inherits WalletComponentBase
+<Microsoft.AspNetCore.Components.Web.Extensions.Head.Title Value=@tag />
+<GridRow>
+    <GridCol Span="18">
+        @if (this.Records.IsNotNullAndEmpty())
+        {
+            foreach (var record in this.Records)
+            {
+                <FlashStateComponent StateRecord=record />
+                var senderSH = record.FlashState.Author;
+                var sender = senderSH.ToAddress();
+                var alias = sender;
+                if (Blockchain.Singleton.GetDomain(senderSH, out byte[] domain))
+                {
+                    alias = System.Text.Encoding.UTF8.GetString(domain);
+                }
+                var time = record.Timestamp.ToDateTime().ToString("yyyy-MM-dd HH:mm:ss");
+                var authorUrl = $"/_pc/flashstate/author/{sender}";
+                <Divider Orientation="left" Plain>@time<a Class="senderButton" href="@authorUrl" target="_blank">@alias</a><a Class="senderButton" href="/_pc/flashstate/statedetail/@record.FlashState.Hash.ToString()">@UIHelper.LocalString("详情", "Details")</a></Divider>
+            }
+        }
+        <div>
+            <Pagination Current="@((int)this.PageIndex)" OnChange="OnPageChange" Total=@((int)FlashMemoryHelper.RangeSize*(int)this.MaxPageSize) PageSize=(int)FlashMemoryHelper.RangeSize ShowSizeChanger=false />
+        </div>
+    </GridCol>
+    <GridCol Span="6">
+        <Card>
+            @{
+                var hostTag = new FlashStateTag("hot");
+                var latestTag = new FlashStateTag("latest");
+                if (tag == "latest")
+                {
+                    <Button Type="@ButtonType.Primary" Size="small">@this.WebLocalString("最新", "Latest")</Button>
+                    <Button Type="@ButtonType.Default" Size="small" OnClick="_=>GoTag(hostTag)">@this.WebLocalString("最热", "Hot")</Button>
+                }
+                else if (tag == "hot")
+                {
+                    <Button Type="@ButtonType.Default" Size="small" OnClick="_=>GoTag(latestTag)">@this.WebLocalString("最新", "Latest")</Button>
+                    <Button Type="@ButtonType.Primary" Size="small">@this.WebLocalString("最热", "Hot")</Button>
+                }
+                else
+                {
+                    <Button Type="@ButtonType.Default" Size="small" OnClick="_=>GoTag(latestTag)">@this.WebLocalString("最新", "Latest")</Button>
+                    <Button Type="@ButtonType.Default" Size="small" OnClick="_=>GoTag(hostTag)">@this.WebLocalString("最热", "Hot")</Button>
+                    <Button Type="@ButtonType.Primary" Size="small">@this.tag</Button>
+                }
+                var ts = FlashMessageProvider.Instance.FlashStateTagCount.OrderByDescending(m => m.Value.Value).Take(100);
+                if (ts.IsNotNullAndEmpty())
+                {
+                    foreach (var tag in ts)
+                    {
+                        if (tag.Key != this.FlashStateTag)
+                        {
+                            <Button Type="@ButtonType.Dashed" Size="small" OnClick="_=>GoTag(tag.Key)">@tag.Key.ToString()</Button>
+                        }
+                    }
+                }
+            }
+        </Card>
+    </GridCol>
+</GridRow>
+
+<style type="text/css">
+    .senderButton {
+        margin-left: 10px;
+    }
+
+    .standardList .ant-card-head {
+        border-bottom: none;
+    }
+
+    .standardList .ant-card-head-title {
+        padding: 24px 0;
+        line-height: 32px;
+    }
+
+    .standardList .ant-card-extra {
+        padding: 24px 0;
+    }
+
+    .standardList .ant-list-pagination {
+        margin-top: 24px;
+        text-align: right;
+    }
+
+    .standardList .ant-avatar-lg {
+        width: 48px;
+        height: 48px;
+        line-height: 48px;
+    }
+
+    .standardList .headerInfo {
+        position: relative;
+        text-align: center;
+    }
+
+        .standardList .headerInfo > span {
+            display: inline-block;
+            margin-bottom: 4px;
+            color: rgba(0, 0, 0, 0.45);
+            font-size: 14px;
+            line-height: 22px;
+        }
+
+        .standardList .headerInfo > p {
+            margin: 0;
+            color: rgba(0, 0, 0, 0.85);
+            font-size: 24px;
+            line-height: 32px;
+        }
+
+        .standardList .headerInfo > em {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 1px;
+            height: 56px;
+            background-color: #f0f0f0;
+        }
+
+    .standardList .listContent {
+        font-size: 0;
+    }
+
+        .standardList .listContent .listContentItem {
+            display: inline-block;
+            margin-left: 20px;
+            color: rgba(0, 0, 0, 0.45);
+            font-size: 14px;
+            vertical-align: middle;
+        }
+
+            .standardList .listContent .listContentItem > span {
+                line-height: 20px;
+            }
+
+            .standardList .listContent .listContentItem > p {
+                margin-top: 4px;
+                margin-bottom: 0;
+                line-height: 22px;
+            }
+
+    .standardList .extraContentSearch {
+        width: 272px;
+        margin-left: 16px;
+    }
+
+    .standardList .ant-list-item-action {
+        margin-left: 0;
+    }
+
+    .standardList .listContent {
+        margin-left: 0;
+    }
+
+        .standardList .listContent > div {
+            margin-left: 0;
+        }
+
+    .standardList .listCard .ant-card-head-title {
+        overflow: visible;
+    }
+
+    }
+
+    .standardList .headerInfo {
+        margin-bottom: 16px;
+    }
+
+        .standardList .headerInfo > em {
+            display: none;
+        }
+
+    }
+
+    .standardListForm .ant-form-item {
+        margin-bottom: 12px;
+    }
+
+        .standardListForm .ant-form-item:last-child {
+            margin-bottom: 32px;
+            padding-top: 4px;
+        }
+
+    .formResult {
+        width: 100%;
+    }
+
+        .formResult [class^='title'] {
+            margin-bottom: 8px;
+        }
+
+</style>

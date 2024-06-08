@@ -12,6 +12,7 @@ namespace OX.Wallets.Base.Wallets
 {
     public interface IWalletProvider : IBappProvider
     {
+        public Dictionary<UInt256, Fixed8> TokenBlackHoleDestroySummary { get; set; }
         IEnumerable<KeyValuePair<BoardKey, UInt256>> GetRangeBoards(uint indexrange);
         UInt256 GetBoard(BoardKey key);
         EngravePageState GetEngravePageState(BoardKey key);
@@ -21,6 +22,7 @@ namespace OX.Wallets.Base.Wallets
         HashPage GetDiggPageHash(UInt256 engraveId, uint pageIndex);
         IEnumerable<KeyValuePair<EngraveHolder, Engrave>> GetEngravesByHolder(UInt160 holder);
         IEnumerable<KeyValuePair<MyBookKey, BookTransaction>> GetMyBooks();
-        IEnumerable<KeyValuePair<SecretLetterKey, SecretLetterTransaction>> GetMyLetters();
+        IEnumerable<KeyValuePair<SecretLetterKey, SecretLetterState>> GetMyLetters(UInt256 letterLine=default);
+        IEnumerable<KeyValuePair<UInt256, LetterPair>> GetLetterLines();
     }
 }

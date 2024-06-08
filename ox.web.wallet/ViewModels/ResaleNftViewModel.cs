@@ -1,5 +1,5 @@
 ﻿using OX.Ledger;
-using OX.Wallets.Base.NFT;
+using OX.Network.P2P.Payloads;
 namespace OX.Web
 {
     public class PublishResaleViewModel
@@ -9,8 +9,7 @@ namespace OX.Web
     public class ResaleNftViewModel
     {
         public string IssueId;
-        public string Auth;
-        public NFTTranferData NFTTranferData;
+        public NFTPending NFTTranferData;
         public NFCState NFCState;
     }
 

@@ -167,7 +167,7 @@ namespace OX.Wallets.Base
             if (!string.IsNullOrEmpty(remark))
                 attributes.Add(new TransactionAttribute
                 {
-                    Usage = TransactionAttributeUsage.Remark,
+                    Usage = TransactionAttributeUsage.Remark1,
                     Data = Encoding.UTF8.GetBytes(remark)
                 });
             tx.Attributes = attributes.ToArray();

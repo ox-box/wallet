@@ -10,7 +10,7 @@ using OX.IO;
 using OX.SmartContract;
 using OX.Ledger;
 using OX.Persistence;
-using OX.Cryptography.AES;
+using OX.Cryptography;
 using Akka.Util.Internal;
 using OX.Wallets.Base.Events;
 using OX.Wallets.Base.Wallets;

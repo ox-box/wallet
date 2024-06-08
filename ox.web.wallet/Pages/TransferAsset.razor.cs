@@ -15,7 +15,7 @@ using OX.IO;
 using OX.Cryptography.ECC;
 using OX.Ledger;
 using OX.SmartContract;
-using OX.Cryptography.AES;
+using OX.Cryptography;
 using OX.Web.Models;
 using OX.Wallets.Hubs;
 using Microsoft.AspNetCore.SignalR.Client;
@@ -29,6 +29,10 @@ using AntDesign;
 using System.Threading;
 using Nethereum.Util;
 using NuGet.ContentModel;
+using System.Web;
+using Nethereum.Contracts.Standards.ENS.ENSRegistry.ContractDefinition;
+using Akka.Actor.Dsl;
+using OX.Persistence;
 
 namespace OX.Web.Pages
 {
@@ -50,6 +54,8 @@ namespace OX.Web.Pages
         public string amount { get; set; }
         [Parameter]
         public string height { get; set; }
+        [Parameter]
+        public string daovote { get; set; }
 
         AssetState AssetState { get; set; }
 
@@ -60,6 +66,8 @@ namespace OX.Web.Pages
         public EthAssetBalanceState BalanceState = new EthAssetBalanceState();
         TransferViewModel model { get; set; } = new TransferViewModel();
         TransferEthViewModel modelEth { get; set; } = new TransferEthViewModel();
+        Fixed8 MinAmount = Fixed8.Zero;
+        Fixed8 MaxAmount = Fixed8.Zero;
         private readonly FormItemLayout _formItemLayout = new FormItemLayout
         {
             LabelCol = new ColLayoutParam
@@ -84,9 +92,25 @@ namespace OX.Web.Pages
                 Sm = new EmbeddedProperty { Span = 10, Offset = 7 },
             }
         };
-       
+
         protected override void OnWalletInit()
         {
+            var strmin = this.NavigationManager.QueryString("minamount");
+            if (strmin.IsNotNullAndEmpty())
+            {
+                if (Fixed8.TryParse(strmin, out Fixed8 min) && min > Fixed8.Zero)
+                {
+                    this.MinAmount = min;
+                }
+            }
+            var strmax = this.NavigationManager.QueryString("maxamount");
+            if (strmax.IsNotNullAndEmpty())
+            {
+                if (Fixed8.TryParse(strmax, out Fixed8 max) && max > Fixed8.Zero)
+                {
+                    this.MaxAmount = max;
+                }
+            }
             AssetState = Blockchain.Singleton.CurrentSnapshot.Assets.TryGet(UInt256.Parse(this.assetid));
 
             if (this.EthID.IsNotNull() && this.Box.Notecase.Wallet is OpenWallet openWallet)
@@ -106,7 +130,7 @@ namespace OX.Web.Pages
                 this.modelEth.FromEthAddress = this.EthID.EthAddress;
                 this.modelEth.FromOXAddress = this.EthID.MapAddress;
                 this.modelEth.LockExprationIndex = 0;
-                
+
             }
             if (kind == "1")
             {
@@ -131,6 +155,10 @@ namespace OX.Web.Pages
                     this.modelEth.ToEthAddress = targetaddr;
                     var amt = decimal.Parse(amount);
                     this.modelEth.Amount = amt;
+                    if (this.daovote.IsNotNullAndEmpty())
+                    {
+                        this.modelEth.DaoVote = this.daovote.HexToBytes().AsSerializable<DaoVote>();
+                    }
                     uint.TryParse(height, out this.modelEth.LockExprationIndex);
                 }
                 catch
@@ -162,12 +190,25 @@ namespace OX.Web.Pages
                 this.modelEth.FromEthAddress = this.EthID.EthAddress;
                 this.modelEth.FromOXAddress = this.EthID.MapAddress;
                 this.modelEth.LockExprationIndex = 0;
-                
+
             }
         }
         private async void HandleSubmit()
         {
             loading = true;
+            var amt = Fixed8.FromDecimal(this.model.Amount);
+            if (this.MinAmount > Fixed8.Zero && amt < this.MinAmount)
+            {
+                msg = this.WebLocalString($"金额无效", $"Invalid amount");
+                loading2 = false;
+                return;
+            }
+            if (this.MaxAmount > Fixed8.Zero && amt > this.MaxAmount)
+            {
+                msg = this.WebLocalString($"金额无效", $"Invalid amount");
+                loading2 = false;
+                return;
+            }
             try
             {
                 var shTarget = this.model.OxAddress.ToScriptHash();
@@ -193,7 +234,7 @@ namespace OX.Web.Pages
                                 });
                             }
                             List<string> excludedUtxoKeys = new List<string>();
-                            var amt = Fixed8.FromDecimal(this.model.Amount);
+
                             if (utxos.SortSearch(amt.GetInternalValue(), excludedUtxoKeys, out EthMapUTXO[] selectedUtxos, out long remainder))
                             {
                                 List<TransactionOutput> outputs = new List<TransactionOutput>();
@@ -262,6 +303,19 @@ namespace OX.Web.Pages
         private async void HandleSubmit2()
         {
             loading2 = true;
+            var amt = Fixed8.FromDecimal(this.modelEth.Amount);
+            if (this.MinAmount > Fixed8.Zero && amt < this.MinAmount)
+            {
+                msg = this.WebLocalString($"金额无效", $"Invalid amount");
+                loading2 = false;
+                return;
+            }
+            if (this.MaxAmount > Fixed8.Zero && amt > this.MaxAmount)
+            {
+                msg = this.WebLocalString($"金额无效", $"Invalid amount");
+                loading2 = false;
+                return;
+            }
             try
             {
                 var toEthAddress = this.modelEth.ToEthAddress;
@@ -288,7 +342,7 @@ namespace OX.Web.Pages
                                 });
                             }
                             List<string> excludedUtxoKeys = new List<string>();
-                            var amt = Fixed8.FromDecimal(this.modelEth.Amount);
+
                             if (utxos.SortSearch(amt.GetInternalValue(), excludedUtxoKeys, out EthMapUTXO[] selectedUtxos, out long remainder))
                             {
                                 List<TransactionOutput> outputs = new List<TransactionOutput>();
@@ -318,13 +372,18 @@ namespace OX.Web.Pages
                                     Inputs = inputs.ToArray(),
                                     Witnesses = new Witness[0]
                                 };
+
                                 var stringToSign = tx.InputOutputHash.ToArray().ToHexString();
                                 var signatureData = await this.MetaMaskService.PersonalSign(stringToSign);
                                 var signer = new Nethereum.Signer.EthereumMessageSigner();
                                 var ethaddress = signer.EncodeUTF8AndEcRecover(stringToSign, signatureData);
                                 if (ethaddress.ToLower() == this.EthID.EthAddress.ToLower())
                                 {
-                                    tx.Attributes = new TransactionAttribute[] { new TransactionAttribute { Usage = TransactionAttributeUsage.EthSignature, Data = System.Text.Encoding.UTF8.GetBytes(signatureData) } };
+                                    List<TransactionAttribute> attrs = new List<TransactionAttribute>();
+                                    attrs.Add(new TransactionAttribute { Usage = TransactionAttributeUsage.EthSignature, Data = System.Text.Encoding.UTF8.GetBytes(signatureData) });
+                                    if (this.modelEth.DaoVote.IsNotNull())
+                                        attrs.Add(new TransactionAttribute { Usage = TransactionAttributeUsage.DaoVote, Data = this.modelEth.DaoVote.ToArray() });
+                                    tx.Attributes = attrs.ToArray();
                                     var oxKey = openWallet.GetHeldAccounts().First().GetKey();
                                     List<AvatarAccount> avatars = new List<AvatarAccount>();
                                     foreach (var c in contracts)
@@ -352,6 +411,14 @@ namespace OX.Web.Pages
                 msg = this.WebLocalString($"内部错误", $"internal error");
             }
             loading2 = false;
+        }
+        void search()
+        {
+            if (Blockchain.Singleton.GetAddressByDomain(this.model.OxAddress, out UInt160 addr))
+            {
+                this.model.OxAddress = addr.ToAddress();
+                StateHasChanged();
+            }
         }
     }
 }

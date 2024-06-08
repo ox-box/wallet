@@ -142,7 +142,10 @@ namespace OX.Wallets.Base
             {
             }
         }
+        public void OnFlashMessage(FlashMessage flashMessage)
+        {
 
+        }
         public void ChangeWallet(INotecase operater)
         {
             this.Operater = operater;

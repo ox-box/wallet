@@ -5,6 +5,7 @@ using OX.Wallets;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
+ 
 
 namespace OX.Wallets.Base
 {
@@ -40,6 +41,9 @@ namespace OX.Wallets.Base
         {
 
         }
+       public  void OnFlashMessage(FlashMessage flashmessage)
+        {
+        } 
         public bool ProcessAsync(HttpContext context, string path, Dictionary<string, string> query, out string resp)
         {
             resp = "not found api";

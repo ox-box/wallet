@@ -12,7 +12,6 @@ using System.Linq;
 using System.Windows.Forms;
 using System.Threading.Tasks;
 using System.Text;
-//using NBitcoin;
 
 namespace OX.Wallets.Base
 {
@@ -185,6 +184,10 @@ namespace OX.Wallets.Base
                 this.ResetIndex(true);
         }
         public void OnRebuild() { }
+        public void OnFlashMessage(FlashMessage flashMessage)
+        {
+
+        }
         #endregion
 
 

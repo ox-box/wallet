@@ -2,6 +2,8 @@
 // functions, and may import other JavaScript modules if required.
 
 export async function checkMetaMask() {
+    console.log('check');
+
     // Modern dapp browsers...
     if (window.ethereum) {
         if (ethereum.selectedAddress === null || ethereum.selectedAddress === undefined) {
@@ -31,6 +33,7 @@ export async function requestAccounts() {
 }
 
 export function hasMetaMask() {
+    console.log('hasMetamask');
     return (window.ethereum != undefined);
 }
 
@@ -47,19 +50,19 @@ export async function getSelectedAddress() {
 export async function listenToChangeEvents() {
     if (hasMetaMask()) {
         ethereum.on("connect", function (connectInfo) {
-            DotNet.invokeMethodAsync('ox.metamask', 'OnConnect');
+            DotNet.invokeMethodAsync('OX.MetaMask', 'OnConnect');
         });
 
         ethereum.on("disconnect", function (error) {
-            DotNet.invokeMethodAsync('ox.metamask', 'OnDisconnect');
+            DotNet.invokeMethodAsync('OX.MetaMask', 'OnDisconnect');
         });
 
         ethereum.on("accountsChanged", function (accounts) {
-            DotNet.invokeMethodAsync('ox.metamask', 'OnAccountsChanged', accounts[0]);
+            DotNet.invokeMethodAsync('OX.MetaMask', 'OnAccountsChanged', accounts[0]);
         });
 
         ethereum.on("chainChanged", function (chainId) {
-            DotNet.invokeMethodAsync('ox.metamask', 'OnChainChanged', chainId);
+            DotNet.invokeMethodAsync('OX.MetaMask', 'OnChainChanged', chainId);
         });
     }
 }

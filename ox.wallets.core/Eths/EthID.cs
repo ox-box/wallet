@@ -34,5 +34,9 @@ namespace OX.Wallets.Eths
         {
             return this.EthAddress.ToLower().GetHashCode();
         }
+        public bool IsSelf(OpenWallet wallet)
+        {
+            return EthAddress.IsNotNullAndEmpty() && wallet.EthAccounts.IsNotNullAndEmpty() && wallet.EthAccounts.Select(m => m.Address).Contains(EthAddress);
+        }
     }
 }

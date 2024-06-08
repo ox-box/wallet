@@ -166,6 +166,10 @@ namespace OX.Wallets
         public void OnRebuild()
         {
         }
+        public  void OnFlashMessage(FlashMessage flashMessage)
+        {
+
+        }
         #endregion
 
         private void cb_auto_CheckedChanged(object sender, System.EventArgs e)

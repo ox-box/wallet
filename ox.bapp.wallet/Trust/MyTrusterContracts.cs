@@ -173,6 +173,7 @@ namespace OX.Wallets.Base
             DoReload();
         }
         public void OnRebuild() { }
+        public void OnFlashMessage(FlashMessage flashMessage) { }
         void DoReload()
         {
             this.DoInvoke(() =>
@@ -210,7 +211,7 @@ namespace OX.Wallets.Base
                                 n3.Nodes.Add(n4);
                             }
                             subnode.Nodes.Add(n3);
-                            n3 = new DarkTreeNode(UIHelper.LocalString($"边际信托范围", $"Side Trust Scope"));
+                            n3 = new DarkTreeNode(UIHelper.LocalString($"插槽信托范围", $"Slot Trust Scope"));
                             n3.NodeType = 3;
                             n3.Tag = ct;
                             foreach (var sh in ct.Value.SideScopes)

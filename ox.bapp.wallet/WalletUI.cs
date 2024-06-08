@@ -23,6 +23,7 @@ using OX.Wallets.Base.Help;
 using OX.Wallets.Base.Letters;
 using OX.Wallets.Base.NFT;
 using OX.Wallets.Base.DNP;
+using OX.Wallets.Flash;
 
 namespace OX.Wallets.Base
 {
@@ -43,6 +44,8 @@ namespace OX.Wallets.Base
             this._modules[m.ModuleName] = m;
             LetterModule lm = new LetterModule(bapp);
             this._modules[lm.ModuleName] = lm;
+            FlashMessageModule fsm=new FlashMessageModule (bapp);
+            this._modules[fsm.ModuleName] = fsm;
             EventModule em = new EventModule(bapp);
             this._modules[em.ModuleName] = em;
             NFTModule nm = new NFTModule(bapp);
@@ -90,6 +93,12 @@ namespace OX.Wallets.Base
             foreach (var m in this.Modules)
                 if (m is Module module)
                     module.OnRebuild();
+        }
+        public void OnFlashMessage(FlashMessage flashMessage)
+        {
+            foreach (var m in this.Modules)
+                if (m is Module module)
+                    module.OnFlashMessage(flashMessage);
         }
     }
 }

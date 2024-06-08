@@ -192,6 +192,10 @@ namespace OX.Wallets.Base
             this.Operater = operater;
             this.DoPartners();
         }
+        public void OnFlashMessage(FlashMessage flashMessage)
+        {
+
+        }
         public void OnRebuild()
         {
         }

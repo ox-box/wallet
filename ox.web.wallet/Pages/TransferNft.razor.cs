@@ -15,7 +15,7 @@ using OX.IO;
 using OX.Cryptography.ECC;
 using OX.Ledger;
 using OX.SmartContract;
-using OX.Cryptography.AES;
+using OX.Cryptography;
 using OX.Web.Models;
 using OX.Wallets.Hubs;
 using Microsoft.AspNetCore.SignalR.Client;
@@ -34,6 +34,10 @@ using OX.Network.P2P;
 using OX.Wallets.Base.NFT;
 using Akka.Actor.Dsl;
 using System.Text;
+using Nethereum.Hex.HexConvertors.Extensions;
+using OX.Wallets.Flash.Chat;
+using System.IO;
+using OX.Wallets.Flash;
 
 namespace OX.Web.Pages
 {
@@ -47,7 +51,8 @@ namespace OX.Web.Pages
         NftTransferTransaction NftTransfer;
         NFSStateKey Mykey = default;
         string msg;
-
+        bool loading = false;
+        bool success = false;
         private readonly FormItemLayout _formItemLayout = new FormItemLayout
         {
             LabelCol = new ColLayoutParam
@@ -88,7 +93,7 @@ namespace OX.Web.Pages
         {
             Mykey = default;
             NftTransfer = default;
-            if (this.Valid&&transferhex.IsNotNullAndEmpty())
+            if (this.Valid && transferhex.IsNotNullAndEmpty())
             {
                 try
                 {
@@ -134,7 +139,7 @@ namespace OX.Web.Pages
                 var ethaddress = signer.EncodeUTF8AndEcRecover(stringToSign, signatureData);
                 if (ethaddress.ToLower() == this.EthID.EthAddress.ToLower())
                 {
-                    byte[] signData= Encoding.UTF8.GetBytes(signatureData);
+                    byte[] signData = Encoding.UTF8.GetBytes(signatureData);
                     MixSignatureValidator<NftTransferAuthentication> validator = new MixSignatureValidator<NftTransferAuthentication>() { Target = auth, Signature = signData };
                     NFSStateKey nFSStateKey = new NFSStateKey
                     {
@@ -142,10 +147,48 @@ namespace OX.Web.Pages
                         IssueBlockIndex = this.NftTransfer.NFSStateKey.IssueBlockIndex == 0 ? Mykey.IssueBlockIndex : this.NftTransfer.NFSStateKey.IssueBlockIndex,
                         IssueN = this.NftTransfer.NFSStateKey.IssueN == 0 ? Mykey.IssueN : this.NftTransfer.NFSStateKey.IssueN
                     };
-                    NFTTranferData ndv = new NFTTranferData { Key = nFSStateKey, Validator = validator };
+                    NFTPending ndv = new NFTPending { Key = nFSStateKey, Validator = validator };
+                    this.Model.Pending = ndv;
                     this.Model.Signature = ndv.ToArray().ToHexString();
                 }
 
+            }
+        }
+        async void Publish()
+        {
+            if (this.Valid && this.Model.IsNotNull() && this.Model.Pending.IsNotNull())
+            {
+                if (this.Model.Pending.IsNull() || this.Model.Pending.Validator.IsNull() || this.Model.Pending.Key.IsNull() || !this.Model.Pending.Validator.Verify()) return;
+                if (this.Model.Pending.Validator.Target.Amount <= Fixed8.Zero || this.Model.Pending.Validator.Target.MaxIndex < this.Model.Pending.Validator.Target.MinIndex || (this.Model.Pending.Validator.Target.MaxIndex>0&&this.Model.Pending.Validator.Target.MaxIndex <= Blockchain.Singleton.Height)) return;
+                var lastNftDonate = Blockchain.Singleton.CurrentSnapshot.GetNftTransfer(this.Model.Pending.Key);
+                if (lastNftDonate.IsNull()) return;
+                var nfc = Blockchain.Singleton.CurrentSnapshot.GetNftState(this.Model.Pending.Key.NFCID);
+                if (nfc.IsNull()) return;
+                if (!this.Model.Pending.Validator.Target.PreHash.Equals(lastNftDonate.LastNFS.Hash)) return;
+
+                var mapAddress = this.EthID.MapAddress;
+                var accountState = Blockchain.Singleton.CurrentSnapshot.Accounts.TryGet(mapAddress);
+                if (accountState.IsNotNull() && Blockchain.Singleton.AllowFlashMessage(accountState, out uint _))
+                {
+                    loading = true;
+                    var fs = new FlashNFTPending(mapAddress, Blockchain.Singleton.HeaderHeight, new NFTPending[] { this.Model.Pending });
+                    var stringToSign = fs.GetRequireEthSignatureData().ToHex(true); ;
+                    var signatureData = await this.MetaMaskService.PersonalSign(stringToSign);
+                    var signer = new Nethereum.Signer.EthereumMessageSigner();
+                    var ethaddress = signer.EncodeUTF8AndEcRecover(stringToSign, signatureData);
+                    if (ethaddress.ToLower() == this.EthID.EthAddress.ToLower())
+                    {
+                        fs.EthSignature = signatureData.HexToByteArray();
+                        if (fs.Size <= FlashMessage.MaxFlashMessageSize)
+                        {
+                            this.Box.Notecase.Relay(fs);
+                            FlashMessageProvider.Instance.AppendNFTPending(this.Model.Pending);
+                            success = true;
+                        }
+                    }
+                    loading = false;
+                    await InvokeAsync(StateHasChanged);
+                }
             }
         }
     }

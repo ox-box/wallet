@@ -23,7 +23,6 @@ using Nethereum.Model;
 using System.Security.Principal;
 using Akka.Actor.Dsl;
 using OX.IO;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace OX.Wallets.Base
 {
@@ -83,12 +82,12 @@ namespace OX.Wallets.Base
                             sm.Click += ClaimOXC_Click;
                             menu.Items.Add(sm);
                             //选举
-                            sm = new ToolStripMenuItem(UIHelper.LocalString("选举", "Election"));
+                            sm = new ToolStripMenuItem(UIHelper.LocalString("参选记账人", "Election Validator"));
                             sm.Tag = account;
                             sm.Click += Election_Click;
                             menu.Items.Add(sm);
                             //投票
-                            sm = new ToolStripMenuItem(UIHelper.LocalString("投票", "Vote"));
+                            sm = new ToolStripMenuItem(UIHelper.LocalString("投票记账人", "Vote Validator"));
                             sm.Tag = account;
                             sm.Click += Vote_Click;
                             menu.Items.Add(sm);
@@ -112,10 +111,10 @@ namespace OX.Wallets.Base
                             sm.Tag = account;
                             sm.Click += Sm_Click;
                             menu.Items.Add(sm);
-                            //商业频道租赁
-                            sm = new ToolStripMenuItem(UIHelper.LocalString("商业频道租赁", "Business Channel Lease"));
+                            //插槽租赁
+                            sm = new ToolStripMenuItem(UIHelper.LocalString("插槽租赁", "Slot Rental"));
                             sm.Tag = account;
-                            sm.Click += SmDetain_Click;
+                            sm.Click += SmSlot_Click;
                             menu.Items.Add(sm);
                             //整理余额碎片
                             sm = new ToolStripMenuItem(UIHelper.LocalString("整理余额碎片", "Defragment  balance"));
@@ -126,6 +125,11 @@ namespace OX.Wallets.Base
                             sm = new ToolStripMenuItem(UIHelper.LocalString("重置简易码", "Reset Easy Code"));
                             sm.Tag = account;
                             sm.Click += ResetEasyCode_Click6;
+                            menu.Items.Add(sm);
+                            //注册语义名
+                            sm = new ToolStripMenuItem(UIHelper.LocalString("注册语义名", "Register Semantic Name"));
+                            sm.Tag = account;
+                            sm.Click += Sm_RegisterSemanticName;
                             menu.Items.Add(sm);
                         }
                         //备注账户名称
@@ -140,6 +144,72 @@ namespace OX.Wallets.Base
             }
         }
 
+        private void Sm_RegisterSemanticName(object sender, EventArgs e)
+        {
+            ToolStripMenuItem ToolStripMenuItem = sender as ToolStripMenuItem;
+            WalletAccount account = ToolStripMenuItem.Tag as WalletAccount;
+            var dmbs = FlashMessageHelper.GetDomain(account.ScriptHash);
+            using (var dialog = new DialogRegisterSemanticName(account, dmbs))
+            {
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    var name = dialog.GetName();
+                    name = name.Trim();
+                    if (name.IsNotNullAndEmpty())
+                    {
+                        RegisterDomain(account, name);
+                    }
+                }
+            }
+        }
+        void RegisterDomain(WalletAccount account, string domain)
+        {
+            var dmbs = FlashMessageHelper.GetDomain(account.ScriptHash);
+            if (dmbs.IsNullOrEmpty())
+            {
+                ContractState contract = Blockchain.Singleton.Store.GetContracts().TryGet(Blockchain.FlashMessageContractScriptHash);
+                var parameters = contract.ParameterList.Select(p => new ContractParameter(p)).ToArray();
+                parameters[0].Value = "register";
+                List<ContractParameter> list = new List<ContractParameter>();
+                list.Add(new ContractParameter { Type = ContractParameterType.ByteArray, Value = System.Text.Encoding.UTF8.GetBytes(domain) });
+                list.Add(new ContractParameter { Type = ContractParameterType.Hash160, Value = account.ScriptHash }); ;
+                parameters[1].Value = list;
+                byte[] scripts = default;
+                using (ScriptBuilder sb = new ScriptBuilder())
+                {
+                    sb.EmitAppCall(Blockchain.FlashMessageContractScriptHash, parameters);
+                    scripts = sb.ToArray();
+                }
+                var tx = new InvocationTransaction();
+                tx.Version = 1;
+                tx.Script = scripts;
+                if (tx.Attributes == null) tx.Attributes = new TransactionAttribute[0];
+                if (tx.Inputs == null) tx.Inputs = new CoinReference[0];
+                if (tx.Outputs == null) tx.Outputs = new TransactionOutput[0];
+                if (tx.Witnesses == null) tx.Witnesses = new Witness[0];
+
+
+                Fixed8 fee = Fixed8.One;
+                if (tx.Size > 1024)
+                {
+                    Fixed8 sumFee = Fixed8.FromDecimal(tx.Size * 0.00001m) + Fixed8.FromDecimal(0.001m);
+                    if (fee < sumFee)
+                    {
+                        fee = sumFee;
+                    }
+                }
+
+                var newTx = this.Operater.Wallet.MakeTransaction(tx, account.ScriptHash, account.ScriptHash, fee);
+                this.Operater.SignAndSendTx(newTx);
+                string msg = $"{UIHelper.LocalString("注册语义名交易已广播", "Relay reg semantic name voting transaction completed")}   {newTx.Hash}";
+                DarkMessageBox.ShowInformation(msg, "");
+            }
+            else
+            {
+                string msg = UIHelper.LocalString("语义名已存在", "Semantic name already exists");
+                DarkMessageBox.ShowInformation(msg, "");
+            }
+        }
         private void Election_Click(object sender, EventArgs e)
         {
             ToolStripMenuItem ToolStripMenuItem = sender as ToolStripMenuItem;
@@ -280,11 +350,11 @@ namespace OX.Wallets.Base
                 }
             }
         }
-        private void SmDetain_Click(object sender, System.EventArgs e)
+        private void SmSlot_Click(object sender, System.EventArgs e)
         {
             ToolStripMenuItem ToolStripMenuItem = sender as ToolStripMenuItem;
             WalletAccount account = ToolStripMenuItem.Tag as WalletAccount;
-            using (DetainDialog dialog = new DetainDialog(account))
+            using (SlotDialog dialog = new SlotDialog(account))
             {
                 var result = dialog.ShowDialog();
                 if (result == DialogResult.OK)
@@ -294,7 +364,7 @@ namespace OX.Wallets.Base
                     {
                         this.Operater.Wallet.MixBuildAndRelaySingleOutputTransaction(tx, account.ScriptHash, tx2 =>
                         {
-                            string msg = $"{UIHelper.LocalString("商业频道租赁交易已广播", "Relay business channel lease transaction completed")}   {tx.Hash}";
+                            string msg = $"{UIHelper.LocalString("插槽租赁交易已广播", "Relay slot rent transaction completed")}   {tx.Hash}";
                             Bapp.PushCrossBappMessage(new CrossBappMessage() { Content = msg, From = this.Module.Bapp });
                             DarkMessageBox.ShowInformation(msg, "");
                         });
@@ -431,7 +501,10 @@ namespace OX.Wallets.Base
         public void OnBlock(Block block)
         {
         }
+        public void OnFlashMessage(FlashMessage flashMessage)
+        {
 
+        }
         public void HeartBeat(HeartBeatContext context)
         {
 

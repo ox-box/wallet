@@ -2,15 +2,14 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net7.0-windows</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
     <RootNamespace>OX.Notecase</RootNamespace>
     <Authors>gt</Authors>
     <Company>gt</Company>
     <Copyright>gt</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
-    <Version>1.2.0</Version>
+    <Version>3.0.0</Version>
     <AssemblyName>ox.box</AssemblyName>
   </PropertyGroup>
 

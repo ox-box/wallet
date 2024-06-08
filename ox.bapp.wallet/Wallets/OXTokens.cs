@@ -17,7 +17,6 @@ using OX.Wallets.UI.Forms;
 using OX.Persistence;
 using OX.Cryptography.ECC;
 using OX.SmartContract;
-using NBitcoin.OpenAsset;
 
 namespace OX.Wallets.Base
 {
@@ -49,11 +48,22 @@ namespace OX.Wallets.Base
                     sm.Tag = node.Tag;
                     sm.Click += Sm_Click;
                     menu.Items.Add(sm);
+                    sm = new ToolStripMenuItem(UIHelper.LocalString("锁仓投票", "Lock Vote"));
+                    sm.Tag = node.Tag;
+                    sm.Click += Sm_Click1;
+                    menu.Items.Add(sm);
                 }
 
                 if (menu.Items.Count > 0)
                     menu.Show(this.treeAsset, e.Location);
             }
+        }
+
+        private void Sm_Click1(object sender, EventArgs e)
+        {
+            ToolStripMenuItem ToolStripMenuItem = sender as ToolStripMenuItem;
+            AssetState assetState = ToolStripMenuItem.Tag as AssetState;
+            new DialogAssetLockVote(this.Operater, assetState).ShowDialog();
         }
 
         private void Sm_Click(object sender, EventArgs e)
@@ -210,9 +220,12 @@ namespace OX.Wallets.Base
                     subnode.Tag = asset.Value;
                     node.Nodes.Add(subnode);
 
+                    Fixed8 Destroy = Fixed8.Zero;
+                    WalletBappProvider.Instance.TokenBlackHoleDestroySummary.TryGetValue(asset.Key, out Destroy);
+                    subnode = new DarkTreeNode { Text = UIHelper.LocalString($"累计黑洞销毁： {Destroy}", $"Total Black Hole Destruction: {Destroy}") };
+                    subnode.Tag = asset.Value;
+                    node.Nodes.Add(subnode);
 
-
-                  
                     this.treeAsset.Nodes.Add(node);
                 }
             });
@@ -225,6 +238,10 @@ namespace OX.Wallets.Base
             reload();
         }
         public void OnRebuild() { }
+        public void OnFlashMessage(FlashMessage flashMessage)
+        {
+
+        }
         #endregion
     }
 }

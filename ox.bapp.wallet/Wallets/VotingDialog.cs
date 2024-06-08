@@ -39,7 +39,7 @@ namespace OX.Wallets.Base
             AccountState account = Blockchain.Singleton.Store.GetAccounts().TryGet(script_hash);
             label1.Text = script_hash.ToAddress();
             textBox1.Lines = account.Votes.Select(p => p.ToString()).ToArray();
-            this.Text = UIHelper.LocalString("投票", "Voting");
+            this.Text = UIHelper.LocalString("投票记账人", "Vote Validator");
             this.groupBox1.Text = UIHelper.LocalString("候选人", "Candidates");
             this.button1.Text = UIHelper.LocalString("确定", "OK");
             this.button2.Text = UIHelper.LocalString("取消", "Cancel");

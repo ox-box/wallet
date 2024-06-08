@@ -21,7 +21,6 @@ using System.Xml;
 using OX.Bapps;
 using OX.Cryptography;
 using System.IO;
-using NBitcoin.OpenAsset;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using OX.Cryptography.ECC;
 using Akka.IO;

@@ -20,6 +20,9 @@ using Akka.Actor.Dsl;
 using System.ComponentModel.Design;
 using OX.Wallets.Base.Events;
 using OX.Wallets.Base.Wallets;
+using Akka.IO;
+using Nethereum.Model;
+using OX.Cryptography.ECC;
 
 namespace OX.Wallets.Base
 {
@@ -29,6 +32,7 @@ namespace OX.Wallets.Base
         Wallet _wallet;
         public override Wallet Wallet { get { return _wallet; } set { _wallet = value; initHashAccounts(); } }
         public Fixed8 TotalIssuedOXC { get; private set; }
+        public Dictionary<UInt256, Fixed8> TokenBlackHoleDestroySummary { get; set; } = new Dictionary<UInt256, Fixed8>();
         public Dictionary<UInt256, AccountPack> HashAccounts = new Dictionary<UInt256, AccountPack>();
         internal Dictionary<WalletSettingKey, WalletSettingValue> WalletSettings { get; set; } = new Dictionary<WalletSettingKey, WalletSettingValue>();
         internal Dictionary<UInt160, MyLockAssetMeta> LockAssetMetas { get; set; } = new Dictionary<UInt160, MyLockAssetMeta>();
@@ -43,6 +47,7 @@ namespace OX.Wallets.Base
         {
             Db = DB.Open(Path.GetFullPath($"{WalletIndexDirectory}\\wlt_{Message.Magic.ToString("X8")}"), new Options { CreateIfMissing = true });
             Instance = this;
+            this.TokenBlackHoleDestroySummary = new Dictionary<UInt256, Fixed8>(this.GetAll<UInt256, Fixed8>(WalletBizPersistencePrefixes.TokenBlackHoleDestroySummary));
             this.WalletSettings = new Dictionary<WalletSettingKey, WalletSettingValue>(this.GetAll<WalletSettingKey, WalletSettingValue>(WalletBizPersistencePrefixes.Wallet_Setting));
             this.LockAssetMetas = new Dictionary<UInt160, MyLockAssetMeta>(this.GetMyAllLockAssetMetas());
             this.MyLockAssets = new Dictionary<CoinReference, MyLockAssetMerge>(this.GetMyAllLockAssets());
@@ -231,6 +236,7 @@ namespace OX.Wallets.Base
                     for (ushort k = 0; k < tx.Outputs.Length; k++)
                     {
                         var output = tx.Outputs[k];
+                        CheckUSDTBlackHoleDestroy(batch, output, tx);
                         if (this.AssetTrustContacts.ContainsKey(output.ScriptHash))
                         {
                             var key = new AssetTrustOutputKey { TxId = tx.Hash, N = k };
@@ -279,11 +285,30 @@ namespace OX.Wallets.Base
             if (hasEventTransaction)
                 Bapp.PushEvent(new BappEvent { EventItems = new BappEventItem[] { new BappEventItem() { EventType = WalletBappEventType.EventTransactionEvent.Value(), Arg = block } } });
         }
+        public override void OnFlashMessage(FlashMessage flashmessage)
+        {
+        }
         public void OnSecretLetterTransaction(WriteBatch batch, Block block, SecretLetterTransaction slt)
         {
             if (this.HashAccounts.TryGetValue(slt.ToHash, out AccountPack ap))
             {
-                batch.Save_SecretLetterTransaction(this, block, slt, ap);
+                batch.Save_SecretLetterTransaction(this, block, slt, ap, SecretLetterKind.Inbox);
+            }
+            if (this.HashAccounts.TryGetValue(Contract.CreateSignatureRedeemScript(slt.From).ToScriptHash().Hash, out AccountPack myap))
+            {
+                batch.Save_SecretLetterTransaction(this, block, slt, myap, SecretLetterKind.OutBox);
+            }
+
+        }
+        public void CheckUSDTBlackHoleDestroy(WriteBatch batch, TransactionOutput output, Transaction tx)
+        {
+            if (output.ScriptHash.Equals(UInt160.Zero) && output.Value > Fixed8.Zero)
+            {
+                Fixed8 amount = Fixed8.Zero;
+                this.TokenBlackHoleDestroySummary.TryGetValue(output.AssetId, out amount);
+                amount += output.Value;
+                this.TokenBlackHoleDestroySummary[output.AssetId] = amount;
+                batch.Put(SliceBuilder.Begin(WalletBizPersistencePrefixes.TokenBlackHoleDestroySummary).Add(output.AssetId), SliceBuilder.Begin().Add(amount));
             }
         }
         public IEnumerable<KeyValuePair<BoardKey, UInt256>> GetRangeBoards(uint indexrange)
@@ -298,16 +323,29 @@ namespace OX.Wallets.Base
                 return new KeyValuePair<BoardKey, UInt256>(ks.AsSerializable<BoardKey>(), data.AsSerializable<UInt256>());
             });
         }
-        public IEnumerable<KeyValuePair<SecretLetterKey, SecretLetterTransaction>> GetMyLetters()
+        public IEnumerable<KeyValuePair<SecretLetterKey, SecretLetterState>> GetMyLetters(UInt256 letterLine = default)
         {
-            var builder = SliceBuilder.Begin(WalletBizPersistencePrefixes.SecrectLetter_Inbox);
+            var builder = SliceBuilder.Begin(WalletBizPersistencePrefixes.SecrectLetter_box);
+            if (letterLine.IsNotNull()) builder = builder.Add(letterLine);
             return this.Db.Find(ReadOptions.Default, builder, (k, v) =>
             {
                 var ks = k.ToArray();
                 var length = ks.Length - sizeof(byte);
                 ks = ks.TakeLast(length).ToArray();
                 byte[] data = v.ToArray();
-                return new KeyValuePair<SecretLetterKey, SecretLetterTransaction>(ks.AsSerializable<SecretLetterKey>(), data.AsSerializable<SecretLetterTransaction>());
+                return new KeyValuePair<SecretLetterKey, SecretLetterState>(ks.AsSerializable<SecretLetterKey>(), data.AsSerializable<SecretLetterState>());
+            });
+        }
+        public IEnumerable<KeyValuePair<UInt256, LetterPair>> GetLetterLines()
+        {
+            var builder = SliceBuilder.Begin(WalletBizPersistencePrefixes.LetterLine_Pair);
+            return this.Db.Find(ReadOptions.Default, builder, (k, v) =>
+            {
+                var ks = k.ToArray();
+                var length = ks.Length - sizeof(byte);
+                ks = ks.TakeLast(length).ToArray();
+                byte[] data = v.ToArray();
+                return new KeyValuePair<UInt256, LetterPair>(ks.AsSerializable<UInt256>(), data.AsSerializable<LetterPair>());
             });
         }
         public IEnumerable<KeyValuePair<MyBookKey, BookTransaction>> GetMyBooks()

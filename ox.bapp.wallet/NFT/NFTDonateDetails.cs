@@ -11,7 +11,6 @@ using OX.Network.P2P.Payloads;
 using OX.Wallets.UI.Forms;
 using OX.SmartContract;
 using OX.Wallets.UI.Controls;
-using NBitcoin;
 using OX.Ledger;
 
 namespace OX.Wallets.Base

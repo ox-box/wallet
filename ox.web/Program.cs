@@ -37,7 +37,6 @@ namespace OX.Mix
                     CreateHostBuilder(args).Build().Run();
                 });
             };
-
             Application.Run(app.SyncForm = new SyncForm());
         }
 

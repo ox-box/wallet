@@ -21,8 +21,10 @@ using OX.Bapps;
 using OX.SmartContract;
 using OX.Wallets.Base.Letters;
 using OX.Wallets.Base.Wallets;
+using OX.Cryptography.ECC;
+using OX.Wallets.Base;
 
-namespace OX.Wallets.Base
+namespace OX.Wallets.Letters
 {
     public partial class MyLetters : DarkToolWindow, INotecaseTrigger, IModuleComponent
     {
@@ -49,10 +51,13 @@ namespace OX.Wallets.Base
                 if (nodes != null && nodes.Length == 1)
                 {
                     var node = nodes.FirstOrDefault();
-                    sm = new ToolStripMenuItem(UIHelper.LocalString("查看私信", "View Letter"));
-                    sm.Tag = node.Tag;
-                    sm.Click += Sm_Click;
-                    menu.Items.Add(sm);
+                    if ((int)node.NodeType == 2)
+                    {
+                        sm = new ToolStripMenuItem(UIHelper.LocalString("查看链邮", "View blockchain mail"));
+                        sm.Tag = node.Tag;
+                        sm.Click += Sm_Click;
+                        menu.Items.Add(sm);
+                    }
                 }
                 if (menu.Items.Count > 0)
                     menu.Show(this.treeRooms, e.Location);
@@ -62,10 +67,10 @@ namespace OX.Wallets.Base
         private void Sm_Click(object sender, EventArgs e)
         {
             ToolStripMenuItem ToolStripMenuItem = sender as ToolStripMenuItem;
-            SecretLetterKey key = ToolStripMenuItem.Tag as SecretLetterKey;
+            Tuple<UInt256, LetterPair> t = ToolStripMenuItem.Tag as Tuple<UInt256, LetterPair>;
             if (this.Module is LetterModule md)
             {
-                new ViewLetterDialog(this.Operater, key).ShowDialog();
+                md.OpenLetterLine(t.Item1, t.Item2);
             }
         }
 
@@ -130,6 +135,10 @@ namespace OX.Wallets.Base
         public void OnRebuild()
         {
         }
+        public void OnFlashMessage(FlashMessage flashMessage)
+        {
+
+        }
         void reload()
         {
 
@@ -139,11 +148,19 @@ namespace OX.Wallets.Base
                 this.DoInvoke(() =>
                 {
                     this.treeRooms.Nodes.Clear();
-                    foreach (var b in bizPlugin.GetMyLetters().OrderByDescending(m => m.Key.LetterIndex))
+                    foreach (var glocal in bizPlugin.GetLetterLines()?.GroupBy(m => m.Value.Local))
                     {
-                        var from = Contract.CreateSignatureRedeemScript(b.Key.From).ToScriptHash();
-                        var node = new DarkTreeNode(from.ToAddress());
-                        node.Tag = b.Key;
+                        var node = new DarkTreeNode(glocal.Key.ToAddress());
+                        node.Tag = glocal;
+                        node.NodeType = 1;
+                        foreach (var r in glocal)
+                        {
+                            var remoteSH = Contract.CreateSignatureRedeemScript(r.Value.Remote).ToScriptHash();
+                            var subnode = new DarkTreeNode(remoteSH.ToAddress());
+                            subnode.Tag = new Tuple<UInt256, LetterPair>(r.Key, r.Value);
+                            subnode.NodeType = 2;
+                            node.Nodes.Add(subnode);
+                        }
                         this.treeRooms.Nodes.Add(node);
                     }
                 });

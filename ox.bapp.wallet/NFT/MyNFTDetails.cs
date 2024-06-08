@@ -13,7 +13,6 @@ using OX.SmartContract;
 using OX.Ledger;
 using OX.Persistence;
 using System.Security.Cryptography;
-using NBitcoin;
 
 namespace OX.Wallets.Base
 {

@@ -33,6 +33,7 @@ namespace OX.Notecase
         public override string[] BizAddresses => new string[] { };
         public static event BlockChainHandler<Block> SyncBlocksCompleted;
         public static event BlockChainHandler<Block> BlockCompleted;
+        public static event BlockChainHandler<FlashMessage> FlashMessageCaptured;
         public WalletsBlockHandler(OXSystem oxsystem) : base(oxsystem)
         {
             this.Start();
@@ -76,6 +77,10 @@ namespace OX.Notecase
             BlockCompleted?.Invoke(block);
             if (Blockchain.Singleton.Height == Blockchain.Singleton.HeaderHeight)
                 SyncBlocksCompleted?.Invoke(block);
+        }
+        protected override void OnFlashMessageCaptured(FlashMessage flashMessage)
+        {
+            FlashMessageCaptured?.Invoke(flashMessage);
         }
 
     }

@@ -125,7 +125,7 @@ namespace OX.Wallets.Base
             }
             try
             {
-                var ndv = this.tb_signature.Text.HexToBytes().AsSerializable<NFTTranferData>();
+                var ndv = this.tb_signature.Text.HexToBytes().AsSerializable<NFTPending>();
                 if (ndv.IsNull() || ndv.Validator.IsNull() || ndv.Key.IsNull() || !ndv.Validator.Verify())
                 {
                     string msg = UIHelper.LocalString("签名验证失败", "Signature verify failed");
@@ -224,7 +224,7 @@ namespace OX.Wallets.Base
         private void tb_signature_TextChanged(object sender, EventArgs e)
         {
             this.lb_nfthash_v.Text = string.Empty;
-            var ndv = this.tb_signature.Text.HexToBytes().AsSerializable<NFTTranferData>();
+            var ndv = this.tb_signature.Text.HexToBytes().AsSerializable<NFTPending>();
             if (ndv.IsNull() || ndv.Validator.IsNull() || ndv.Key.IsNull() || !ndv.Validator.Verify())
             {
                 string msg = UIHelper.LocalString("签名验证失败", "Signature verify failed");

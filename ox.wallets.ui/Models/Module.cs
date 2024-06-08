@@ -22,6 +22,7 @@ namespace OX.Wallets
         public abstract void BeforeOnBlock(Block block);
         public abstract void AfterOnBlock(Block block);
         public abstract void OnRebuild();
+        public abstract void OnFlashMessage(FlashMessage flashmessage);
         public void LoadBappModuleWalletSection(JObject bappSectionObject)
         {
             moduleWalletSection = bappSectionObject;

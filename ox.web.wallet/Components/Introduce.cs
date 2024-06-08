@@ -18,6 +18,7 @@ using OX.Network.P2P.Payloads;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.AspNetCore.Components.Rendering;
 using OX.Wallets;
+using Markdig;
 
 namespace OX.Web.Components
 {
@@ -25,10 +26,14 @@ namespace OX.Web.Components
     {
         protected override void BuildRenderTree(RenderTreeBuilder builder)
         {
-            var html = DNPHelper.GetDNPSetting()?.DNP_Introduce;
-            if (html.IsNotNullAndEmpty())
-            {
-                builder.AddMarkupContent(0,html);
+            var pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
+            var markString = DNPHelper.GetDNPSetting()?.DNP_Introduce;
+            if (markString.IsNotNullAndEmpty()) {
+                var html = Markdown.ToHtml(markString, pipeline);
+                if (html.IsNotNullAndEmpty())
+                {
+                    builder.AddMarkupContent(0, html);
+                }
             }
         }
     }

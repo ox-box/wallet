@@ -28,7 +28,7 @@ namespace OX.Wallets
         public const byte Book_Record = 0x14;
         public const byte Book_Record_My = 0x15;
         public const byte IssueTransaction_History = 0x16;
-        public const byte SecrectLetter_Inbox = 0x17;
+        public const byte SecrectLetter_box = 0x17;
         public const byte AssetTrust_Contract = 0x18;
         public const byte AssetTrust_UTXO = 0x19;
         public const byte TX_LockAsset_Record = 0x1A;
@@ -39,6 +39,8 @@ namespace OX.Wallets
         public const byte NFT_Issue_Record = 0x1F;
         public const byte NFT_Transfer_Record_Server = 0x20;
         public const byte TX_LockAssetMeta = 0x21;
+        public const byte TokenBlackHoleDestroySummary = 0x22;
+        public const byte LetterLine_Pair = 0x23;
     }
     public enum WalletSettingKind
     {
@@ -66,7 +68,7 @@ namespace OX.Wallets
         }
         public override int GetHashCode()
         {
-            return this.Key.GetHashCode();
+            return this.Key.Value();
         }
         public override string ToString()
         {

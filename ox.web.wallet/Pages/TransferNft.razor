@@ -8,32 +8,46 @@
     <ChildContent>
         @if (this.Model.IsNotNull() && this.NftTransfer.IsNotNull())
         {
+               <Spin Spinning=loading>
             <Form Model="@this.Model"
-                                  Style="margin-top: 8px;"
-                                  OnFinish="Transfer">
-                                
-                                <FormItem Label=@this.WebLocalString("NFT CID","NFT CID") LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
-                                    <Input @bind-Value="@this.NftTransfer.NFSStateKey.NFCID.CID" ReadOnly=true />
-                                </FormItem>                                
-                                <FormItem Label=@this.WebLocalString("转售金额","Transfer Amount") LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
-                                    <Input @bind-Value="@context.Amount" />
-                                </FormItem>
-                                 <FormItem Label=@this.WebLocalString("最大区块高度:", "Max Block Index:") LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
-                                    <Input @bind-Value="@context.MaxIndex" />
-                                </FormItem>
-                                  <FormItem Label=@this.WebLocalString("最小区块高度:", "Min Block Index:") LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
-                                    <Input @bind-Value="@context.MinIndex" />
-                                </FormItem>
-                                 <FormItem Label=" " Style="margin-top:32px" WrapperCol="_submitFormLayout.WrapperCol">
-                                    <Button Type="primary" HtmlType="submit" Disabled=!this.Valid>
-                                        @this.WebLocalString("签名","Sign")
-                                    </Button>
-                                </FormItem>
-                                <FormItem Label=@this.WebLocalString("签名数据:", "Signature Data:") LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
-                                    <Text Copyable>@context.Signature</Text>
-                                </FormItem>                                
-                            </Form>
-         }
+                  Style="margin-top: 8px;"
+                  OnFinish="Transfer">
+
+                <FormItem Label=@this.WebLocalString("NFT CID","NFT CID") LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
+                    <Input @bind-Value="@this.NftTransfer.NFSStateKey.NFCID.CID" ReadOnly=true />
+                </FormItem>
+                <FormItem Label=@this.WebLocalString("转售金额","Transfer Amount") LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
+                    <Input @bind-Value="@context.Amount" />
+                </FormItem>
+                <FormItem Label=@this.WebLocalString("最大区块高度:", "Max Block Index:") LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
+                    <Input @bind-Value="@context.MaxIndex" />
+                </FormItem>
+                <FormItem Label=@this.WebLocalString("最小区块高度:", "Min Block Index:") LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
+                    <Input @bind-Value="@context.MinIndex" />
+                </FormItem>
+                <FormItem Label=" " Style="margin-top:32px" WrapperCol="_submitFormLayout.WrapperCol">
+                    <Button Type="primary" HtmlType="submit" Disabled=!this.Valid>
+                        @this.WebLocalString("签名", "Sign")
+                    </Button>
+                </FormItem>
+                <FormItem Label=@this.WebLocalString("签名数据:", "Signature Data:") LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
+                    <Text Copyable>@context.Signature</Text>
+                </FormItem>
+                <FormItem Label=" " Style="margin-top:32px" WrapperCol="_submitFormLayout.WrapperCol">
+                    <Button Type="primary" OnClick="Publish" Disabled=!this.Valid>
+                        @this.WebLocalString("发布", "Publish")
+                    </Button>
+                </FormItem>
+            </Form>
+                @if (success)
+                {
+                    <Result Status="success"
+                            Title=@this.WebLocalString("成功","Success")
+                            SubTitle=@this.WebLocalString("闪态提交成功","Successfully post flash state")>
+                    </Result>
+                }
+            </Spin>
+        }
     </ChildContent>
 </PageContainer>
 <style>

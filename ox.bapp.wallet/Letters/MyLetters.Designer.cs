@@ -1,7 +1,7 @@
 ﻿using OX.Wallets.UI.Config;
 using OX.Wallets.UI.Docking;
 
-namespace OX.Wallets.Base
+namespace OX.Wallets.Letters
 {
     partial class MyLetters
     {

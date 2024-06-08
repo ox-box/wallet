@@ -18,6 +18,7 @@ namespace OX.Wallets
         }
         public string DNP_Name { get; set; }
         public string DNP_Introduce { get; set; }
+
         public string Base_Url { get; set; }
 
         public JObject Build()
@@ -32,6 +33,12 @@ namespace OX.Wallets
 
     public static class DNPHelper
     {
+        public static bool HaveIntroduce()
+        {
+            var ds = GetDNPSetting();
+            if (ds.IsNull()) return false;
+            return ds.DNP_Introduce.IsNotNullAndEmpty();
+        }
         public static DNPSetting GetDNPSetting()
         {
             return new DNPSetting(dnp);

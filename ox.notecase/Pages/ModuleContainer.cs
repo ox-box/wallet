@@ -15,6 +15,7 @@ using System.Drawing;
 using OX.Network;
 using OX.Notecase;
 using OX.Bapps;
+using OX.Notecase.Pages;
 
 namespace OX.Wallets
 {
@@ -30,7 +31,7 @@ namespace OX.Wallets
 
         public List<DarkDockContent> ToolWindows { get; private set; }
         public DockPanelState DockPanelState { get; private set; }
-
+        IndexLock IndexLock = new IndexLock();
         #region 变量
         private DateTime persistence_time = DateTime.MinValue;
 
@@ -204,8 +205,18 @@ namespace OX.Wallets
             {
                 walletHeight = NotecaseApp.Instance.Wallet.WalletHeight > 0 ? NotecaseApp.Instance.Wallet.WalletHeight - 1 : 0;
             }
+            var msg = $"{walletHeight}/{Blockchain.Singleton.Height}/{Blockchain.Singleton.HeaderHeight}";
             this.ModuleStatusLabel.Text = LocalNode.Singleton.GetRemoteNodes().Count().ToString() + UIHelper.LocalString(" 节点", " Nodes");
-            this.toolStripStatusLabel5.Text = $"{walletHeight}/{Blockchain.Singleton.Height}/{Blockchain.Singleton.HeaderHeight}";
+            this.toolStripStatusLabel5.Text = msg;
+            if (walletHeight < Blockchain.Singleton.HeaderHeight-100)
+            {
+                if (!this.IndexLock.Visible) this.IndexLock.ShowDialog();
+                this.IndexLock.SetMessage(msg);
+            }
+            else
+            {
+                if (this.IndexLock.Visible) this.IndexLock.Hide();
+            }
             this.DoInvoke(() =>
             {
                 TimeSpan persistence_span = DateTime.UtcNow - persistence_time;

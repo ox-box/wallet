@@ -45,7 +45,7 @@ namespace OX.Wallets.Base.Books
             newBookMenu.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
             //newBookMenu.Image = global::Example.Icons.NewFile_6276;
             newBookMenu.Name = "newBookMenu";
-            newBookMenu.ShortcutKeys = Keys.Control | Keys.R;
+            newBookMenu.ShortcutKeys = Keys.Control |Keys.Alt| Keys.R;
             newBookMenu.Size = new System.Drawing.Size(170, 22);
             newBookMenu.Text = UIHelper.LocalString("&注册书籍", "&Register Book");
             newBookMenu.Click += NewBookMenu_Click;
@@ -56,7 +56,7 @@ namespace OX.Wallets.Base.Books
             allBooksMenu.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
             //allBookMenu.Image = global::Example.Icons.NewFile_6276;
             allBooksMenu.Name = "allBookMenu";
-            allBooksMenu.ShortcutKeys = Keys.Control | Keys.A;
+            allBooksMenu.ShortcutKeys = Keys.Control |Keys.Alt| Keys.A;
             allBooksMenu.Size = new System.Drawing.Size(170, 22);
             allBooksMenu.Text = UIHelper.LocalString("&所有书籍", "&All Books");
             allBooksMenu.Click += AllBookMenu_Click;
@@ -67,7 +67,7 @@ namespace OX.Wallets.Base.Books
             myBooksMenu.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
             //myBooksMenu.Image = global::Example.Icons.NewFile_6276;
             myBooksMenu.Name = "myBooksMenu";
-            myBooksMenu.ShortcutKeys = Keys.Control | Keys.M;
+            myBooksMenu.ShortcutKeys = Keys.Control |Keys.Alt| Keys.M;
             myBooksMenu.Size = new System.Drawing.Size(170, 22);
             myBooksMenu.Text = UIHelper.LocalString("&我的书籍", "&My Books");
             myBooksMenu.Click += MyBooksMenu_Click;
@@ -114,7 +114,7 @@ namespace OX.Wallets.Base.Books
                             Bapp.PushCrossBappMessage(new CrossBappMessage() { Content = msg, From = this.Bapp });
                             DarkMessageBox.ShowInformation(msg, "");
                         });
-                    } 
+                    }
                 }
             }
         }
@@ -164,6 +164,11 @@ namespace OX.Wallets.Base.Books
         {
             if (MyBooks != default)
                 MyBooks.OnRebuild();
+        }
+        public override void OnFlashMessage(FlashMessage flashmessage)
+        {
+            if (MyBooks != default)
+                MyBooks.OnFlashMessage(flashmessage);
         }
         public override void OnLoadBappModuleWalletSection(JObject bappSectionObject)
         {

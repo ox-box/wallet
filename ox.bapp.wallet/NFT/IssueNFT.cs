@@ -23,7 +23,6 @@ using OX.Cryptography;
 using System.IO;
 using Nethereum.Util;
 using OX.Cryptography.ECC;
-using static NBitcoin.Scripting.OutputDescriptor;
 using Nethereum.Hex.HexConvertors.Extensions;
 
 namespace OX.Wallets.Base

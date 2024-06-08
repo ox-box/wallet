@@ -39,6 +39,33 @@ namespace OX.Wallets
             Console.WriteLine(msg);
             return true;
         }
+        public static bool SignAndSendFlashMessage(this INotecase operater, FlashMessage fm)
+        {
+            ContractParametersContext context;
+            try
+            {
+                context = new ContractParametersContext(fm);
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine($"Error creating contract params: {ex}");
+                throw;
+            }
+            operater.Wallet.Sign(context);
+            string msg;
+            if (context.Completed)
+            {
+                fm.Witnesses = context.GetWitnesses();
+                if (fm.Size > FlashMessage.MaxFlashMessageSize) return false;
+                operater.Relay(fm);
+                msg = $"Signed and relayed transaction with hash={fm.Hash}";
+                Console.WriteLine(msg);
+                return true;
+            }
+            msg = $"Failed sending transaction with hash={fm.Hash}";
+            Console.WriteLine(msg);
+            return true;
+        }
 
         public static bool IsChina()
         {

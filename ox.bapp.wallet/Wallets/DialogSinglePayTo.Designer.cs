@@ -55,6 +55,7 @@
             lb_eth_lockindex = new UI.Controls.DarkLabel();
             tb_eth_targetAddress = new UI.Controls.DarkTextBox();
             lb_eth_targetAddress = new UI.Controls.DarkLabel();
+            lb_domainAddr = new UI.Controls.DarkLabel();
             tab_target.SuspendLayout();
             tab_native.SuspendLayout();
             tab_lock.SuspendLayout();
@@ -207,6 +208,7 @@
             // tab_native
             // 
             tab_native.BackColor = System.Drawing.Color.DarkGray;
+            tab_native.Controls.Add(lb_domainAddr);
             tab_native.Controls.Add(tb_native_targetAddress);
             tab_native.Controls.Add(lb_native_targetAddress);
             tab_native.Location = new System.Drawing.Point(4, 32);
@@ -364,7 +366,7 @@
             tab_eth.Controls.Add(lb_eth_targetAddress);
             tab_eth.Location = new System.Drawing.Point(4, 32);
             tab_eth.Name = "tab_eth";
-            tab_eth.Size = new System.Drawing.Size(987, 296);
+            tab_eth.Size = new System.Drawing.Size(192, 64);
             tab_eth.TabIndex = 2;
             tab_eth.Text = "tabPage3";
             // 
@@ -424,6 +426,16 @@
             lb_eth_targetAddress.Size = new System.Drawing.Size(54, 25);
             lb_eth_targetAddress.TabIndex = 15;
             lb_eth_targetAddress.Text = "地址:";
+            // 
+            // lb_domainAddr
+            // 
+            lb_domainAddr.AutoSize = true;
+            lb_domainAddr.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
+            lb_domainAddr.Location = new System.Drawing.Point(152, 167);
+            lb_domainAddr.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            lb_domainAddr.Name = "lb_domainAddr";
+            lb_domainAddr.Size = new System.Drawing.Size(0, 25);
+            lb_domainAddr.TabIndex = 10;
             // 
             // DialogSinglePayTo
             // 
@@ -492,5 +504,6 @@
         private UI.Controls.DarkTextBox tb_eth_targetAddress;
         private UI.Controls.DarkLabel lb_eth_targetAddress;
         private UI.Controls.DarkLabel lb_mapaddress;
+        private UI.Controls.DarkLabel lb_domainAddr;
     }
 }

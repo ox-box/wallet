@@ -118,7 +118,7 @@ namespace OX.Wallets.UI.Forms
 
         private void CalculateSize()
         {
-            var width = 260; var height = 124;
+            var width = 260; var height = 174;
 
             // Reset form back to original size
             Size = new Size(width, height);

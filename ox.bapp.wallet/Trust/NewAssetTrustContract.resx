@@ -122,7 +122,7 @@
     <value>192, 603</value>
   </data>
   <data name="pl_side_scope.Size" type="System.Drawing.Size, System.Drawing">
-    <value>715, 211</value>
+    <value>888, 211</value>
   </data>
   <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="pl_side_scope.TabIndex" type="System.Int32, mscorlib">
@@ -179,7 +179,7 @@
     <value>NoControl</value>
   </data>
   <data name="bt_copy.Location" type="System.Drawing.Point, System.Drawing">
-    <value>777, 829</value>
+    <value>948, 828</value>
   </data>
   <data name="bt_copy.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>5, 5, 5, 5</value>
@@ -209,7 +209,7 @@
     <value>192, 831</value>
   </data>
   <data name="tb_trustAddr.Size" type="System.Drawing.Size, System.Drawing">
-    <value>569, 30</value>
+    <value>750, 30</value>
   </data>
   <data name="tb_trustAddr.TabIndex" type="System.Int32, mscorlib">
     <value>55</value>
@@ -326,7 +326,7 @@
     <value>192, 84</value>
   </data>
   <data name="tb_amount.Size" type="System.Drawing.Size, System.Drawing">
-    <value>242, 30</value>
+    <value>281, 30</value>
   </data>
   <data name="tb_amount.TabIndex" type="System.Int32, mscorlib">
     <value>51</value>
@@ -377,10 +377,10 @@
     <value>8</value>
   </data>
   <data name="tb_balance.Location" type="System.Drawing.Point, System.Drawing">
-    <value>665, 86</value>
+    <value>799, 84</value>
   </data>
   <data name="tb_balance.Size" type="System.Drawing.Size, System.Drawing">
-    <value>242, 30</value>
+    <value>281, 30</value>
   </data>
   <data name="tb_balance.TabIndex" type="System.Int32, mscorlib">
     <value>49</value>
@@ -404,7 +404,7 @@
     <value>NoControl</value>
   </data>
   <data name="lb_balance.Location" type="System.Drawing.Point, System.Drawing">
-    <value>481, 88</value>
+    <value>627, 90</value>
   </data>
   <data name="lb_balance.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>5, 0, 5, 0</value>
@@ -461,7 +461,7 @@
     <value>11</value>
   </data>
   <data name="bt_add.Location" type="System.Drawing.Point, System.Drawing">
-    <value>777, 251</value>
+    <value>950, 251</value>
   </data>
   <data name="bt_add.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>5, 5, 5, 5</value>
@@ -491,7 +491,7 @@
     <value>192, 291</value>
   </data>
   <data name="dlv_addrs.Size" type="System.Drawing.Size, System.Drawing">
-    <value>715, 295</value>
+    <value>888, 295</value>
   </data>
   <data name="dlv_addrs.TabIndex" type="System.Int32, mscorlib">
     <value>45</value>
@@ -518,7 +518,7 @@
     <value>5, 4, 5, 4</value>
   </data>
   <data name="cbAccounts.Size" type="System.Drawing.Size, System.Drawing">
-    <value>715, 31</value>
+    <value>886, 31</value>
   </data>
   <data name="cbAccounts.TabIndex" type="System.Int32, mscorlib">
     <value>44</value>
@@ -572,7 +572,7 @@
     <value>192, 253</value>
   </data>
   <data name="tb_addr.Size" type="System.Drawing.Size, System.Drawing">
-    <value>569, 30</value>
+    <value>752, 30</value>
   </data>
   <data name="tb_addr.TabIndex" type="System.Int32, mscorlib">
     <value>40</value>
@@ -686,7 +686,7 @@
     <value>5, 4, 5, 4</value>
   </data>
   <data name="panel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>933, 946</value>
+    <value>1092, 946</value>
   </data>
   <data name="panel.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -710,7 +710,7 @@
     <value>11, 24</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>933, 946</value>
+    <value>1092, 946</value>
   </data>
   <data name="$this.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft YaHei UI, 9pt</value>

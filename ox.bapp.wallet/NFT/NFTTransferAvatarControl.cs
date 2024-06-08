@@ -15,7 +15,6 @@ using System.IO;
 using System.Net.Http;
 using OX.Ledger;
 using OX.Persistence;
-using NBitcoin;
 using OX.Wallets.Eths;
 
 namespace OX.Wallets.Base

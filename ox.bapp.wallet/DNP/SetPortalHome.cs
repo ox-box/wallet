@@ -39,7 +39,7 @@ namespace OX.Wallets.Base
             this.Text = UIHelper.LocalString("节点门户设置", "Node Portal Setting");
             this.lb_name.Text = UIHelper.LocalString("节点门户名称:", "Node Portal Name:");
             this.lb_baseUrl.Text = UIHelper.LocalString("外网IP或域名:", "IP or Domain Name:");
-            this.lb_remark.Text = UIHelper.LocalString("节点门户简介:", "Node Portal Introduce:");
+            this.lb_remark.Text = UIHelper.LocalString("Markdown:", "Markdown:");
             this.bt_ok.Text = UIHelper.LocalString("确定", "OK");
             this.bt_cancel.Text = UIHelper.LocalString("取消", "Cancel");
             DNPHelper.SetDNP(Module.dnp);
