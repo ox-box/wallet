@@ -263,9 +263,9 @@ namespace OX.Wallets
         {
             return this.GetMyLockAssetUTXO()?.Where(m => m.Value.SpentIndex == 0 && m.Value.Owner.Equals(from) && ((m.Value.Tx.IsTimeLock && DateTime.Now.ToTimestamp() > m.Value.Tx.LockExpiration) || (!m.Value.Tx.IsTimeLock && Blockchain.Singleton.Height > m.Value.Tx.LockExpiration)))?.Select(m => new MixUTXO { Owner = m.Value.Owner, AssetId = m.Value.Output.AssetId, Amount = m.Value.Output.Value, IsLockCoin = true, LockCoin = m });
         }
-        public bool MixBuildAndRelaySingleOutputTransaction<T>(T tx, UInt160 from, Action<T> transactionCompleted) where T : Transaction
+        public bool MixBuildAndRelaySingleOutputTransaction<T>(T tx, UInt160 from, Action<T> transactionCompleted, IEnumerable<WalletAccount> defaultWitnesses = default) where T : Transaction
         {
-            var newTx = tx.Outputs.IsNullOrEmpty() ? MixBuildNoneOutputTransaction(tx, from) : MixBuildSingleOutputTransaction(tx, from);
+            var newTx = tx.Outputs.IsNullOrEmpty() ? MixBuildNoneOutputTransaction(tx, from, defaultWitnesses) : MixBuildSingleOutputTransaction(tx, from, defaultWitnesses);
             if (newTx.IsNull()) return false;
             if (newTx.IsNotNull())
             {
@@ -279,7 +279,7 @@ namespace OX.Wallets
             }
             return false;
         }
-        public T MixBuildSingleOutputTransaction<T>(T tx, UInt160 from) where T : Transaction
+        public T MixBuildSingleOutputTransaction<T>(T tx, UInt160 from, IEnumerable<WalletAccount> defaultWitnesses = default) where T : Transaction
         {
             if (tx.Outputs.IsNullOrEmpty()) return default;
             if (tx.Outputs.Count() != 1) return default;
@@ -369,12 +369,18 @@ namespace OX.Wallets
                         }
                     }
                     tx.Inputs = crfs.ToArray();
+                    if (defaultWitnesses.IsNotNullAndEmpty())
+                        foreach (var witness in defaultWitnesses)
+                        {
+                            var aa = new AvatarAccount { ScriptHash = witness.ScriptHash, Contract = witness.Contract, Key = witness.GetKey() };
+                            avatars.Add(aa);
+                        }
                     return LockAssetHelper.Build(tx, avatars.ToArray());
                 }
             }
             return default;
         }
-        public T MixBuildNoneOutputTransaction<T>(T tx, UInt160 from) where T : Transaction
+        public T MixBuildNoneOutputTransaction<T>(T tx, UInt160 from, IEnumerable<WalletAccount> defaultWitnesses = default) where T : Transaction
         {
             if (tx.Outputs.IsNotNullAndEmpty()) return default;
             var walletAccount = this.GetAccount(from);
@@ -408,6 +414,12 @@ namespace OX.Wallets
                     }
                 }
                 tx.Inputs = crfs.ToArray();
+                if (defaultWitnesses.IsNotNullAndEmpty())
+                    foreach (var witness in defaultWitnesses)
+                    {
+                        var aa = new AvatarAccount { ScriptHash = witness.ScriptHash, Contract = witness.Contract, Key = witness.GetKey() };
+                        avatars.Add(aa);
+                    }
                 return LockAssetHelper.Build(tx, avatars.ToArray());
             }
             return default;

@@ -81,7 +81,7 @@ namespace OX.Web.Pages
                     AssetState = Blockchain.Singleton.CurrentSnapshot.Assets.TryGet(astID);
                     if (AssetState.IsNotNull())
                     {
-                        assetInfo = $"{AssetState.GetName()}      ({AssetState.AssetId.ToString()})";
+                        assetInfo = $"{AssetState.GetName()}      ({this.OmitString(AssetState.AssetId.ToString())})";
                         var daoVoteList = Blockchain.Singleton.CurrentSnapshot.DaoVoteList.TryGet(astID);
                         if (daoVoteList.IsNotNull() && daoVoteList.Votes.IsNotNullAndEmpty())
                         {

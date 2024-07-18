@@ -11,10 +11,12 @@
     </Content>
     <ChildContent>
 
-
+        @{
+            TabPosition tp = this.IsMobile? TabPosition.Left : TabPosition.Top;
+        }
         <Card Class="tabsCard">
             <CardTabs>
-                <Tabs @bind-ActiveKey=@activeKey>
+                <Tabs @bind-ActiveKey=@activeKey TabPosition=tp>
                     <TabPane Key="1">
                         <TabTemplate>@this.WebLocalString("转到OX地址", "To OX Address")</TabTemplate>
                         <ChildContent>

@@ -1,8 +1,8 @@
 ﻿@page "/_pc/flashstate/new"
 @inherits WalletComponentBase
 <Microsoft.AspNetCore.Components.Web.Extensions.Head.Title Value=@this.PageTitle />
-<GridRow>
-    <GridCol Span="18">
+<Flex Gap="middle">
+    <Flex Vertical=this.IsMobile>
         <Spin Spinning=loading>
             <Form Model="@this.StateText"
                   Style="margin-top: 8px;">
@@ -62,11 +62,8 @@
                 </Result>
             }
         </Spin>
-    </GridCol>
-    <GridCol Span="6">
-
-    </GridCol>
-</GridRow>
+    </Flex>
+</Flex>
 
 <style type="text/css">
     .site-tag-plus {

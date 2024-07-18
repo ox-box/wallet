@@ -17,7 +17,7 @@ namespace OX.Wallets.States
         protected IStateDispatch StateDispatcher { get; set; }
         //[Inject]
         //protected IEthereumContext EthereumContext { get; set; }
-      
+
         public EthID EthID { get; set; }
         public bool HaveEthID { get { return EthID.IsNotNull(); } }
 
@@ -30,7 +30,8 @@ namespace OX.Wallets.States
         public string? PersonalSigned { get; set; }
         public string? FunctionResult { get; set; }
         public string? RpcResult { get; set; }
-        public int? Chain { get; set; }
+        public int? ChainID { get; set; }
+        public Chain Chain { get; set; }
 
 
         protected override async Task OnInit()
@@ -90,8 +91,8 @@ namespace OX.Wallets.States
         public async Task GetSelectedNetwork()
         {
             var chainInfo = await MetaMaskService.GetSelectedChain();
-            Chain = (int)chainInfo.chain;
-
+            ChainID = (int)chainInfo.chainId;
+            Chain = chainInfo.chain;
             SelectedChain = $"ChainID: {chainInfo.chainId}, Name: {chainInfo.chain.ToString()}";
             Console.WriteLine($"ChainID: {chainInfo.chainId}");
         }

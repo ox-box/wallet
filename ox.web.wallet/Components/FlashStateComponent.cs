@@ -33,16 +33,18 @@ namespace OX.Web.Components
             var pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
             if (StateRecord.FlashState.TextData.IsNotNullAndEmpty() && StateRecord.FlashState.TextData.Length > 1)
             {
+                html += "<li>";
                 var str = System.Text.Encoding.UTF8.GetString(StateRecord.FlashState.TextData);
                 if (str.IsNotNullAndEmpty())
                     html += Markdown.ToHtml(str, pipeline);
+                html += "</li>";
             }
+
             if (StateRecord.FlashState.ImageData.IsNotNullAndEmpty() && StateRecord.FlashState.ImageData.Length > 1)
             {
                 var base64String = Convert.ToBase64String(StateRecord.FlashState.ImageData);
-                html += $"<img src='data:image/jpg;base64,{base64String}'/>";
+                html += $"<li><img src='data:image/jpg;base64,{base64String}'/></li>";
             }
- 
             if (html.IsNotNullAndEmpty())
             {
                 var str = Markdown.ToHtml(html, pipeline);

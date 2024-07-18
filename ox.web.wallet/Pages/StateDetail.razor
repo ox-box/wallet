@@ -1,23 +1,41 @@
 ﻿@page "/_pc/flashstate/statedetail/{statehash}"
 @inherits WalletComponentBase
 <Microsoft.AspNetCore.Components.Web.Extensions.Head.Title Value=@PageTitle />
-<GridRow>
-    <GridCol Span="18">
-        @if (this.FlashStateRecord.IsNotNull())
-        {
-            <FlashStateComponent StateRecord=this.FlashStateRecord />
-            var senderSH = this.FlashStateRecord.FlashState.Author;
-            var sender = senderSH.ToAddress();
-            var alias = sender;
-            if (Blockchain.Singleton.GetDomain(senderSH, out byte[] domain))
+<Flex Gap="middle">
+    <Flex Vertical=this.IsMobile>
+        <ul>
+            @if (this.FlashStateRecord.IsNotNull())
             {
-                alias = System.Text.Encoding.UTF8.GetString(domain);
+                <FlashStateComponent StateRecord=this.FlashStateRecord />
+                var senderSH = this.FlashStateRecord.FlashState.Author;
+                var sender = senderSH.ToAddress();
+                var alias = sender;
+                if (Blockchain.Singleton.GetDomain(senderSH, out byte[] domain))
+                {
+                    alias = System.Text.Encoding.UTF8.GetString(domain);
+                }
+                var time = this.FlashStateRecord.Timestamp.ToDateTime().ToString("yyyy-MM-dd HH:mm:ss");
+                var authorUrl = $"/_pc/flashstate/author/{sender}";
+                <li>
+                    <Divider Orientation="left" Plain>@time<a Class="senderButton" target="_blank" href="@authorUrl">@alias</a><Button Type="@ButtonType.Text" Size="small" Icon="@IconType.Outline.Comment" OnClick="_=>Reply(null)"></Button></Divider>
+                </li>
             }
-            var time = this.FlashStateRecord.Timestamp.ToDateTime().ToString("yyyy-MM-dd HH:mm:ss");
-            var authorUrl = $"/_pc/flashstate/author/{sender}";
-
-            <Divider Orientation="left" Plain>@time<a Class="senderButton" target="_blank" href="@authorUrl">@alias</a><Button Type="@ButtonType.Text" Size="small" Icon="@IconType.Outline.Comment" OnClick="_=>Reply(null)"></Button></Divider>
-        }
+        </ul>
+    </Flex>
+</Flex>
+<Flex Vertical=this.IsMobile>
+    <Flex Vertical=this.IsMobile>
+        <Card>
+            @if (this.FlashStateRecord.IsNotNull() && this.FlashStateRecord.FlashState.Tags.IsNotNullAndEmpty())
+                foreach (var tag in this.FlashStateRecord.FlashState.Tags)
+                {
+                    <Button Type="@ButtonType.Dashed" Size="small" OnClick="_=>GoTag(tag)">@tag.ToString()</Button>
+                }
+        </Card>
+    </Flex>
+</Flex>
+<Flex Gap="middle">
+    <Flex Vertical=this.IsMobile>
         @if (this.CMS.IsNotNullAndEmpty())
         {
             <div>
@@ -109,17 +127,9 @@
 
             </div>
         }
-    </GridCol>
-    <GridCol Span="6">
-        <Card>
-            @if (this.FlashStateRecord.IsNotNull() && this.FlashStateRecord.FlashState.Tags.IsNotNullAndEmpty())
-                foreach (var tag in this.FlashStateRecord.FlashState.Tags)
-                {
-                    <Button Type="@ButtonType.Dashed" Size="small" OnClick="_=>GoTag(tag)">@tag.ToString()</Button>
-                }
-        </Card>
-    </GridCol>
-</GridRow>
+    </Flex>
+</Flex>
+
 <div>
     @if (this.HaveEthID)
     {

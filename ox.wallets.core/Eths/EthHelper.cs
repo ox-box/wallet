@@ -18,13 +18,30 @@ namespace OX.Wallets.Eths
         public static string Omit(this string address, int limitLength = 6)
         {
             var length = address.Length;
-            if (length > 15)
+            if (length > limitLength*2+3)
             {
                 return address.Substring(0, limitLength) + "..." + address.Substring(length - limitLength, limitLength);
             }
             return address;
         }
-
+        public static string OmitOnlyLeft(this string address, int limitLength = 6)
+        {
+            var length = address.Length;
+            if (length > limitLength+3)
+            {
+                return address.Substring(0, limitLength) + "...";
+            }
+            return address;
+        }
+        public static string OmitOnlyRight(this string address, int limitLength = 6)
+        {
+            var length = address.Length;
+            if (length > limitLength + 3)
+            {
+                return "..." + address.Substring(length - limitLength, limitLength);
+            }
+            return address;
+        }
         public static EthBalanceState QueryBalanceState(this OpenWallet openWallet, EthID ethid)
         {
             return openWallet.QueryBalanceState(ethid.EthAddress);

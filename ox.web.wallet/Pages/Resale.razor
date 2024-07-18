@@ -41,7 +41,7 @@
                                     <div class="listContent">
                                         <div class="listContentItem">
                                             <span>@this.WebLocalString("NFT CID", "NFT CID")</span>
-                                            <p>@context.NFCState.NFC.NftCopyright.NftID.CID</p>
+                                            <p>@this.OmitString(context.NFCState.NFC.NftCopyright.NftID.CID)</p>
                                         </div>
                                     </div>
                                     <div class="listContent">
@@ -88,9 +88,12 @@
                                                 <SpaceItem>
                                                     <a href="@url" target="_blank">@this.WebLocalString("预览", "Preview")</a>
                                                 </SpaceItem>
-                                                <SpaceItem>
-                                                    <a href="@url2" target="_blank">@this.WebLocalString("节点预览", "Node Preview")</a>
-                                                </SpaceItem>
+                                                @if (!this.IsMobile)
+                                                {
+                                                    <SpaceItem>
+                                                        <a href="@url2" target="_blank">@this.WebLocalString("节点预览", "Node Preview")</a>
+                                                    </SpaceItem>
+                                                }
                                             </Space>
                                         </div>
                                     </div>

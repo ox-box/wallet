@@ -44,7 +44,7 @@ namespace OX.Wallets.Base
         {
             this.Text = UIHelper.LocalString($"发行NFT", $"Issue NFT");
             this.lb_nfthash.Text = UIHelper.LocalString("NFT CID:", "NFT CID:");
-            this.lb_newowner.Text = UIHelper.LocalString("接收人:", "Recipient:");
+            this.lb_newowner.Text = UIHelper.LocalString("接收人公钥:", "Recipient PubKey:");
             this.lb_sn.Text = UIHelper.LocalString("编号:", "SN:");
             this.lb_holdername.Text = UIHelper.LocalString("接收人名称:", "Recipient Name:");
             this.btnOk.Text = UIHelper.LocalString("立即发行", "Issue Now");
@@ -133,13 +133,26 @@ namespace OX.Wallets.Base
             var tx = buildTx(out UInt160 sh);
             if (tx.IsNotNull() && this.Operater.Wallet.IsNotNull())
             {
-                this.Operater.Wallet.MixBuildAndRelaySingleOutputTransaction(tx,sh, tx2 =>
+                List<WalletAccount> acts = new List<WalletAccount>();
+                if (tx.NftChangeType == NftChangeType.Issue && tx.NFSStateKey.IsNotNull() && tx.NFSStateKey.NFCID.IsNotNull())
+                {
+                    var nfcstate = Blockchain.Singleton.CurrentSnapshot.GetNftState(tx.NFSStateKey.NFCID);
+                    if (nfcstate.IsNotNull())
+                    {
+                        var v = Contract.CreateSignatureRedeemScript(nfcstate.NFC.Author).ToScriptHash();
+                        var act = this.Operater.Wallet.GetAccount(v);
+                        if (act.IsNull() || act.WatchOnly) return;
+                        acts.Add(act);
+                    }
+                }
+
+                this.Operater.Wallet.MixBuildAndRelaySingleOutputTransaction(tx, sh, tx2 =>
                 {
                     string msg = $"{UIHelper.LocalString("发行NFT交易已广播", "Relay issue NFT transaction completed")}   {tx2.Hash}";
                     DarkMessageBox.ShowInformation(msg, "");
-                });
+                }, acts);
             }
-             
+
         }
     }
 }

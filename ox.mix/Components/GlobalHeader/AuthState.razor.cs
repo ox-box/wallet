@@ -44,7 +44,10 @@ namespace OX.Mix.Components
         public string? PersonalSigned { get; set; }
         public string? FunctionResult { get; set; }
         public string? RpcResult { get; set; }
-        public int? Chain { get; set; }
+        public int? ChainID { get; set; }
+        public Chain Chain { get; set; }
+
+
         protected override async Task OnInitializedAsync()
         {
             //Subscribe to events
@@ -135,7 +138,8 @@ namespace OX.Mix.Components
         public async Task GetSelectedNetwork()
         {
             var chainInfo = await MetaMaskService.GetSelectedChain();
-            Chain = (int)chainInfo.chain;
+            ChainID = (int)chainInfo.chainId;
+            Chain = chainInfo.chain;
 
             SelectedChain = $"ChainID: {chainInfo.chainId}, Name: {chainInfo.chain.ToString()}";
             Console.WriteLine($"ChainID: {chainInfo.chainId}");

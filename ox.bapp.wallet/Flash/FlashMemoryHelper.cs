@@ -49,7 +49,7 @@ namespace OX.Wallets.Flash
     }
     public static class FlashMemoryHelper
     {
-        public const uint RangeSize = 2;
+        public const uint RangeSize = 10;
         public static uint LastQueueTimeStamp;
         public static BoundedQueue<UInt256> FlashHashs = new BoundedQueue<UInt256>(10000);
         public static BoundedQueue<Tuple<TalkLineKey, FlashUnicastRecord>> UnicastQueue = new BoundedQueue<Tuple<TalkLineKey, FlashUnicastRecord>>(10000);

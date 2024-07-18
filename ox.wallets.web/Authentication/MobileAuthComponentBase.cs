@@ -19,8 +19,7 @@ namespace OX.Wallets.Authentication
     {
         public abstract string PageTitle { get; }
 
-        [Inject]
-        protected IHttpContextAccessor HttpContextAccessor { get; set; }
+     
        
         [Inject]
         protected IStateDispatch StateDispatcher { get; set; }

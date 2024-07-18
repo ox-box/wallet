@@ -15,10 +15,12 @@ namespace OX.MetaMask
         Ropsten = 3,
         Rinkeby = 4,
         Goerli = 5,
+        Optimism = 10,
         Kovan = 42,
         BinanceSmartChain = 56,
         BinanceTestnet = 97,
         PolygonMainnet = 137,
+        Arbitrum_One = 42161,
         PolygonTestnet = 80001
     }
 }

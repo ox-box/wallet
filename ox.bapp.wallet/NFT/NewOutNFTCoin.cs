@@ -61,16 +61,16 @@ namespace OX.Wallets.Base
             this.pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
             initAccounts();
         }
-        public NftTransaction GetTransaction(out UInt160 from)
+        public NftTransaction GetTransaction(out WalletAccount account)
         {
-            from = default;
+            account = default;
 
             if (this.cbAccounts.SelectedItem.IsNotNull() && this.cbAccounts.SelectedItem is AccountDescriptor ad)
             {
                 var key = ad.Account.GetKey();
                 if (key.IsNotNull())
                 {
-                    from = ad.Account.ScriptHash;
+                    account = ad.Account;
                     NftTransaction tx = new NftTransaction(key.PublicKey)
                     {
                         ContentType = 0,

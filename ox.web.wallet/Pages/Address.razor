@@ -5,27 +5,23 @@
 <Microsoft.AspNetCore.Components.Web.Extensions.Head.Title Value=@PageTitle />
 <PageContainer Title=@PageTitle>
     <ChildContent>
-        <GridRow Class="row">
-            <GridCol Class="col" Span="4">
-            </GridCol>
-            <GridCol Class="col" Span="16">
-                <Search Placeholder="@this.WebLocalString("输入地址","input address")" Size="@InputSize.Large" EnterButton="@this.WebLocalString("查看地址","View Address")" @bind-Value="@this.addr" OnSearch="OnSearch" />
-            </GridCol>
-            <GridCol Class="col" Span="4">
-            </GridCol>
-        </GridRow>
-        <GridRow Class="row">
+        <Flex Gap="middle">
+            <Search Placeholder="@this.WebLocalString("输入地址","input address")" EnterButton="@this.WebLocalString("查看地址","View Address")" @bind-Value="@this.addr" OnSearch="OnSearch" />
+        </Flex>
+     
             @if (this.AccountState.IsNotNull() && this.AccountState.Balances.IsNotNullAndEmpty())
             {
-                <GridCol Span="8">
+            <Flex Gap="middle">
                     <ul>
                         <li>
-                            @this.WebLocalString("地址","Address"): <Text Code>@this.AccountState.ScriptHash.ToAddress()</Text>
-                    </li>
-                </ul>
-                <Divider />
-            </GridCol>
-                <GridCol Span="24">
+                            @this.WebLocalString("地址", "Address"): <Text Code>@this.OmitString(this.AccountState.ScriptHash.ToAddress())</Text>
+                        </li>
+                    </ul>
+                   
+                </Flex>
+            <Divider />
+            <Flex Gap="middle">
+                <Flex Vertical=this.IsMobile>
                     @foreach (var refer in this.AccountState.Balances.OrderByDescending(m => m.Key == Blockchain.OXS).ThenByDescending(m => m.Key == Blockchain.OXC))
                     {
                         var assetState = Blockchain.Singleton.CurrentSnapshot.Assets.TryGet(refer.Key);
@@ -33,21 +29,22 @@
                         {
                             <ul>
                                 <li>
-                                    @this.WebLocalString($"资产名称:{assetState.GetName()}",$"Asset Name:{assetState.GetName()}")
-                            </li>
-                            <li>
-                                    @this.WebLocalString($"资产Id:{refer.Key.ToString()}",$"Asset Id:{refer.Key.ToString()}")
-                            </li>
-                            <li>
-                                    @this.WebLocalString($"余额:{refer.Value}",$"Balance:{refer.Value}")
-                            </li>
-                        </ul>
-                        <Divider />
+                                    @this.WebLocalString($"资产名称:{assetState.GetName()}", $"Asset Name:{assetState.GetName()}")
+                                </li>
+                                <li>
+                                    @this.WebLocalString($"资产Id:{this.OmitString(refer.Key.ToString())}", $"Asset Id:{this.OmitString(refer.Key.ToString())}")
+                                </li>
+                                <li>
+                                    @this.WebLocalString($"余额:{refer.Value}", $"Balance:{refer.Value}")
+                                </li>
+                            </ul>
+                            <Divider />
                         }
                     }
-                </GridCol>
+                </Flex>
+                 </Flex>
             }
-        </GridRow>
+       
     </ChildContent>
 </PageContainer>
 <style>

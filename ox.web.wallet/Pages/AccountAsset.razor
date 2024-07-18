@@ -19,45 +19,45 @@
 
                             <div class="listContent">
                                 <div class="listContentItem">
-                                    <span>@this.WebLocalString("资产名称","Asset Name")</span>
+                                    <span>@this.WebLocalString("资产名称", "Asset Name")</span>
                                     <p>@context.AssetName </p>
                                 </div>
                             </div>
                             <div class="listContent">
                                 <div class="listContentItem">
-                                    <span>@this.WebLocalString("资产Id","Asset Id")</span>
-                                    <p>@context.AssetId.ToString() </p>
+                                    <span>@this.WebLocalString("资产Id", "Asset Id")</span>
+                                    <p>@this.OmitString(context.AssetId.ToString()) </p>
                                 </div>
                             </div>
                             <div class="listContent">
                                 <div class="listContentItem">
-                                    <span>@this.WebLocalString("主账户余额","Master Balance")</span>
+                                    <span>@this.WebLocalString("主账户余额", "Master Balance")</span>
                                     <p>@context.MasterBalance </p>
                                 </div>
                             </div>
                             <div class="listContent">
                                 <div class="listContentItem">
-                                    <span>@this.WebLocalString("总余额","Total Balance")</span>
+                                    <span>@this.WebLocalString("总余额", "Total Balance")</span>
                                     <p>@context.TotalBalance </p>
                                 </div>
                             </div>
                             <div class="listContent">
                                 <div class="listContentItem">
-                                    <span>@this.WebLocalString("可用余额","Available Balance")</span>
+                                    <span>@this.WebLocalString("可用余额", "Available Balance")</span>
                                     <p>@context.AvailableBalance </p>
                                 </div>
                             </div>
                             <div class="listContent">
-                            <div class="listContentItem">
-                                <Space>
-                                    <SpaceItem>
-                                            <a href="/_pc/wallet/balancedetail/@context.AssetId.ToString()">@this.WebLocalString("明细","Detail")</a>
-                                    </SpaceItem>
-                                    <SpaceItem>
-                                            <a href="/_pc/wallet/transferasset/@context.AssetId.ToString()">@this.WebLocalString("转帐","Transfer")</a>
-                                    </SpaceItem>
-                                </Space>
-                            </div>
+                                <div class="listContentItem">
+                                    <Space>
+                                        <SpaceItem>
+                                            <a href="/_pc/wallet/balancedetail/@context.AssetId.ToString()">@this.WebLocalString("明细", "Detail")</a>
+                                        </SpaceItem>
+                                        <SpaceItem>
+                                            <a href="/_pc/wallet/transferasset/@context.AssetId.ToString()">@this.WebLocalString("转帐", "Transfer")</a>
+                                        </SpaceItem>
+                                    </Space>
+                                </div>
                             </div>
                         </ListItem>
                     </AntList>

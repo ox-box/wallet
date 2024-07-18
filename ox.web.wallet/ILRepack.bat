@@ -1,0 +1,1 @@
+C:\Users\Scott\.nuget\packages\ilrepack\2.0.33\tools\ILRepack.exe /lib:C:\ox\net7.0  /out:bin\Debug\net7.0-windows\wlt.dll     bin\Debug\net7.0-windows\ox.wallets.module.base.dll bin\Debug\net7.0-windows\ox.web.wallet.dll  

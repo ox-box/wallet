@@ -13,7 +13,7 @@
             string s = string.Empty;
             if (this.NftID.IsNotNull())
             {
-                s = this.NftID.CID;
+                s = this.OmitString(this.NftID.CID);
                 nfcstate = Blockchain.Singleton.CurrentSnapshot.NFTs.TryGet(this.NftID);
             }
         }
@@ -31,10 +31,10 @@
                                 var url2 = $"ipfs://{nfcstate.NFC.NftCopyright.NftID.CID}/{nfcstate.NFC.NftCopyright.NftName}";
                             }
                             <SpaceItem>
-                                <a href="@url" target="_blank">@this.WebLocalString("预览","Preview")</a>
+                                <a href="@url" target="_blank">@this.WebLocalString("预览", "Preview")</a>
                             </SpaceItem>
                             <SpaceItem>
-                                <a href="@url2" target="_blank">@this.WebLocalString("节点预览","Node Preview")</a>
+                                <a href="@url2" target="_blank">@this.WebLocalString("节点预览", "Node Preview")</a>
                             </SpaceItem>
                         </Space>
                     }
@@ -44,15 +44,15 @@
                     {
                         var author = Contract.CreateSignatureRedeemScript(nfcstate.NFC.Author).ToScriptHash().ToAddress();
                         <ul>
-                            <li>@this.WebLocalString($"NFT名称:",$"NFT Name:")<Text Copyable>@nfcstate.NFC.NftCopyright.NftName</Text></li>
-                        <li>@this.WebLocalString($"NFT简介:",$"NFT Description:")<Text Copyable>@nfcstate.NFC.NftCopyright.Description</Text></li>
-                        <li>@this.WebLocalString($"作者:",$"Author:")<Text Copyable>@author</Text></li>
-                        <li>@this.WebLocalString($"作者名称:",$"Author Name:")<Text Copyable>@nfcstate.NFC.NftCopyright.AuthorName</Text></li>
-                        <li>@this.WebLocalString($"NFT 标号:",$"NFT Seal:")<Text Copyable>@nfcstate.NFC.NftCopyright.Seal</Text></li>
-                        <li>@this.WebLocalString($"已发行{nfcstate.TotalIssue}份",$"{nfcstate.TotalIssue} copies issued")</li>
-                        <li>@this.WebLocalString($"转售{nfcstate.TotalTransfer}次",$"Resale {nfcstate.TotalTransfer} times")</li>
-                        <li>@this.WebLocalString($"累计交易{nfcstate.TotalAmountTransfer} OXC",$"Total  exchange amount {nfcstate.TotalAmountTransfer} OXC")</li>
-                    </ul>
+                            <li>@this.WebLocalString($"NFT名称:", $"NFT Name:")<Text Copyable>@nfcstate.NFC.NftCopyright.NftName</Text></li>
+                            <li>@this.WebLocalString($"NFT简介:", $"NFT Description:")<Text Copyable>@nfcstate.NFC.NftCopyright.Description</Text></li>
+                            <li>@this.WebLocalString($"作者:", $"Author:")<Text Copyable>@author</Text></li>
+                            <li>@this.WebLocalString($"作者名称:", $"Author Name:")<Text Copyable>@nfcstate.NFC.NftCopyright.AuthorName</Text></li>
+                            <li>@this.WebLocalString($"NFT 标号:", $"NFT Seal:")<Text Copyable>@nfcstate.NFC.NftCopyright.Seal</Text></li>
+                            <li>@this.WebLocalString($"已发行{nfcstate.TotalIssue}份", $"{nfcstate.TotalIssue} copies issued")</li>
+                            <li>@this.WebLocalString($"转售{nfcstate.TotalTransfer}次", $"Resale {nfcstate.TotalTransfer} times")</li>
+                            <li>@this.WebLocalString($"累计交易{nfcstate.TotalAmountTransfer} OXC", $"Total  exchange amount {nfcstate.TotalAmountTransfer} OXC")</li>
+                        </ul>
 
                     }
                     @if (NftTransfer.IsNotNull())
@@ -63,11 +63,11 @@
                         <Divider></Divider>
                         <ul>
                             <li>
-                                @this.WebLocalString($"发行 ID:",$"Issue ID:") <Text Copyable>@issueId</Text>
-                        </li>
-                        <li>@this.WebLocalString($"持有人全名:",$"Holder Fullname:") <Text Copyable>@holderName</Text></li>
-                        <li>@this.WebLocalString($"NFT 编号:",$"NFT SN:") <Text Copyable>@sn</Text></li>
-                    </ul>
+                                @this.WebLocalString($"发行 ID:", $"Issue ID:") <Text Copyable>@issueId</Text>
+                            </li>
+                            <li>@this.WebLocalString($"持有人全名:", $"Holder Fullname:") <Text Copyable>@holderName</Text></li>
+                            <li>@this.WebLocalString($"NFT 编号:", $"NFT SN:") <Text Copyable>@sn</Text></li>
+                        </ul>
                     }
                     <AntDesign.Charts.Line @ref="@chart1" Config="config1" OnFirstRender="OnChart_Render" />
                 </ChildContent>

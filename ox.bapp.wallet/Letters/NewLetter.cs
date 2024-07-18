@@ -190,7 +190,7 @@ namespace OX.Wallets.Letters
                         {
                             string msg = $"{UIHelper.LocalString("链邮交易已广播", "Relay blockchain mail transaction completed")}   {tx2.Hash}";
                             DarkMessageBox.ShowInformation(msg, "");
-                        });
+                        }, new[]{ ad.Account });
                     }
                 }
 

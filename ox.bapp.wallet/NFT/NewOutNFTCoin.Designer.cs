@@ -30,6 +30,9 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(NewOutNFTCoin));
             panel = new System.Windows.Forms.Panel();
+            lb_lock_p = new UI.Controls.DarkLabel();
+            nun_lock = new UI.Controls.DarkNumericUpDown();
+            lb_lock = new UI.Controls.DarkLabel();
             bt_nodepreview = new UI.Controls.DarkButton();
             lb_authorname = new UI.Controls.DarkLabel();
             tb_authorname = new UI.Controls.DarkTextBox();
@@ -44,12 +47,9 @@
             lb_remark = new UI.Controls.DarkLabel();
             tb_remark = new UI.Controls.DarkTextBox();
             lb_image = new UI.Controls.DarkLabel();
-            lb_lock_p = new UI.Controls.DarkLabel();
-            nun_lock = new UI.Controls.DarkNumericUpDown();
-            lb_lock = new UI.Controls.DarkLabel();
             panel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)nun_lock).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
             // btnCancel
@@ -97,6 +97,24 @@
             panel.Controls.Add(lb_image);
             resources.ApplyResources(panel, "panel");
             panel.Name = "panel";
+            // 
+            // lb_lock_p
+            // 
+            resources.ApplyResources(lb_lock_p, "lb_lock_p");
+            lb_lock_p.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
+            lb_lock_p.Name = "lb_lock_p";
+            // 
+            // nun_lock
+            // 
+            resources.ApplyResources(nun_lock, "nun_lock");
+            nun_lock.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
+            nun_lock.Name = "nun_lock";
+            // 
+            // lb_lock
+            // 
+            resources.ApplyResources(lb_lock, "lb_lock");
+            lb_lock.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
+            lb_lock.Name = "lb_lock";
             // 
             // bt_nodepreview
             // 
@@ -199,24 +217,6 @@
             lb_image.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
             lb_image.Name = "lb_image";
             // 
-            // lb_lock_p
-            // 
-            resources.ApplyResources(lb_lock_p, "lb_lock_p");
-            lb_lock_p.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
-            lb_lock_p.Name = "lb_lock_p";
-            // 
-            // nun_lock
-            // 
-            resources.ApplyResources(nun_lock, "nun_lock");
-            nun_lock.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
-            nun_lock.Name = "nun_lock";
-            // 
-            // lb_lock
-            // 
-            resources.ApplyResources(lb_lock, "lb_lock");
-            lb_lock.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
-            lb_lock.Name = "lb_lock";
-            // 
             // NewOutNFTCoin
             // 
             resources.ApplyResources(this, "$this");
@@ -231,8 +231,8 @@
             Controls.SetChildIndex(panel, 0);
             panel.ResumeLayout(false);
             panel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ((System.ComponentModel.ISupportInitialize)nun_lock).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
         }
 

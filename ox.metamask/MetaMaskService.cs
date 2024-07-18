@@ -100,7 +100,12 @@ namespace OX.MetaMask
                 throw;
             }
         }
-
+        /// <summary>
+        /// mainnet:1
+        /// optimism:10
+        /// arbitrum one:42161
+        /// </summary>
+        /// <returns></returns>
         public async ValueTask<(long chainId, Chain chain)> GetSelectedChain()
         {
             var module = await moduleTask.Value;

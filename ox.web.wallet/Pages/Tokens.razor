@@ -8,8 +8,8 @@
         <Collapse>
             @{
                 var block = Blockchain.Singleton.CurrentSnapshot.Blocks.TryGet(Blockchain.Singleton.CurrentBlockHash);
-                var sOXS = $"OXS   /   {Blockchain.OXS.ToString()}";
-                var sOXC = $"OXC   /   {Blockchain.OXC.ToString()}";
+                var sOXS = $"OXS   /   {this.OmitString(Blockchain.OXS.ToString())}";
+                var sOXC = $"OXC   /   {this.OmitString(Blockchain.OXC.ToString())}";
 
                 var oxsIssued = Blockchain.Singleton.CurrentSnapshot.Assets.TryGet(Blockchain.OXS).Available;
                 var oxcIssued = WalletBappProvider.Instance.TotalIssuedOXC;
@@ -203,7 +203,7 @@
                         }
                     }
                 }
-                var s = $"{asset.Value.GetName()}   /   {asset.Key.ToString()}";
+                var s = $"{asset.Value.GetName()}   /   {this.OmitString(asset.Key.ToString())}";
                 var owner = Contract.CreateSignatureRedeemScript(asset.Value.Owner).ToScriptHash().ToAddress();
                 var cap = asset.Value.Amount == -Fixed8.Satoshi ? UIHelper.LocalString("无限", "unlimited") : asset.Value.Amount.ToString();
                 var Available = asset.Value.Available.ToString();

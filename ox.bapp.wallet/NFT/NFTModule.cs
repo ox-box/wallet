@@ -145,14 +145,14 @@ namespace OX.Wallets.Base.NFT
             using (NftCoinOutChain = new NewOutNFTCoin(Operater))
             {
                 if (NftCoinOutChain.ShowDialog() != DialogResult.OK) return;
-                var tx = NftCoinOutChain.GetTransaction(out UInt160 from);
+                var tx = NftCoinOutChain.GetTransaction(out WalletAccount from);
                 if (tx.IsNotNull() && this.Operater.Wallet.IsNotNull())
                 {
-                    this.Operater.Wallet.MixBuildAndRelaySingleOutputTransaction(tx, from, tx2 =>
+                    this.Operater.Wallet.MixBuildAndRelaySingleOutputTransaction(tx, from.ScriptHash, tx2 =>
                     {
                         string msg = $"{UIHelper.LocalString("铸造NFT交易已广播", "Relay coin NFT transaction completed")}   {tx2.Hash}";
                         DarkMessageBox.ShowInformation(msg, "");
-                    });
+                    }, new[] { from });
                 }
 
             }
@@ -304,6 +304,6 @@ namespace OX.Wallets.Base.NFT
         public override void OnLoadBappModuleWalletSection(JObject bappSectionObject)
         {
         }
-       
+
     }
 }
