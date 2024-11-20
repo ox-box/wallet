@@ -39,7 +39,7 @@
             pictureBox1.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             pictureBox1.Location = new System.Drawing.Point(3, 3);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new System.Drawing.Size(521, 448);
+            pictureBox1.Size = new System.Drawing.Size(521, 452);
             pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             pictureBox1.TabIndex = 0;
             pictureBox1.TabStop = false;
@@ -77,7 +77,7 @@
             Controls.Add(pictureBox1);
             Margin = new System.Windows.Forms.Padding(0);
             Name = "UrlPort";
-            Size = new System.Drawing.Size(524, 528);
+            Size = new System.Drawing.Size(524, 532);
             Load += UrlPort_Load;
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);

@@ -651,6 +651,8 @@ namespace OX.Wallets.Base
 
         private void Reindexmenu_Click(object sender, EventArgs e)
         {
+            Bapp.AllowUIBlockIndex = false;
+            OXRunTime.NeedReset = true;
             this.Operater.Indexer.RebuildIndex(this.Operater.Wallet);
         }
 

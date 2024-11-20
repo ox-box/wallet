@@ -49,6 +49,7 @@ namespace OX.Mix
             {
                 BaseAddress = new Uri(sp.GetService<NavigationManager>().BaseUri)
             });
+            services.AddControllers();
             services.Configure<ProSettings>(x =>
             {
                 x.Title = "OX";
@@ -63,6 +64,7 @@ namespace OX.Mix
             //services.Configure<RazorViewEngineOptions>(o => {
             //    o.ViewLocationExpanders.Add(new CustomViewLocationExpander());
             //});
+            services.AddResponseCaching();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -78,7 +80,7 @@ namespace OX.Mix
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
+            app.UseResponseCaching();
             //app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
@@ -87,6 +89,7 @@ namespace OX.Mix
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                //endpoints.MapControllerRoute(name: "Default", url: "api/{ApiBoxName}/{ApiModuleName}/{ApiActionName}/{arg=}", defaults: new { controller = "PrintCard", action = "DownJobCardRar", arg = UrlParameter.Optional });
                 endpoints.MapBlazorHub();
                 endpoints.MapHub<StateHub>("/statehub");
                 endpoints.MapFallbackToPage("/_Host");

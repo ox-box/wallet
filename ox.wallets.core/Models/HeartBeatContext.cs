@@ -28,6 +28,13 @@ namespace OX.Wallets
                 return ((TimeStamp - BaseTimeStamp) % 60 == 0) && WalletOpened;
             }
         }
+        public bool Is10Minutes
+        {
+            get
+            {
+                return ((TimeStamp - BaseTimeStamp) % 600 == 0);
+            }
+        }
         public bool IsOnceHour
         {
             get

@@ -32,7 +32,7 @@ namespace OX.Web.Models
                     Path = "/_pc/flashstate",
                     Name = UIHelper.WebLocalString(language, "闪态", "Flash State"),
                     Key = "flashstate",
-                    //Icon = "smile",
+                    Icon = "comment",
                     Children = new MenuDataItem[] {
                     new MenuDataItem
                     {
@@ -59,7 +59,7 @@ namespace OX.Web.Models
                     Path = "/_pc/blockchain",
                     Name = UIHelper.WebLocalString(language, "区块链", "Blockchain"),
                     Key = "blockchain",
-                    //Icon = "smile",
+                    Icon = "block",
                     Children = new MenuDataItem[] {
                     new MenuDataItem
                     {
@@ -93,7 +93,7 @@ namespace OX.Web.Models
                     Path = "/_pc/wallet",
                     Name = UIHelper.WebLocalString(language, "账户", "Account"),
                     Key = "wallet",
-                    //Icon = "smile",
+                    Icon = "wallet",
                     Children = new MenuDataItem[] {
                     new MenuDataItem
                     {
@@ -108,7 +108,7 @@ namespace OX.Web.Models
                     Path = "/_pc/nft",
                     Name = UIHelper.WebLocalString(language, "NFT", "NFT"),
                     Key = "nft",
-                    //Icon = "smile",
+                    Icon = "file-image",
                     Children = new MenuDataItem[] {
                     new MenuDataItem
                     {

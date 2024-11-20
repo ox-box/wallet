@@ -28,82 +28,81 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.lblHeader = new OX.Wallets.UI.Controls.DarkLabel();
-            this.btOpenWallet = new OX.Wallets.UI.Controls.DarkButton();
-            this.lb2 = new OX.Wallets.UI.Controls.DarkLabel();
-            this.tbPwd = new OX.Wallets.UI.Controls.DarkTextBox();
-            this.SuspendLayout();
+            lblHeader = new UI.Controls.DarkLabel();
+            btOpenWallet = new UI.Controls.DarkButton();
+            lb2 = new UI.Controls.DarkLabel();
+            tbPwd = new UI.Controls.DarkTextBox();
+            SuspendLayout();
             // 
             // lblHeader
             // 
-            this.lblHeader.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.lblHeader.Dock = System.Windows.Forms.DockStyle.Top;
-            this.lblHeader.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.lblHeader.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.lblHeader.Location = new System.Drawing.Point(0, 0);
-            this.lblHeader.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
-            this.lblHeader.Name = "lblHeader";
-            this.lblHeader.Size = new System.Drawing.Size(1018, 113);
-            this.lblHeader.TabIndex = 5;
-            this.lblHeader.Text = "O X";
-            this.lblHeader.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            lblHeader.BackColor = System.Drawing.Color.FromArgb(64, 64, 64);
+            lblHeader.Dock = System.Windows.Forms.DockStyle.Top;
+            lblHeader.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            lblHeader.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
+            lblHeader.Location = new System.Drawing.Point(0, 0);
+            lblHeader.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            lblHeader.Name = "lblHeader";
+            lblHeader.Size = new System.Drawing.Size(1018, 113);
+            lblHeader.TabIndex = 5;
+            lblHeader.Text = "O X";
+            lblHeader.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // btOpenWallet
             // 
-            this.btOpenWallet.Location = new System.Drawing.Point(751, 149);
-            this.btOpenWallet.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
-            this.btOpenWallet.Name = "btOpenWallet";
-            this.btOpenWallet.Padding = new System.Windows.Forms.Padding(8, 7, 8, 7);
-            this.btOpenWallet.Size = new System.Drawing.Size(156, 40);
-            this.btOpenWallet.SpecialBorderColor = null;
-            this.btOpenWallet.SpecialFillColor = null;
-            this.btOpenWallet.SpecialTextColor = null;
-            this.btOpenWallet.TabIndex = 9;
-            this.btOpenWallet.Text = "button2";
-            this.btOpenWallet.Click += new System.EventHandler(this.btOpenWallet_Click);
+            btOpenWallet.Location = new System.Drawing.Point(751, 149);
+            btOpenWallet.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
+            btOpenWallet.Name = "btOpenWallet";
+            btOpenWallet.Padding = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            btOpenWallet.Size = new System.Drawing.Size(156, 40);
+            btOpenWallet.SpecialBorderColor = null;
+            btOpenWallet.SpecialFillColor = null;
+            btOpenWallet.SpecialTextColor = null;
+            btOpenWallet.TabIndex = 9;
+            btOpenWallet.Text = "button2";
+            btOpenWallet.Click += btOpenWallet_Click;
             // 
             // lb2
             // 
-            this.lb2.AutoSize = true;
-            this.lb2.ForeColor = System.Drawing.Color.White;
-            this.lb2.Location = new System.Drawing.Point(115, 161);
-            this.lb2.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
-            this.lb2.Name = "lb2";
-            this.lb2.Size = new System.Drawing.Size(63, 24);
-            this.lb2.TabIndex = 7;
-            this.lb2.Text = "label2";
+            lb2.AutoSize = true;
+            lb2.ForeColor = System.Drawing.Color.White;
+            lb2.Location = new System.Drawing.Point(115, 161);
+            lb2.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            lb2.Name = "lb2";
+            lb2.Size = new System.Drawing.Size(63, 24);
+            lb2.TabIndex = 7;
+            lb2.Text = "label2";
             // 
             // tbPwd
             // 
-            this.tbPwd.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.tbPwd.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.tbPwd.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.tbPwd.Location = new System.Drawing.Point(313, 155);
-            this.tbPwd.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
-            this.tbPwd.Name = "tbPwd";
-            this.tbPwd.Size = new System.Drawing.Size(324, 30);
-            this.tbPwd.TabIndex = 10;
-            this.tbPwd.PasswordChar = '*';
-           
+            tbPwd.BackColor = System.Drawing.Color.FromArgb(64, 64, 64);
+            tbPwd.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            tbPwd.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
+            tbPwd.Location = new System.Drawing.Point(313, 155);
+            tbPwd.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
+            tbPwd.Name = "tbPwd";
+            tbPwd.PasswordChar = '*';
+            tbPwd.Size = new System.Drawing.Size(324, 30);
+            tbPwd.TabIndex = 10;
             // 
             // LockWallet
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            this.ClientSize = new System.Drawing.Size(1018, 274);
-            this.Controls.Add(this.tbPwd);
-            this.Controls.Add(this.lb2);
-            this.Controls.Add(this.btOpenWallet);
-            this.Controls.Add(this.lblHeader);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
-            this.Name = "LockWallet";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "O X";
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
+            AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            BackColor = System.Drawing.Color.FromArgb(60, 63, 65);
+            ClientSize = new System.Drawing.Size(1018, 274);
+            Controls.Add(tbPwd);
+            Controls.Add(lb2);
+            Controls.Add(btOpenWallet);
+            Controls.Add(lblHeader);
+            FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
+            Name = "LockWallet";
+            StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            Text = "O X";
+            FormClosing += LockWallet_FormClosing;
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion

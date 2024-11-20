@@ -1,8 +1,6 @@
 ﻿{
   "ApplicationConfiguration": {
-    "Paths": {
-      "Chain": "Chain_{0}",
-      "BizChain": "BizChain_{0}",
+    "Paths": {    
       "Index": "Index_{0}"
     },
     "P2P": {

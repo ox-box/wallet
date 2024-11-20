@@ -26,7 +26,6 @@ using OX.Bapps;
 using OX.Wallets.Eths;
 using OX.MetaMask;
 using OX.Persistence;
-using NBitcoin.OpenAsset;
 
 namespace OX.Web.Pages
 {

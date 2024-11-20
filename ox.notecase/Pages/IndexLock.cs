@@ -25,6 +25,7 @@ namespace OX.Notecase.Pages
 {
     public partial class IndexLock : DarkForm
     {
+        public bool allowClose = false;
         public IndexLock()
         {
             InitializeComponent();
@@ -39,12 +40,20 @@ namespace OX.Notecase.Pages
 
         private void Form_FormClosed(object sender, FormClosedEventArgs e)
         {
+            allowClose = true;
             this.Close();
         }
 
         private void btOpenWallet_Click(object sender, EventArgs e)
         {
+            allowClose = true;
             Application.Exit();
+        }
+
+        private void IndexLock_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (!allowClose)
+                e.Cancel = true;
         }
     }
 }

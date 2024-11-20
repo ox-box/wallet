@@ -25,6 +25,7 @@ using OX.SmartContract;
 using OX.Wallets.NEP6;
 using OX.Network.P2P;
 using OX.Persistence.LevelDB;
+using OX.Persistence;
 
 namespace OX.Notecase
 {
@@ -58,8 +59,27 @@ namespace OX.Notecase
             {
                 seeds = extseeds.Union(seeds).ToArray();
             }
+            var collectSeeds = Settings.Default.CollectSeeds;
+            if (collectSeeds != default && collectSeeds.Length > 0)
+            {
+                seeds = collectSeeds.Union(seeds).ToArray();
+            }
+
             ProtocolSettings.InitSeed(seeds, Settings.Default.P2P.OnlySeed);
-            LevelDBStore store = new LevelDBStore(Settings.Default.Paths.Chain);
+            LevelDBStore store = default;
+            try
+            {
+                store = new LevelDBStore(Settings.Default.Paths.Chain);
+            }
+            catch
+            {
+                var path = Path.GetFullPath(Settings.Default.Paths.Chain);
+                if (Directory.Exists(path))
+                {
+                    Directory.Delete(path, true);
+                }
+                store = new LevelDBStore(Settings.Default.Paths.Chain);
+            }
             var oxsystem = new OXSystem(store);
             return oxsystem.ActorSystem.ActorOf(Akka.Actor.Props.Create(() => new WalletsBlockHandler(oxsystem)));
         }

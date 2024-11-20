@@ -16,7 +16,7 @@ namespace OX.Wallets
     {
         public string UserAgent;
         public bool IsMobile;
-        public bool IsTokenPocketMobile;
+        public bool IsMajorWeb3Mobile;
     }
     public static class RequestExtensions
     {
@@ -35,7 +35,10 @@ namespace OX.Wallets
             status.UserAgent = request.UserAgent();
             if ((b.IsMatch(status.UserAgent) || v.IsMatch(status.UserAgent.Substring(0, 4))))
                 status.IsMobile = true;
-            status.IsTokenPocketMobile = status.UserAgent.ToLower().Contains("tokenpocket");
+            status.IsMajorWeb3Mobile = status.UserAgent.ToLower().Contains("tokenpocket")
+                || status.UserAgent.ToLower().Contains("okex")
+                || status.UserAgent.ToLower().Contains("okx")
+                 || status.UserAgent.ToLower().Contains("binance");
             return status;
         }
         public static bool IsInPCUrl(this HttpRequest request)
@@ -46,7 +49,7 @@ namespace OX.Wallets
         {
             return request.Headers["User-Agent"];
         }
-      
+
     }
 
     class CheckMobileBrowser
@@ -60,7 +63,7 @@ namespace OX.Wallets
         public async Task InvokeAsync(HttpContext context)
         {
             var state = context.Request.GetUserAgent();
-            if (state.IsMobile && !state.IsTokenPocketMobile && context.Request.IsInPCUrl())
+            if (state.IsMobile && !state.IsMajorWeb3Mobile && context.Request.IsInPCUrl())
             {
                 context.Response.Redirect("/_m");
             }

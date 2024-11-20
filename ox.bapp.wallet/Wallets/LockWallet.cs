@@ -25,6 +25,7 @@ namespace OX.Wallets.Base
 {
     public partial class LockWallet : DarkForm
     {
+        bool allowClose = false;
         OpenWallet Wallet;
         public LockWallet(OpenWallet wallet)
         {
@@ -38,6 +39,7 @@ namespace OX.Wallets.Base
 
         private void Form_FormClosed(object sender, FormClosedEventArgs e)
         {
+            allowClose = true;
             this.Close();
         }
 
@@ -47,13 +49,22 @@ namespace OX.Wallets.Base
             if (act.IsNotNull() && act is NEP6Account nepAct)
             {
                 if (nepAct.VerifyPassword(this.tbPwd.Text))
+                {
+                    allowClose = true;
                     this.Close();
+                }
                 else
                 {
                     this.tbPwd.Text = String.Empty;
                     DarkMessageBox.ShowError(UIHelper.LocalString("密码错误", "invalid password"), String.Empty);
                 }
             }
+        }
+
+        private void LockWallet_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (!allowClose)
+                e.Cancel = true;
         }
     }
 }

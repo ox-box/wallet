@@ -64,7 +64,10 @@ namespace OX.Notecase
             this.timer.Interval = 500;
             this.timer.Tick += Timer_Tick;
         }
-
+        public void StopTime()
+        {
+            this.timer.Enabled = false;
+        }
         private void Timer_Tick(object sender, EventArgs e)
         {
             HeartBeatContext context = new HeartBeatContext() { IsNormalSync = IsNormalSync };

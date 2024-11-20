@@ -44,6 +44,20 @@
             {
                 this["ExtSeeds"] = value;
             }
-        }        
+        }
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string[] CollectSeeds
+        {
+            get
+            {
+                return ((string[])(this["CollectSeeds"]));
+            }
+            set
+            {
+                this["CollectSeeds"] = value;
+            }
+        }
     }
 }

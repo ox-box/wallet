@@ -16,7 +16,6 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static NBitcoin.Scripting.OutputDescriptor;
 
 namespace OX.Wallets.Flash.Chat
 {

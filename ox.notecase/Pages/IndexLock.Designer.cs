@@ -86,6 +86,7 @@
             Name = "IndexLock";
             StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             Text = "O X";
+            FormClosing += IndexLock_FormClosing;
             ResumeLayout(false);
             PerformLayout();
         }

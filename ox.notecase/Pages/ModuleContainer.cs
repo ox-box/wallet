@@ -16,6 +16,7 @@ using OX.Network;
 using OX.Notecase;
 using OX.Bapps;
 using OX.Notecase.Pages;
+using System.Threading;
 
 namespace OX.Wallets
 {
@@ -208,14 +209,47 @@ namespace OX.Wallets
             var msg = $"{walletHeight}/{Blockchain.Singleton.Height}/{Blockchain.Singleton.HeaderHeight}";
             this.ModuleStatusLabel.Text = LocalNode.Singleton.GetRemoteNodes().Count().ToString() + UIHelper.LocalString(" 节点", " Nodes");
             this.toolStripStatusLabel5.Text = msg;
-            if (walletHeight < Blockchain.Singleton.HeaderHeight-100)
+            if (walletHeight < Blockchain.Singleton.HeaderHeight - 100)
             {
                 if (!this.IndexLock.Visible) this.IndexLock.ShowDialog();
                 this.IndexLock.SetMessage(msg);
             }
             else
             {
-                if (this.IndexLock.Visible) this.IndexLock.Hide();
+                if (this.IndexLock.Visible)
+                {
+                    this.IndexLock.Hide();
+                    if (OXRunTime.NeedReset)
+                    {
+                        this.IndexLock.allowClose = true;
+                        NotecaseApp.Instance.StopTime();
+                        Application.Exit();
+                    }
+                }
+            }
+            if (context.Is10Minutes)
+            {
+                var setting = Settings.Default;
+                List<string> collectSeeds = new List<string>();
+                foreach (var node in LocalNode.Singleton.GetRemoteNodes())
+                {
+                    if (node.Listener.Port == setting.P2P.Port)
+                    {
+                        collectSeeds.Add(node.Listener.ToString());
+                    }
+                }
+                if (setting.CollectSeeds.IsNotNullAndEmpty())
+                {
+                    foreach (var seed in setting.CollectSeeds)
+                    {
+                        if (!collectSeeds.Contains(seed))
+                        {
+                            collectSeeds.Add(seed);
+                        }
+                    }
+                }
+                setting.CollectSeeds = collectSeeds.Take(20).ToArray();
+                setting.Save();
             }
             this.DoInvoke(() =>
             {

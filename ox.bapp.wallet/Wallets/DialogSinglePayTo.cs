@@ -21,8 +21,6 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using OX.Bapps;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 using OX.Persistence;
-using static NBitcoin.Scripting.OutputDescriptor;
-using NBitcoin.OpenAsset;
 
 namespace OX.Wallets.Base
 {

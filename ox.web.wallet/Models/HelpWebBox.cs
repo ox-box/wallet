@@ -30,7 +30,7 @@ namespace OX.Web.Models
                     Path = "/_pc/help",
                     Name = UIHelper.WebLocalString(language, "帮助", "Help"),
                     Key = "help",
-                    //Icon = "smile",
+                    Icon = "question-circle",
                     Children = new MenuDataItem[] {
                     new MenuDataItem
                     {

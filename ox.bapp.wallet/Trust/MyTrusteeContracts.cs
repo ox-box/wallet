@@ -58,6 +58,10 @@ namespace OX.Wallets.Base
                         sm.Tag = node.Tag;
                         sm.Click += Sm_Click1;
                         menu.Items.Add(sm);
+                        sm = new ToolStripMenuItem(UIHelper.LocalString("复制委托人公钥", "Copy Truster Public Key"));
+                        sm.Tag = node.Tag;
+                        sm.Click += Sm_Click5;
+                        menu.Items.Add(sm);
                         sm = new ToolStripMenuItem(UIHelper.LocalString("查看信托余额", "View Trust Balance"));
                         sm.Tag = node.Tag;
                         sm.Click += Sm_Click3;
@@ -79,6 +83,18 @@ namespace OX.Wallets.Base
                     menu.Show(this.treeAsset, e.Location);
             }
         }
+
+        private void Sm_Click5(object sender, EventArgs e)
+        {
+            ToolStripMenuItem ToolStripMenuItem = sender as ToolStripMenuItem;
+            KeyValuePair<UInt160, AssetTrustContract> p = (KeyValuePair<UInt160, AssetTrustContract>)ToolStripMenuItem.Tag;
+            var pubkey = p.Value.Truster.ToString();
+            Clipboard.SetText(pubkey);
+            string msg = pubkey + UIHelper.LocalString("  已复制", "  copied");
+            Bapp.PushCrossBappMessage(new CrossBappMessage() { Content = msg, From = this.Module.Bapp });
+            DarkMessageBox.ShowInformation(msg, "");
+        }
+
         private void Sm_Click4(object sender, EventArgs e)
         {
             ToolStripMenuItem ToolStripMenuItem = sender as ToolStripMenuItem;

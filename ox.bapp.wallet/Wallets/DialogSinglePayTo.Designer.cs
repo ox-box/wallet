@@ -38,6 +38,7 @@
             cb_assets = new UI.Controls.DarkComboBox();
             tab_target = new UI.Controls.DarkTabControl();
             tab_native = new System.Windows.Forms.TabPage();
+            lb_domainAddr = new UI.Controls.DarkLabel();
             tab_lock = new System.Windows.Forms.TabPage();
             cb_lockself = new UI.Controls.DarkCheckBox();
             dtp_time = new System.Windows.Forms.DateTimePicker();
@@ -55,7 +56,6 @@
             lb_eth_lockindex = new UI.Controls.DarkLabel();
             tb_eth_targetAddress = new UI.Controls.DarkTextBox();
             lb_eth_targetAddress = new UI.Controls.DarkLabel();
-            lb_domainAddr = new UI.Controls.DarkLabel();
             tab_target.SuspendLayout();
             tab_native.SuspendLayout();
             tab_lock.SuspendLayout();
@@ -218,6 +218,16 @@
             tab_native.TabIndex = 0;
             tab_native.Text = "tab_native";
             // 
+            // lb_domainAddr
+            // 
+            lb_domainAddr.AutoSize = true;
+            lb_domainAddr.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
+            lb_domainAddr.Location = new System.Drawing.Point(152, 167);
+            lb_domainAddr.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            lb_domainAddr.Name = "lb_domainAddr";
+            lb_domainAddr.Size = new System.Drawing.Size(0, 25);
+            lb_domainAddr.TabIndex = 10;
+            // 
             // tab_lock
             // 
             tab_lock.BackColor = System.Drawing.Color.DarkGray;
@@ -232,7 +242,7 @@
             tab_lock.Location = new System.Drawing.Point(4, 32);
             tab_lock.Name = "tab_lock";
             tab_lock.Padding = new System.Windows.Forms.Padding(3);
-            tab_lock.Size = new System.Drawing.Size(192, 64);
+            tab_lock.Size = new System.Drawing.Size(987, 296);
             tab_lock.TabIndex = 1;
             tab_lock.Text = "tabPage2";
             // 
@@ -257,7 +267,7 @@
             dtp_time.Location = new System.Drawing.Point(600, 231);
             dtp_time.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
             dtp_time.Name = "dtp_time";
-            dtp_time.Size = new System.Drawing.Size(0, 31);
+            dtp_time.Size = new System.Drawing.Size(795, 31);
             dtp_time.TabIndex = 31;
             dtp_time.Visible = false;
             // 
@@ -426,16 +436,6 @@
             lb_eth_targetAddress.Size = new System.Drawing.Size(54, 25);
             lb_eth_targetAddress.TabIndex = 15;
             lb_eth_targetAddress.Text = "地址:";
-            // 
-            // lb_domainAddr
-            // 
-            lb_domainAddr.AutoSize = true;
-            lb_domainAddr.ForeColor = System.Drawing.Color.FromArgb(220, 220, 220);
-            lb_domainAddr.Location = new System.Drawing.Point(152, 167);
-            lb_domainAddr.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
-            lb_domainAddr.Name = "lb_domainAddr";
-            lb_domainAddr.Size = new System.Drawing.Size(0, 25);
-            lb_domainAddr.TabIndex = 10;
             // 
             // DialogSinglePayTo
             // 

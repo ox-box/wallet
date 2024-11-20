@@ -19,6 +19,7 @@ namespace OX.Wallets
     }
     public static class OXRunTime
     {
+        public static bool NeedReset { get; set; } = false;
         public static int Port { get; set; }
         public static RunMode RunMode { get; set; }
         public static RunStatus RunState { get; set; }
